@@ -1,92 +1,51 @@
-<!-- <mat-toolbar>
-  <mat-toolbar-row>
-    <span>First Row</span>
-  </mat-toolbar-row>
-  <mat-toolbar-row>
-    <span>Second Row</span>
-  </mat-toolbar-row>
-</mat-toolbar> -->
-<button mat-icon-button [matMenuTriggerFor]="menu">
-  <mat-icon svgIcon="thumbs-up"></mat-icon>
-</button>
-<mat-menu #menu="matMenu">
-  <button mat-menu-item>
-    <mat-icon svgIcon="dialpad">dialpad</mat-icon>
-    <span>Redial</span>
-  </button>
-  <button mat-menu-item disabled>
-    <mat-icon svgIcon="voicemail">voicemail</mat-icon>
-    <span>Check voicemail</span>
-  </button>
-  <button mat-menu-item>
-    <mat-icon svgIcon="notification">notifications_off</mat-icon>
-    <span>Disable alerts</span>
-  </button>
-</mat-menu>
+
 <!-- <mat-icon svgIcon="thumbs-up"></mat-icon> -->
 
-<!-- <button mat-button [matMenuTriggerFor]="menu">Menu</button>
-<mat-menu #menu="matMenu">
-  <button mat-menu-item>Item 1</button>
-  <button mat-menu-item>Item 2</button>
-</mat-menu>
-<button mat-button [matMenuTriggerFor]="animals">Animal index</button>
-
-<mat-menu #animals="matMenu">
-  <button mat-menu-item [matMenuTriggerFor]="vertebrates">Vertebrates</button>
-  <button mat-menu-item [matMenuTriggerFor]="invertebrates">Invertebrates</button>
-</mat-menu>
-
-<mat-menu #vertebrates="matMenu">
-  <button mat-menu-item [matMenuTriggerFor]="fish">Fishes</button>
-  <button mat-menu-item [matMenuTriggerFor]="amphibians">Amphibians</button>
-  <button mat-menu-item [matMenuTriggerFor]="reptiles">Reptiles</button>
-  <button mat-menu-item>Birds</button>
-  <button mat-menu-item>Mammals</button>
-</mat-menu>
-
-<mat-menu #invertebrates="matMenu">
-  <button mat-menu-item>Insects</button>
-  <button mat-menu-item>Molluscs</button>
-  <button mat-menu-item>Crustaceans</button>
-  <button mat-menu-item>Corals</button>
-  <button mat-menu-item>Arachnids</button>
-  <button mat-menu-item>Velvet worms</button>
-  <button mat-menu-item>Horseshoe crabs</button>
-</mat-menu>
-
-<mat-menu #fish="matMenu">
-  <button mat-menu-item>Baikal oilfish</button>
-  <button mat-menu-item>Bala shark</button>
-  <button mat-menu-item>Ballan wrasse</button>
-  <button mat-menu-item>Bamboo shark</button>
-  <button mat-menu-item>Banded killifish</button>
-</mat-menu>
-
-<mat-menu #amphibians="matMenu">
-  <button mat-menu-item>Sonoran desert toad</button>
-  <button mat-menu-item>Western toad</button>
-  <button mat-menu-item>Arroyo toad</button>
-  <button mat-menu-item>Yosemite toad</button>
-</mat-menu>
-
-<mat-menu #reptiles="matMenu">
-  <button mat-menu-item>Banded Day Gecko</button>
-  <button mat-menu-item>Banded Gila Monster</button>
-  <button mat-menu-item>Black Tree Monitor</button>
-  <button mat-menu-item>Blue Spiny Lizard</button>
-  <button mat-menu-item disabled>Velociraptor</button>
-</mat-menu> -->
 <mat-toolbar color="primary">
-  <span>{{title}}</span>
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon svgIcon="menu"></mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item>
+          <mat-icon svgIcon="dialpad">dialpad</mat-icon>
+          <span>Redial</span>
+        </button>
+        <button mat-menu-item disabled>
+          <mat-icon svgIcon="voicemail">voicemail</mat-icon>
+          <span>Check voicemail</span>
+        </button>
+        <button mat-menu-item>
+          <mat-icon svgIcon="notification">notifications_off</mat-icon>
+          <span>Disable alerts</span>
+        </button>
+      </mat-menu>
+  
 
   <!-- This fills the remaining space of the current row -->
   <span class="example-fill-remaining-space"></span>
 
-  <span>Right Aligned Text</span>
+  <span>{{title}}</span>
 
 </mat-toolbar>
 <button mat-button (click)="openDialog()">Open dialog</button>
 
-
-
+<mat-card class="example-card" >
+  <mat-card-header>
+    <div mat-card-avatar class="example-header-image"></div>
+    <mat-card-title>Skating 2018 Peir Village</mat-card-title>
+    <mat-card-subtitle>12/1/2018</mat-card-subtitle>
+  </mat-card-header>
+  <img mat-card-image [src]="myImg()" alt="kids skatin peir village" id="card" >
+  <mat-card-content>
+    <p>
+      A great time had by all.
+    </p>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-button>LIKE</button>
+    <button mat-button>SHARE</button>
+  </mat-card-actions>
+</mat-card>
+  <div id="myWorkContent">
+    <img *ngFor="let card of db; let i = index;" src="{{db[i]}}" height="200" (click)="updateImg(i)" style="margin:0 4px;" >
+</div>

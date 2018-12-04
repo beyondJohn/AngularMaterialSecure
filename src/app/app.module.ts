@@ -8,6 +8,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { HttpClientModule } from '@angular/common/http';
+import { MatCardModule } from '@angular/material/card';
 
 import { AppComponent } from './app.component';
 import { DialogDefaultComponent } from './dialog-default/dialog-default.component';
@@ -28,6 +29,7 @@ import { DialogDefaultComponent } from './dialog-default/dialog-default.componen
     , MatMenuModule
     , MatIconModule
     , HttpClientModule
+    , MatCardModule
   ],
   providers: [],
   bootstrap: [AppComponent],

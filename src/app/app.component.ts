@@ -12,6 +12,8 @@ import { MatIconRegistry } from '@angular/material';
 })
 export class AppComponent {
   title = 'meBloggy';
+  db = ["../assets/img/kidsSkating.jpg", "../assets/img/kidsSkating2.jpg", "../assets/img/kidsSkating5.jpg",
+    "../assets/img/kidsSkating3.jpg", "../assets/img/kidsSkating4.jpg"];
   constructor(
     public dialog: MatDialog
     , iconRegistry: MatIconRegistry
@@ -29,8 +31,22 @@ export class AppComponent {
     iconRegistry.addSvgIcon(
       'notification',
       sanitizer.bypassSecurityTrustResourceUrl('assets/img/examples/notification.svg'));
+      iconRegistry.addSvgIcon(
+        'menu',
+        sanitizer.bypassSecurityTrustResourceUrl('assets/img/examples/menu.svg'));
   }
-
+  myPosition = 0;
+  myImg() {
+      return this.db[this.myPosition];
+  }
+  updateImg(i){
+    this.myPosition = i;
+    console.log("hello" + i);
+    
+    var top = document.getElementById("card").offsetTop + 120; //Getting Y of target element
+    console.log("offset" + top);
+    window.scrollTo(200, top);  
+  }
   openDialog() {
     const dialogRef = this.dialog.open(DialogDefaultComponent);
 
