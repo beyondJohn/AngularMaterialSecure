@@ -1,0 +1,38 @@
+{
+    "imagesDB": [
+        [
+            {
+                "date": "",
+                "name": "defaultHeader",
+                "image": "KidsSkating1.jpg",
+                "url": "http://switchmagic.com:4113/images/KidsSkating1.jpg"
+            },
+            {
+                "date": "",
+                "name": "PlayStationtLogo",
+                "image": "KidsSkating2.jpg",
+                "url": "http://switchmagic.com:4113/images/KidsSkating2.jpg"
+            },
+            {
+                "date": "",
+                "name": "PlayStationtLogo",
+                "image": "KidsSkating3.jpg",
+                "url": "http://switchmagic.com:4113/images/KidsSkating3.jpg"
+            },
+            {
+                "date": "",
+                "name": "PlayStationtLogo",
+                "image": "KidsSkating4.jpg",
+                "url": "http://switchmagic.com:4113/images/KidsSkating4.jpg"
+            }
+        ],
+        [
+            {
+                "date": "",
+                "name": "PlayStationtLogo",
+                "image": "LogoHeader.png",
+                "url": "http://switchmagic.com:4113/images/KidsSkating2.jpg"
+            }
+        ]
+    ]
+}

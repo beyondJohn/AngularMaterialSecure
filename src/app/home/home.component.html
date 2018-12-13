@@ -1,0 +1,25 @@
+
+<!-- <mat-icon svgIcon="thumbs-up"></mat-icon> -->
+
+<button mat-button (click)="openDialog()">Open dialog</button>
+
+<mat-card class="example-card" >
+<mat-card-header>
+  <div mat-card-avatar class="example-header-image"></div>
+  <mat-card-title>Skating 2018 Peir Village</mat-card-title>
+  <mat-card-subtitle>12/1/2018</mat-card-subtitle>
+</mat-card-header>
+<img mat-card-image [src]="myImg()" alt="kids skatin peir village" id="card" >
+<mat-card-content>
+  <p>
+    A great time had by all.
+  </p>
+</mat-card-content>
+<mat-card-actions>
+  <button mat-button>LIKE</button>
+  <button mat-button>SHARE</button>
+</mat-card-actions>
+</mat-card>
+<div id="myWorkContent">
+  <img *ngFor="let card of db; let i = index;" src="{{db[i]}}" height="200" (click)="updateImg(i)" style="margin:0 4px;" >
+</div>

@@ -1,51 +1,33 @@
-
-<!-- <mat-icon svgIcon="thumbs-up"></mat-icon> -->
-
 <mat-toolbar color="primary">
-    <button mat-icon-button [matMenuTriggerFor]="menu">
-        <mat-icon svgIcon="menu"></mat-icon>
-      </button>
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item>
-          <mat-icon svgIcon="dialpad">dialpad</mat-icon>
-          <span>Redial</span>
-        </button>
-        <button mat-menu-item disabled>
-          <mat-icon svgIcon="voicemail">voicemail</mat-icon>
-          <span>Check voicemail</span>
-        </button>
-        <button mat-menu-item>
-          <mat-icon svgIcon="notification">notifications_off</mat-icon>
-          <span>Disable alerts</span>
-        </button>
-      </mat-menu>
-  
+  <button mat-icon-button [matMenuTriggerFor]="menu">
+    <mat-icon svgIcon="menu"></mat-icon>
+  </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item><a style="text-decoration: none; color: rgba(0,0,0,.87);" routerLink="/home" routerLinkActive="active">
+        <mat-icon svgIcon="home">Home</mat-icon>
+        <span>Home</span>
+      </a>
+    </button>
+    <button mat-menu-item><a style="text-decoration: none; color: rgba(0,0,0,.87);" routerLink="/upload" routerLinkActive="active">
+        <mat-icon svgIcon="upload">Upload</mat-icon>
+        <span>Upload</span>
+      </a>
+    </button>
+    <button mat-menu-item>
+      <mat-icon svgIcon="settings">Settings</mat-icon>
+      <span>Settings</span>
+    </button>
+    <button mat-menu-item>
+      <mat-icon svgIcon="account">Account</mat-icon>
+      <span>Account</span>
+    </button>
+  </mat-menu>
 
   <!-- This fills the remaining space of the current row -->
   <span class="example-fill-remaining-space"></span>
 
   <span>{{title}}</span>
-
 </mat-toolbar>
-<button mat-button (click)="openDialog()">Open dialog</button>
-
-<mat-card class="example-card" >
-  <mat-card-header>
-    <div mat-card-avatar class="example-header-image"></div>
-    <mat-card-title>Skating 2018 Peir Village</mat-card-title>
-    <mat-card-subtitle>12/1/2018</mat-card-subtitle>
-  </mat-card-header>
-  <img mat-card-image [src]="myImg()" alt="kids skatin peir village" id="card" >
-  <mat-card-content>
-    <p>
-      A great time had by all.
-    </p>
-  </mat-card-content>
-  <mat-card-actions>
-    <button mat-button>LIKE</button>
-    <button mat-button>SHARE</button>
-  </mat-card-actions>
-</mat-card>
-  <div id="myWorkContent">
-    <img *ngFor="let card of db; let i = index;" src="{{db[i]}}" height="200" (click)="updateImg(i)" style="margin:0 4px;" >
+<div [@routerAnimation]="getRouteAnimation(route)">
+  <router-outlet #route="outlet"></router-outlet>
 </div>

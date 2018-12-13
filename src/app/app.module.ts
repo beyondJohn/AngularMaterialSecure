@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule, MatCheckboxModule } from '@angular/material';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -9,15 +8,50 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { HttpClientModule } from '@angular/common/http';
 import { MatCardModule } from '@angular/material/card';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterModule, Routes, ActivatedRoute } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { DialogDefaultComponent } from './dialog-default/dialog-default.component';
+import { UploadComponent } from './upload/upload.component';
+import { FileUploadComponent } from './file-upload/file-upload.component';
 
+import { FileUploadService } from './services/file-upload.service';
+import { BehaviorSubjectService } from './services/behavior-subject.service'
+
+import { Config } from './config';
+import { HomeComponent } from './home/home.component';
+
+const appRoutes: Routes = [
+  {
+    path: 'home',
+    component: HomeComponent,
+    data: { title: 'Home', animation: 'home' }
+  },
+  {
+    path: 'upload',
+    component: FileUploadComponent,
+    data: { title: 'Upload', animation: 'upload' }
+  },
+  {
+    path: '',
+    component: HomeComponent
+    
+  },
+  {
+    path: "",
+    redirectTo: 'home',
+    pathMatch: 'full'
+  }
+]
 
 @NgModule({
   declarations: [
     AppComponent,
-    DialogDefaultComponent
+    DialogDefaultComponent,
+    UploadComponent,
+    FileUploadComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule
@@ -30,8 +64,13 @@ import { DialogDefaultComponent } from './dialog-default/dialog-default.componen
     , MatIconModule
     , HttpClientModule
     , MatCardModule
+    , FormsModule
+    , ReactiveFormsModule,
+    RouterModule.forRoot(appRoutes,
+      { enableTracing: false, onSameUrlNavigation: 'reload' }
+    )
   ],
-  providers: [],
+  providers: [FileUploadService, BehaviorSubjectService, Config],
   bootstrap: [AppComponent],
   entryComponents: [DialogDefaultComponent]
 })
