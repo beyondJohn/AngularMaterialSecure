@@ -5,7 +5,7 @@
 
 <mat-card class="example-card" >
 <mat-card-header>
-  <div mat-card-avatar class="example-header-image"></div>
+  <div mat-card-avatar class="icon-image"></div>
   <mat-card-title>Skating 2018 Peir Village</mat-card-title>
   <mat-card-subtitle>12/1/2018</mat-card-subtitle>
 </mat-card-header>
@@ -20,6 +20,9 @@
   <button mat-button>SHARE</button>
 </mat-card-actions>
 </mat-card>
-<div id="myWorkContent">
+<div class="myWorkContent">
+  <img *ngFor="let card of db; let i = index;" src="{{db[i]}}" height="200" (click)="updateImg(i)" style="margin:0 4px;" >
+</div>
+<div class="myWorkContent">
   <img *ngFor="let card of db; let i = index;" src="{{db[i]}}" height="200" (click)="updateImg(i)" style="margin:0 4px;" >
 </div>

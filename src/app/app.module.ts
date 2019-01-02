@@ -6,7 +6,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
-import { HttpClientModule } from '@angular/common/http';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { HttpClientModule,HTTP_INTERCEPTORS, HttpClient  } from '@angular/common/http';
 import { MatCardModule } from '@angular/material/card';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes, ActivatedRoute } from '@angular/router';
@@ -17,7 +18,8 @@ import { UploadComponent } from './upload/upload.component';
 import { FileUploadComponent } from './file-upload/file-upload.component';
 
 import { FileUploadService } from './services/file-upload.service';
-import { BehaviorSubjectService } from './services/behavior-subject.service'
+import { BehaviorSubjectService } from './services/behavior-subject.service';
+import { HttpInterceptorService } from './services/http-interceptor.service';
 
 import { Config } from './config';
 import { HomeComponent } from './home/home.component';
@@ -62,6 +64,7 @@ const appRoutes: Routes = [
     , MatDialogModule
     , MatMenuModule
     , MatIconModule
+    , MatProgressSpinnerModule
     , HttpClientModule
     , MatCardModule
     , FormsModule
@@ -70,7 +73,11 @@ const appRoutes: Routes = [
       { enableTracing: false, onSameUrlNavigation: 'reload' }
     )
   ],
-  providers: [FileUploadService, BehaviorSubjectService, Config],
+  providers: [
+    FileUploadService
+    , BehaviorSubjectService
+    , Config
+    ,HttpClient],
   bootstrap: [AppComponent],
   entryComponents: [DialogDefaultComponent]
 })

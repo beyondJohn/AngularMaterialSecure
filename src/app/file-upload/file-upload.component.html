@@ -1,31 +1,35 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
-  <div class="form-group">
-      <table>
-          <tr>
-              <td style="text-align: left; padding-left: 28px;height:80px;" colspan="2">
-                <button mat-raised-button color="primary" style="padding:15px;" type="button" (click)="openInput()">Select Image</button>
-                  <input class="file-selector" hidden type="file" accept="image/*" id="image" name="image" (change)="onFileChange($event)" enctype="multipart/form-data"
-                      #fileInput>
-              </td>
-          </tr>
+    <div class="form-group">
+        <table>
+            <tr>
+                <td style="text-align: left; padding-left: 28px;height:80px;" colspan="2">
+                    <button mat-raised-button color="primary" style="padding:15px;" type="button" (click)="openInput()">Select
+                        Image</button>
+                    <input class="file-selector" hidden type="file" accept="image/*" id="image" name="image" (change)="onFileChange($event)"
+                        enctype="multipart/form-data" #fileInput>
+                </td>
+            </tr>
 
-          <tr>
-              <td colspan="2">
-                  <img [src]="preview()" style="width:100%; padding: 25px;">
-              </td>
-          </tr>
-          <tr>
+            <tr>
+                <td colspan="2">
+                    <img [src]="preview()" style="width:100%; padding: 25px;">
+                    <mat-progress-spinner [color]="color" [mode]="mode" [value]="value">
+                    </mat-progress-spinner>
+                </td>
+            </tr>
+            <tr>
                 <td>
                 </td>
                 <td style="text-align: right;">
                     <!-- <button type="button" class="btn btn-sm btn-default" (click)="clearFile()">clear file</button> -->
                     <button mat-raised-button color="warn" style="padding:15px;" type="button" (click)="cancel()">Cancel</button>
-                    <button id="submit" type="submit" mat-raised-button color="accent" style="padding:15px;"  [disabled]="form.invalid || loading || disabled" class="btn btn-success">Save
+                    <button id="submit" type="submit" mat-raised-button color="accent" style="padding:15px;" [disabled]="form.invalid || loading || disabled"
+                        class="btn btn-success">Save
                         <i class="fa fa-spinner fa-spin fa-fw" *ngIf="loading"></i>
                     </button>
                     <label id="complete"></label>
                 </td>
             </tr>
-      </table>
-  </div>
+        </table>
+    </div>
 </form>

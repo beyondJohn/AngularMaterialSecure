@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router'
 import { Config } from '../config';
 import { BehaviorSubjectService } from '../services/behavior-subject.service';
+
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
@@ -11,6 +12,7 @@ import { MatButtonModule } from '@angular/material/button';
   templateUrl: './file-upload.component.html',
   styleUrls: ['./file-upload.component.css']
 })
+
 export class FileUploadComponent implements OnInit {
   form: FormGroup;
   loading: boolean = false;
@@ -25,6 +27,11 @@ export class FileUploadComponent implements OnInit {
   ) {
     this.createForm();
   }
+
+  color = 'primary';
+  mode = 'determinate';
+  value = 0;
+
   apiEndPoint = this._config.urls.apiEndPoint;
   ngOnInit() {
 
@@ -40,13 +47,13 @@ export class FileUploadComponent implements OnInit {
   //   contentSelector.value === "Content Area..." ? this.disabled = true : this.disabled = false ;
   // }
   found = false;
-  myImage = '../../assets/img/preview.png';
+  myImage = '../../assets/img/search.png';
   preview(img) {
     if (img != null && !this.found) {
       this.found = !this.found;
       this.myImage = img;
     }
-    return(this.myImage);
+    return (this.myImage);
   }
   onFileChange(event) {
     this.found = false;
@@ -80,10 +87,14 @@ export class FileUploadComponent implements OnInit {
     // your can use ElementRef for this later
     document.getElementById("image").click();
   }
-  cancel(){
+  cancel() {
     this._router.navigate(['/home']);
   }
+
+
+
   onSubmit() {
+    let that = this;
     document.getElementById('complete').innerText = '';
     this.loading = true;
     //let contentSelector = document.getElementById('contentAreaSelector') as HTMLSelectElement;
@@ -92,17 +103,109 @@ export class FileUploadComponent implements OnInit {
     let formdata = new FormData();
     formdata.append('image', img.files[0]);
     formdata.append('type', 'kids');
-    this._httpClient.post(this.apiEndPoint + '/imageupload/HeaderLogo', formdata).subscribe(
-      data => {
-        console.log('success: ', data);
-        this.loading = false;
-        document.getElementById('complete').innerText = 'Upload Complete';
-        this.disabled = true;
-        this._router.navigate(['/home']);
-        // this._behaviorSubject.refreshImagesDB('refresh');
-      },
-      error => { console.log(error); this.loading = false; }
-    );
+
+    // //Start WINNER
+    // var xhr = new XMLHttpRequest();
+    // xhr.open('POST', this.apiEndPoint + '/imageupload/HeaderLogo', true);
+    // xhr.upload.onprogress = function (e) {
+    //   if (e.lengthComputable) {
+    //     var percentage = (e.loaded / e.total) * 100;
+    //     console.log(percentage);
+    //   }
+    // };
+    // xhr.send(formdata);
+    // //End WINNER
+
+    // //new Start
+    // var getEventMessage = function (event: HttpEvent<any>, file: File) {
+    //   console.log('event type: ', event.type)
+    //   switch (event.type) {
+    //     case HttpEventType.Sent:
+    //       return `Uploading file "${file.name}" of size ${file.size}.`;
+
+    //     case HttpEventType.UploadProgress:
+    //       // Compute and show the % done:
+    //       const percentDone = Math.round(100 * event.loaded / event.total);
+    //       return `File "${file.name}" is ${percentDone}% uploaded.`;
+
+    //     case HttpEventType.Response:
+    //       return `File "${file.name}" was completely uploaded!`;
+
+    //     default:
+    //       return `File "${file.name}" surprising upload event: ${event.type}.`;
+    //   }
+    // }
+
+    this._httpClient.post(this.apiEndPoint + '/imageupload/HeaderLogo', formdata
+      , {
+        reportProgress: true,
+        observe: 'events'
+      }
+    )
+      .subscribe(
+        (event) => {
+          console.log(event);
+          if (event['type'] == 1 && event['loaded'] && event['total']) {
+            let percent = Math.round(parseFloat(event['total'])/parseFloat(event['loaded']));
+            console.log('percent: ', percent);
+            that.value = percent;
+            console.log("data['type']: " + event['type'] + "data['loaded']: " + event['loaded'] + "data['total']: " + event['total'])
+          }
+          else if(event['type'] > 1){
+            console.log('success: ', event);
+            this.loading = false;
+            document.getElementById('complete').innerText = 'Upload Complete';
+            this.disabled = true;
+            this._behaviorSubject.refreshImagesDB('refresh');
+            this._router.navigate(['/home']);
+          }
+        },
+        err => console.log(err)
+      );
+    //
+    //
+
+    //.map(res => console.log(res));
+    // this._httpClient.post(this.apiEndPoint + '/imageupload/HeaderLogo',formdata)
+    //  .subscribe(
+    //     event => {
+    //       console.log("event: "+event);
+
+    //         // if (event["type"] === HttpEventType.DownloadProgress) {
+    //         //     console.log("Download progress event", event);
+    //         // }
+
+    //         // if (event["type"] === HttpEventType.UploadProgress) {
+    //         //     console.log("Upload progress event", event);
+    //         // }
+
+    //         // if (event["type"] === HttpEventType.Response) {
+    //         //     console.log("response received...", event["body"]);
+    //         // }
+
+    //     }
+    // );
+    // this._httpClient.post(
+    //   this.apiEndPoint
+    //   + '/imageupload/HeaderLogo',
+    //   formdata
+    // ).subscribe(
+    //   data => {
+    //     if (data['type'] == 1 && data['loaded'] && data['total']) {
+
+    //         console.log( "data['type']: " + data['type'] + "data['loaded']: " + data['loaded'] + "data['total']: " + data['total'])
+    //     }
+    //     else {
+    //       console.log('success: ', data);
+    //       this.loading = false;
+    //       document.getElementById('complete').innerText = 'Upload Complete';
+    //       this.disabled = true;
+    //       this._router.navigate(['/home']);
+    //       // this._behaviorSubject.refreshImagesDB('refresh');
+    //     }
+    //   },
+    //   error => { console.log(error); this.loading = false; }
+    // );
   }
   disabled = false;
   clearFile() {
@@ -128,4 +231,6 @@ export class FileUploadComponent implements OnInit {
   //     )
   //   }
   // }
+  /** Return distinct message for sent, upload progress, & response events */
+
 }

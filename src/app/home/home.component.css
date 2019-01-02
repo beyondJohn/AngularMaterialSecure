@@ -1,14 +1,18 @@
-#myWorkContent{
+.myWorkContent{
     width: auto;
     overflow-x: scroll;
     overflow-y: hidden;
     white-space: nowrap;
 }
-#myWorkContent a {
+.myWorkContent a {
     display: inline-block;
     vertical-align: middle;
 }
 
-#myWorkContent img {
+.myWorkContent img {
     border: 0;
 }
+.icon-image {
+    background-image: url('/assets/img/Adrian_Piesco.jpg');
+    background-size: cover;
+  }

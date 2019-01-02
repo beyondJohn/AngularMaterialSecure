@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { HttpClient } from '@angular/common/http';
+import { BehaviorSubjectService } from '../services/behavior-subject.service';
 import { DialogDefaultComponent } from '../dialog-default/dialog-default.component';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatIconRegistry } from '@angular/material';
@@ -15,6 +16,7 @@ export class HomeComponent implements OnInit {
   constructor(
     public dialog: MatDialog
     , private http: HttpClient
+    , private _behaviorSubject: BehaviorSubjectService
   ) { }
   myPosition = 0;
   imageObjects = [];
@@ -37,14 +39,26 @@ export class HomeComponent implements OnInit {
     this.db = [];
     var count = 0;
     for (var object in this.imageObjects) {
-      console.log("object: ", this.imageObjects[count]);
+
       this.db.push(this.imageObjects[count]["url"]);
       count++;
     }
     //this.db.reverse();
   }
-  ngOnInit() {
+  getImages() {
     this.http.get('https://switchmagic.com:4111/getImages').subscribe(imagesDB => { console.log(imagesDB); this.processImages(imagesDB); });
+  }
+  ngOnInit() {
+    this.getImages();
+    let that = this;
+    this._behaviorSubject.elements.subscribe(event => {
+      setTimeout(function () {
+        console.log("get images!");
+        that.getImages();
+      }, 1000);
+
+    });
+
   }
 
 }
