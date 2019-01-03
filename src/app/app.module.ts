@@ -16,13 +16,15 @@ import { AppComponent } from './app.component';
 import { DialogDefaultComponent } from './dialog-default/dialog-default.component';
 import { UploadComponent } from './upload/upload.component';
 import { FileUploadComponent } from './file-upload/file-upload.component';
+import { HomeComponent } from './home/home.component';
+import { EditComponent } from './edit/edit.component';
 
 import { FileUploadService } from './services/file-upload.service';
 import { BehaviorSubjectService } from './services/behavior-subject.service';
 import { HttpInterceptorService } from './services/http-interceptor.service';
 
 import { Config } from './config';
-import { HomeComponent } from './home/home.component';
+
 
 const appRoutes: Routes = [
   {
@@ -53,7 +55,8 @@ const appRoutes: Routes = [
     DialogDefaultComponent,
     UploadComponent,
     FileUploadComponent,
-    HomeComponent
+    HomeComponent,
+    EditComponent
   ],
   imports: [
     BrowserModule
@@ -79,6 +82,6 @@ const appRoutes: Routes = [
     , Config
     ,HttpClient],
   bootstrap: [AppComponent],
-  entryComponents: [DialogDefaultComponent]
+  entryComponents: [DialogDefaultComponent,EditComponent]
 })
 export class AppModule { }

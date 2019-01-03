@@ -1,6 +1,6 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <div class="form-group">
-        <table>
+        <table style="margin: 0 auto;">
             <tr>
                 <td style="text-align: left; padding-left: 28px;height:80px;" colspan="2">
                     <button mat-raised-button color="primary" style="padding:15px;" type="button" (click)="openInput()">Select
@@ -15,6 +15,7 @@
                     <img [src]="preview()" style="width:100%; padding: 25px;">
                     <mat-progress-spinner [color]="color" [mode]="mode" [value]="value">
                     </mat-progress-spinner>
+                    <label id="complete"></label>
                 </td>
             </tr>
             <tr>
@@ -27,7 +28,7 @@
                         class="btn btn-success">Save
                         <i class="fa fa-spinner fa-spin fa-fw" *ngIf="loading"></i>
                     </button>
-                    <label id="complete"></label>
+                    
                 </td>
             </tr>
         </table>

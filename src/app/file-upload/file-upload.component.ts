@@ -28,7 +28,7 @@ export class FileUploadComponent implements OnInit {
     this.createForm();
   }
 
-  color = 'primary';
+  color = 'accent';
   mode = 'determinate';
   value = 0;
 
@@ -146,15 +146,17 @@ export class FileUploadComponent implements OnInit {
         (event) => {
           console.log(event);
           if (event['type'] == 1 && event['loaded'] && event['total']) {
-            let percent = Math.round(parseFloat(event['total'])/parseFloat(event['loaded']));
+            let percent = 100 - Math.round(parseFloat(event['total'])/parseFloat(event['loaded']));
             console.log('percent: ', percent);
             that.value = percent;
+            percent > 98 ? document.getElementById('complete').innerText = 'COMPLETING' : document.getElementById('complete').innerText = percent + '% COMPLETE';
+            
             console.log("data['type']: " + event['type'] + "data['loaded']: " + event['loaded'] + "data['total']: " + event['total'])
           }
           else if(event['type'] > 1){
             console.log('success: ', event);
             this.loading = false;
-            document.getElementById('complete').innerText = 'Upload Complete';
+            // document.getElementById('complete').innerText = 'Upload Complete';
             this.disabled = true;
             this._behaviorSubject.refreshImagesDB('refresh');
             this._router.navigate(['/home']);

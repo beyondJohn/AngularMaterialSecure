@@ -1,7 +1,7 @@
 
 <!-- <mat-icon svgIcon="thumbs-up"></mat-icon> -->
 
-<button mat-button (click)="openDialog()">Open dialog</button>
+<button mat-button (click)="openDialog()">Hello there!</button>
 
 <mat-card class="example-card" >
 <mat-card-header>
@@ -9,7 +9,7 @@
   <mat-card-title>Skating 2018 Peir Village</mat-card-title>
   <mat-card-subtitle>12/1/2018</mat-card-subtitle>
 </mat-card-header>
-<img mat-card-image [src]="myImg()" alt="kids skatin peir village" id="card" >
+<img mat-card-image [src]="myImg()" alt="kids skatin peir village" id="card" (click)="edit(myImg())" >
 <mat-card-content>
   <p>
     A great time had by all.

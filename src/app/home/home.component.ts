@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { Component, OnInit, Inject } from '@angular/core';
+import { MatDialog} from '@angular/material';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubjectService } from '../services/behavior-subject.service';
 import { DialogDefaultComponent } from '../dialog-default/dialog-default.component';
+import { EditComponent } from '../edit/edit.component';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatIconRegistry } from '@angular/material';
 
@@ -11,8 +12,9 @@ import { MatIconRegistry } from '@angular/material';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements OnInit {
 
+export class HomeComponent implements OnInit {
+  
   constructor(
     public dialog: MatDialog
     , private http: HttpClient
@@ -43,7 +45,7 @@ export class HomeComponent implements OnInit {
       this.db.push(this.imageObjects[count]["url"]);
       count++;
     }
-    //this.db.reverse();
+    this.db.reverse();
   }
   getImages() {
     this.http.get('https://switchmagic.com:4111/getImages').subscribe(imagesDB => { console.log(imagesDB); this.processImages(imagesDB); });
@@ -59,6 +61,13 @@ export class HomeComponent implements OnInit {
 
     });
 
+  }
+  openDialog() {
+      this.dialog.open(DialogDefaultComponent);
+  }
+  edit(img){
+    this.dialog.open(EditComponent,{data:{img:img}});
+    console.log('img: ', img);
   }
 
 }
