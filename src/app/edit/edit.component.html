@@ -2,7 +2,7 @@
 <mat-dialog-content class="mat-typography">
   <img [src]="data.img" width="100%">
   <mat-form-field class="example-full-width">
-      <mat-select placeholder="Showcase" [(ngModel)]="selectedValue" [ngModelOptions]="{standalone: true}" value="1" name="type">
+      <mat-select placeholder="Showcase" [(ngModel)]="selectedValue" [ngModelOptions]="{standalone: true}" [(value)]="selectedValue" name="type">
           <mat-option *ngFor="let type of showcases" [value]="type.value">
               {{type.viewValue}}
           </mat-option>
@@ -17,7 +17,7 @@
   </mat-form-field>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button mat-button mat-raised-button color="warn" ><mat-icon svgIcon="delete"></mat-icon></button>
+  <button mat-button mat-raised-button color="warn" (click)="deleteImage(this)" ><mat-icon svgIcon="delete"></mat-icon></button>
   <button mat-button mat-dialog-close mat-raised-button color="accent">Cancel</button>
   <button mat-button (click)="delete(this)" [mat-dialog-close]="true" cdkFocusInitial mat-raised-button color="primary" >Good</button>
 </mat-dialog-actions>

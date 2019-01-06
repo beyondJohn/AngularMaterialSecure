@@ -27,6 +27,7 @@ import { HttpInterceptorService } from './services/http-interceptor.service';
 
 import { Config } from './config';
 import { ReversePipe } from './pipes/reverse.pipe';
+import { VertScrollComponent } from './vert-scroll/vert-scroll.component';
 
 
 const appRoutes: Routes = [
@@ -60,7 +61,8 @@ const appRoutes: Routes = [
     FileUploadComponent,
     HomeComponent,
     EditComponent,
-    ReversePipe
+    ReversePipe,
+    VertScrollComponent
   ],
   imports: [
     BrowserModule

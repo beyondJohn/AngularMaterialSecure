@@ -17,11 +17,11 @@ export interface Showcase {
 
 export class HomeComponent implements OnInit {
   showcases: Showcase[] = [
-    {value: '0', viewValue: 'Family'},
-    {value: '1', viewValue: 'Friends'},
-    {value: '2', viewValue: 'Fun'},
-    {value: '3', viewValue: 'Food'},
-    {value: '4', viewValue: 'Nature'}
+    { value: '0', viewValue: 'Family' },
+    { value: '1', viewValue: 'Friends' },
+    { value: '2', viewValue: 'Fun' },
+    { value: '3', viewValue: 'Food' },
+    { value: '4', viewValue: 'Nature' }
   ];
   constructor(
     public dialog: MatDialog
@@ -33,12 +33,12 @@ export class HomeComponent implements OnInit {
   db = [];
   dbTypesArray = [];
   description = "meBloggy";
-  date = "Thursday December 26, 2018"; 
+  date = "Thursday December 26, 2018";
   comment = "";
   myImg() {
-    
+
     // check if array of showcases 'db' is loaded before attempting to access each showcase's image objects  
-    if(this.db.length > 0){
+    if (this.db.length > 0) {
       // set string values for description, date, & comment before returning the image url to the view
       this.description = this.db[this.myPosition[0]][this.myPosition[1]].description;
       this.date = this.db[this.myPosition[0]][this.myPosition[1]].date;
@@ -103,7 +103,9 @@ export class HomeComponent implements OnInit {
     let desc = this.db[this.myPosition[0]][this.myPosition[1]].description;
     let comm = this.db[this.myPosition[0]][this.myPosition[1]].comment;
     let type = this.db[this.myPosition[0]][this.myPosition[1]].type;
-    this.dialog.open(EditComponent, { data: { img: img, description: desc, comment: comm, type: type} });
+    let image = this.db[this.myPosition[0]][this.myPosition[1]].image;
+    let timestamp = this.db[this.myPosition[0]][this.myPosition[1]].timestamp;
+    this.dialog.open(EditComponent, { data: { img: img, description: desc, comment: comm, type: type, timestamp: timestamp, image:image } });
     console.log('img: ', img);
   }
 

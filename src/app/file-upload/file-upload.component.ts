@@ -119,6 +119,7 @@ export class FileUploadComponent implements OnInit, AfterViewInit {
     formdata.append('description', this.describe);
     formdata.append('date', new Date().toDateString());
     formdata.append('comment', this.comment);
+    formdata.append('timestamp', Date.now.toString());
 
     this._httpClient.post(this.apiEndPoint + '/imageupload/HeaderLogo', formdata
       , {
