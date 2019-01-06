@@ -7,8 +7,10 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { HttpClientModule,HTTP_INTERCEPTORS, HttpClient  } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
 import { MatCardModule } from '@angular/material/card';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes, ActivatedRoute } from '@angular/router';
 
@@ -24,6 +26,7 @@ import { BehaviorSubjectService } from './services/behavior-subject.service';
 import { HttpInterceptorService } from './services/http-interceptor.service';
 
 import { Config } from './config';
+import { ReversePipe } from './pipes/reverse.pipe';
 
 
 const appRoutes: Routes = [
@@ -40,7 +43,7 @@ const appRoutes: Routes = [
   {
     path: '',
     component: HomeComponent
-    
+
   },
   {
     path: "",
@@ -56,7 +59,8 @@ const appRoutes: Routes = [
     UploadComponent,
     FileUploadComponent,
     HomeComponent,
-    EditComponent
+    EditComponent,
+    ReversePipe
   ],
   imports: [
     BrowserModule
@@ -70,6 +74,8 @@ const appRoutes: Routes = [
     , MatProgressSpinnerModule
     , HttpClientModule
     , MatCardModule
+    , MatInputModule
+    , MatSelectModule
     , FormsModule
     , ReactiveFormsModule,
     RouterModule.forRoot(appRoutes,
@@ -80,8 +86,10 @@ const appRoutes: Routes = [
     FileUploadService
     , BehaviorSubjectService
     , Config
-    ,HttpClient],
+    , HttpClient
+    , ReversePipe
+  ],
   bootstrap: [AppComponent],
-  entryComponents: [DialogDefaultComponent,EditComponent]
+  entryComponents: [DialogDefaultComponent, EditComponent]
 })
 export class AppModule { }

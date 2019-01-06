@@ -1,28 +1,29 @@
-
 <!-- <mat-icon svgIcon="thumbs-up"></mat-icon> -->
 
 <button mat-button (click)="openDialog()">Hello there!</button>
 
-<mat-card class="example-card" >
-<mat-card-header>
-  <div mat-card-avatar class="icon-image"></div>
-  <mat-card-title>Skating 2018 Peir Village</mat-card-title>
-  <mat-card-subtitle>12/1/2018</mat-card-subtitle>
-</mat-card-header>
-<img mat-card-image [src]="myImg()" alt="kids skatin peir village" id="card" (click)="edit(myImg())" >
-<mat-card-content>
-  <p>
-    A great time had by all.
-  </p>
-</mat-card-content>
-<mat-card-actions>
-  <button mat-button>LIKE</button>
-  <button mat-button>SHARE</button>
-</mat-card-actions>
+<mat-card class="example-card">
+  <mat-card-header>
+    <div mat-card-avatar class="icon-image"></div>
+    <mat-card-title>{{description}}</mat-card-title>
+    <mat-card-subtitle>{{date}}</mat-card-subtitle>
+  </mat-card-header>
+  <img mat-card-image [src]="myImg()" alt="kids skatin peir village" id="card" (click)="edit(myImg())">
+  <mat-card-content>
+    <p>
+      {{comment}}
+    </p>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-button>LIKE</button>
+    <button mat-button>SHARE</button>
+  </mat-card-actions>
 </mat-card>
-<div class="myWorkContent">
-  <img *ngFor="let card of db; let i = index;" src="{{db[i]}}" height="200" (click)="updateImg(i)" style="margin:0 4px;" >
-</div>
-<div class="myWorkContent">
-  <img *ngFor="let card of db; let i = index;" src="{{db[i]}}" height="200" (click)="updateImg(i)" style="margin:0 4px;" >
+<br />
+<div class="showcaseHeader" *ngFor="let showcaseIndex of db; let s = index;">
+  {{showcases[dbTypesArray[s]].viewValue.toUpperCase()}}
+  <div class="myWorkContent">
+    <img *ngFor="let card of showcaseIndex; let i = index;" src="{{db[s][i].url}}" height="200" (click)="updateImg(i,s)"
+      style="margin:0 4px;">
+  </div>
 </div>

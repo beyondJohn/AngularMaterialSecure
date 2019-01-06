@@ -5,7 +5,6 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { MatIconRegistry } from '@angular/material';
 import { trigger, state, style, animate, transition, query } from '@angular/animations';
 
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -49,9 +48,9 @@ import { trigger, state, style, animate, transition, query } from '@angular/anim
   ]
 })
 export class AppComponent {
+
   title = 'meBloggy';
-  db = ["../assets/img/kidsSkating.jpg", "../assets/img/kidsSkating2.jpg", "../assets/img/kidsSkating5.jpg",
-    "../assets/img/kidsSkating3.jpg", "../assets/img/kidsSkating4.jpg"];
+  db = [];
   constructor(
     iconRegistry: MatIconRegistry
     , sanitizer: DomSanitizer
@@ -83,6 +82,15 @@ export class AppComponent {
     iconRegistry.addSvgIcon(
       'account',
       sanitizer.bypassSecurityTrustResourceUrl('assets/materialIconsSVGs/account.svg'));
+    iconRegistry.addSvgIcon(
+      'delete',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/materialIconsSVGs/delete.svg'));
+    iconRegistry.addSvgIcon(
+      'list',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/materialIconsSVGs/list.svg'));
+    iconRegistry.addSvgIcon(
+      'menu2',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/materialIconsSVGs/menu2.svg'));
   }
   myPosition = 0;
   myImg() {

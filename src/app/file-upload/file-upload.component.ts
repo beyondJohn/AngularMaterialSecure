@@ -1,19 +1,29 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router'
 import { Config } from '../config';
 import { BehaviorSubjectService } from '../services/behavior-subject.service';
 
-import { MatButtonModule } from '@angular/material/button';
-
+export interface Showcase {
+  value: string;
+  viewValue: string;
+}
 @Component({
   selector: 'app-file-upload',
   templateUrl: './file-upload.component.html',
   styleUrls: ['./file-upload.component.css']
 })
 
-export class FileUploadComponent implements OnInit {
+export class FileUploadComponent implements OnInit, AfterViewInit {
+  selectedValue: string;
+  showcases: Showcase[] = [
+    { value: '0', viewValue: 'Family' },
+    { value: '1', viewValue: 'Friends' },
+    { value: '2', viewValue: 'Fun' },
+    { value: '3', viewValue: 'Food' },
+    { value: '4', viewValue: 'Nature' }
+  ];
   form: FormGroup;
   loading: boolean = false;
   @ViewChild('fileInput') fileInput: ElementRef;
@@ -31,12 +41,15 @@ export class FileUploadComponent implements OnInit {
   color = 'accent';
   mode = 'determinate';
   value = 0;
-
+  describe = "meBloggy Rocks!";
+  comment = "What a great time!";
   apiEndPoint = this._config.urls.apiEndPoint;
   ngOnInit() {
 
   }
-
+  ngAfterViewInit() {
+    this.openInput();
+  }
   createForm() {
     this.form = this.fb.group({
       image: [null, Validators.required]
@@ -102,7 +115,53 @@ export class FileUploadComponent implements OnInit {
     let img = document.getElementById("image") as HTMLInputElement;
     let formdata = new FormData();
     formdata.append('image', img.files[0]);
-    formdata.append('type', 'kids');
+    formdata.append('type', this.selectedValue);
+    formdata.append('description', this.describe);
+    formdata.append('date', new Date().toDateString());
+    formdata.append('comment', this.comment);
+
+    this._httpClient.post(this.apiEndPoint + '/imageupload/HeaderLogo', formdata
+      , {
+        reportProgress: true,
+        observe: 'events'
+      }
+    )
+      .subscribe(
+        (event) => {
+          console.log(event);
+          if (event['type'] == 1 && event['loaded'] && event['total']) {
+            let percent = 100 - Math.round(parseFloat(event['total']) / parseFloat(event['loaded']));
+            console.log('percent: ', percent);
+            that.value = percent;
+            percent > 98 ? document.getElementById('complete').innerText = 'COMPLETING' : document.getElementById('complete').innerText = percent + '% COMPLETE';
+
+            console.log("event['type']: " + event['type'] + "event['loaded']: " + event['loaded'] + "event['total']: " + event['total']);
+          }
+          else if (event['type'] > 1) {
+            console.log('success: ', event);
+            this.loading = false;
+            this.disabled = true;
+            this._behaviorSubject.refreshImagesDB('refresh');
+            this._router.navigate(['/home']);
+          }
+        },
+        err => console.log(err)
+      );
+    //
+    //
+
+  }
+  disabled = false;
+  clearFile() {
+    //let contentSelector = document.getElementById('contentAreaSelector') as HTMLSelectElement;
+    //var contentArea = contentSelector.value = "Content Area..." ;
+    this.form.get('image').setValue(null);
+    this.fileInput.nativeElement.value = '';
+    document.getElementById('complete').innerText = '';
+    this.disabled = false;
+  }
+
+}
 
     // //Start WINNER
     // var xhr = new XMLHttpRequest();
@@ -135,104 +194,3 @@ export class FileUploadComponent implements OnInit {
     //       return `File "${file.name}" surprising upload event: ${event.type}.`;
     //   }
     // }
-
-    this._httpClient.post(this.apiEndPoint + '/imageupload/HeaderLogo', formdata
-      , {
-        reportProgress: true,
-        observe: 'events'
-      }
-    )
-      .subscribe(
-        (event) => {
-          console.log(event);
-          if (event['type'] == 1 && event['loaded'] && event['total']) {
-            let percent = 100 - Math.round(parseFloat(event['total'])/parseFloat(event['loaded']));
-            console.log('percent: ', percent);
-            that.value = percent;
-            percent > 98 ? document.getElementById('complete').innerText = 'COMPLETING' : document.getElementById('complete').innerText = percent + '% COMPLETE';
-            
-            console.log("data['type']: " + event['type'] + "data['loaded']: " + event['loaded'] + "data['total']: " + event['total'])
-          }
-          else if(event['type'] > 1){
-            console.log('success: ', event);
-            this.loading = false;
-            // document.getElementById('complete').innerText = 'Upload Complete';
-            this.disabled = true;
-            this._behaviorSubject.refreshImagesDB('refresh');
-            this._router.navigate(['/home']);
-          }
-        },
-        err => console.log(err)
-      );
-    //
-    //
-
-    //.map(res => console.log(res));
-    // this._httpClient.post(this.apiEndPoint + '/imageupload/HeaderLogo',formdata)
-    //  .subscribe(
-    //     event => {
-    //       console.log("event: "+event);
-
-    //         // if (event["type"] === HttpEventType.DownloadProgress) {
-    //         //     console.log("Download progress event", event);
-    //         // }
-
-    //         // if (event["type"] === HttpEventType.UploadProgress) {
-    //         //     console.log("Upload progress event", event);
-    //         // }
-
-    //         // if (event["type"] === HttpEventType.Response) {
-    //         //     console.log("response received...", event["body"]);
-    //         // }
-
-    //     }
-    // );
-    // this._httpClient.post(
-    //   this.apiEndPoint
-    //   + '/imageupload/HeaderLogo',
-    //   formdata
-    // ).subscribe(
-    //   data => {
-    //     if (data['type'] == 1 && data['loaded'] && data['total']) {
-
-    //         console.log( "data['type']: " + data['type'] + "data['loaded']: " + data['loaded'] + "data['total']: " + data['total'])
-    //     }
-    //     else {
-    //       console.log('success: ', data);
-    //       this.loading = false;
-    //       document.getElementById('complete').innerText = 'Upload Complete';
-    //       this.disabled = true;
-    //       this._router.navigate(['/home']);
-    //       // this._behaviorSubject.refreshImagesDB('refresh');
-    //     }
-    //   },
-    //   error => { console.log(error); this.loading = false; }
-    // );
-  }
-  disabled = false;
-  clearFile() {
-    //let contentSelector = document.getElementById('contentAreaSelector') as HTMLSelectElement;
-    //var contentArea = contentSelector.value = "Content Area..." ;
-    this.form.get('image').setValue(null);
-    this.fileInput.nativeElement.value = '';
-    document.getElementById('complete').innerText = '';
-    this.disabled = false;
-  }
-  // fileChange(event) {
-  //   let fileList: FileList = event.target.files;
-  //   if (fileList.length > 0) {
-  //     let file: File = fileList[0];
-  //     let formData: FormData = new FormData();
-  //     formData.append('uploadFile', file, file.name);
-  //     let headers = new Headers();
-
-  //     //let options = new RequestOptions({ headers: headers });
-  //     this._httpClient.post(this.apiEndPoint, { id: '7', name: 'jp', details: file }).subscribe(
-  //       data => console.log('success'),
-  //       error => console.log(error)
-  //     )
-  //   }
-  // }
-  /** Return distinct message for sent, upload progress, & response events */
-
-}

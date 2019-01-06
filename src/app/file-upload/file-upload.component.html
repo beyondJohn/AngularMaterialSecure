@@ -12,7 +12,30 @@
 
             <tr>
                 <td colspan="2">
-                    <img [src]="preview()" style="width:100%; padding: 25px;">
+                    <img [src]="preview()" style="width:100%; padding: 25px 0;">
+                </td>
+            </tr>
+            <tr [hidden]="myImage == '../../assets/img/search.png'">
+                <td colspan="2" style="text-align: center;">
+                    <mat-form-field class="example-full-width">
+                        <mat-select placeholder="Showcase" [(ngModel)]="selectedValue" [ngModelOptions]="{standalone: true}"
+                            name="type">
+                            <mat-option *ngFor="let type of showcases" [value]="type.value">
+                                {{type.viewValue}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <br />
+                    <mat-form-field class="example-full-width">
+                        <input matInput placeholder="Quick Descript" [value]="describe" [(ngModel)]="describe"
+                            [ngModelOptions]="{standalone: true}">
+                    </mat-form-field>
+                    <br />
+                    <mat-form-field class="example-full-width">
+                        <input matInput placeholder="Nice Comment" [value]="comment" [(ngModel)]="comment"
+                            [ngModelOptions]="{standalone: true}">
+                    </mat-form-field>
+                    <br />
                     <mat-progress-spinner [color]="color" [mode]="mode" [value]="value">
                     </mat-progress-spinner>
                     <label id="complete"></label>
@@ -28,7 +51,7 @@
                         class="btn btn-success">Save
                         <i class="fa fa-spinner fa-spin fa-fw" *ngIf="loading"></i>
                     </button>
-                    
+
                 </td>
             </tr>
         </table>

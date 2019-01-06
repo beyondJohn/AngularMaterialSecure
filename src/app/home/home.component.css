@@ -16,3 +16,8 @@
     background-image: url('/assets/img/Adrian_Piesco.jpg');
     background-size: cover;
   }
+  .showcaseHeader{
+      padding: 5px;
+      color: #ff4081;
+      font-weight: 700;
+  }
