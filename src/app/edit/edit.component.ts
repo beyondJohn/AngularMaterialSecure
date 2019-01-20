@@ -69,7 +69,7 @@ export class EditComponent implements OnInit {
     params = params.append('date', this.date);
     params = params.append('image', this.data.image);
     params = params.append('timestamp', this.data.timestamp);
-    params = params.append('type', this.data.type);
+    params = params.append('type', this.selectedValue);
     params = params.append('description', this.describe);
     params = params.append('comment', this.comment);
 
