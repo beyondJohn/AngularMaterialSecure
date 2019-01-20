@@ -3,7 +3,7 @@
   <img [src]="data.img" width="100%">
   <mat-form-field class="example-full-width">
       <mat-select placeholder="Showcase" [(ngModel)]="selectedValue" [ngModelOptions]="{standalone: true}" [(value)]="selectedValue" name="type">
-          <mat-option *ngFor="let type of showcases" [value]="type.value">
+          <mat-option *ngFor="let type of showcases" [value]="type.viewValue">
               {{type.viewValue}}
           </mat-option>
       </mat-select>
