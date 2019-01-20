@@ -1,9 +1,10 @@
 import { Component, OnInit, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router'
+import { Router } from '@angular/router';
 import { Config } from '../config';
 import { BehaviorSubjectService } from '../services/behavior-subject.service';
+import { ShowcasesService } from '../services/showcases.service';
 
 export interface Showcase {
   value: string;
@@ -17,13 +18,7 @@ export interface Showcase {
 
 export class FileUploadComponent implements OnInit, AfterViewInit {
   selectedValue: string;
-  showcases: Showcase[] = [
-    { value: '0', viewValue: 'Family' },
-    { value: '1', viewValue: 'Friends' },
-    { value: '2', viewValue: 'Fun' },
-    { value: '3', viewValue: 'Food' },
-    { value: '4', viewValue: 'Nature' }
-  ];
+  showcases = [];
   form: FormGroup;
   loading: boolean = false;
   @ViewChild('fileInput') fileInput: ElementRef;
@@ -33,6 +28,7 @@ export class FileUploadComponent implements OnInit, AfterViewInit {
     , private fb: FormBuilder
     , private _config: Config
     , private _behaviorSubject: BehaviorSubjectService
+    , private _showcaseTypesService: ShowcasesService
     , private _router: Router
   ) {
     this.createForm();
@@ -42,10 +38,26 @@ export class FileUploadComponent implements OnInit, AfterViewInit {
   mode = 'determinate';
   value = 0;
   describe = "meBloggy Rocks!";
+  newTitle;
   comment = "What a great time!";
   apiEndPoint = this._config.urls.apiEndPoint;
   ngOnInit() {
 
+    this._showcaseTypesService.showcasesDb.subscribe(showcases => {
+      this.showcases = [];
+      showcases['showcaseTypesArray'].forEach(typeObj => {
+        this.showcases.push(typeObj);  
+      });
+    });
+
+    let showcaseLocalStorage = localStorage.getItem('showcasetypes');
+    if(showcaseLocalStorage){
+      this.showcases = [];
+      let tempShowcaseTypes = JSON.parse(showcaseLocalStorage);
+      tempShowcaseTypes.forEach(typeObj => {
+        this.showcases.push(typeObj);  
+      });
+    } 
   }
   ngAfterViewInit() {
     this.openInput();
@@ -61,6 +73,11 @@ export class FileUploadComponent implements OnInit, AfterViewInit {
   // }
   found = false;
   myImage = '../../assets/img/search.png';
+  imgPreviewClass(){
+    let imgPrevClass = "imagePreview";
+    this.loading ?  imgPrevClass = "imgPreviewUploading" :  imgPrevClass = "imgPreview"; 
+    return imgPrevClass;
+  }
   preview(img) {
     if (img != null && !this.found) {
       this.found = !this.found;
@@ -113,13 +130,14 @@ export class FileUploadComponent implements OnInit, AfterViewInit {
     //let contentSelector = document.getElementById('contentAreaSelector') as HTMLSelectElement;
     //let contentArea = contentSelector.value.replace(' ','');
     let img = document.getElementById("image") as HTMLInputElement;
+    let showcaseType = !this.newTitle ? this.selectedValue == "undefined" ? "FAMILY" : this.selectedValue : this.newTitle; 
     let formdata = new FormData();
     formdata.append('image', img.files[0]);
-    formdata.append('type', this.selectedValue);
+    formdata.append('type', showcaseType.toUpperCase());
     formdata.append('description', this.describe);
     formdata.append('date', new Date().toDateString());
     formdata.append('comment', this.comment);
-    formdata.append('timestamp', Date.now.toString());
+    formdata.append('timestamp', new Date().toLocaleTimeString());
 
     this._httpClient.post(this.apiEndPoint + '/imageupload/HeaderLogo', formdata
       , {
@@ -129,17 +147,12 @@ export class FileUploadComponent implements OnInit, AfterViewInit {
     )
       .subscribe(
         (event) => {
-          console.log(event);
           if (event['type'] == 1 && event['loaded'] && event['total']) {
             let percent = 100 - Math.round(parseFloat(event['total']) / parseFloat(event['loaded']));
-            console.log('percent: ', percent);
             that.value = percent;
-            percent > 98 ? document.getElementById('complete').innerText = 'COMPLETING' : document.getElementById('complete').innerText = percent + '% COMPLETE';
-
-            console.log("event['type']: " + event['type'] + "event['loaded']: " + event['loaded'] + "event['total']: " + event['total']);
+            percent > 98 ? document.getElementById('complete').innerText = 'COMPLETING...' : document.getElementById('complete').innerText = percent + '% COMPLETE';
           }
           else if (event['type'] > 1) {
-            console.log('success: ', event);
             this.loading = false;
             this.disabled = true;
             this._behaviorSubject.refreshImagesDB('refresh');
@@ -153,15 +166,6 @@ export class FileUploadComponent implements OnInit, AfterViewInit {
 
   }
   disabled = false;
-  clearFile() {
-    //let contentSelector = document.getElementById('contentAreaSelector') as HTMLSelectElement;
-    //var contentArea = contentSelector.value = "Content Area..." ;
-    this.form.get('image').setValue(null);
-    this.fileInput.nativeElement.value = '';
-    document.getElementById('complete').innerText = '';
-    this.disabled = false;
-  }
-
 }
 
     // //Start WINNER

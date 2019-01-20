@@ -24,6 +24,7 @@ import { EditComponent } from './edit/edit.component';
 import { FileUploadService } from './services/file-upload.service';
 import { BehaviorSubjectService } from './services/behavior-subject.service';
 import { HttpInterceptorService } from './services/http-interceptor.service';
+import { ShowcasesService } from './services/showcases.service';
 
 import { Config } from './config';
 import { ReversePipe } from './pipes/reverse.pipe';
@@ -40,6 +41,11 @@ const appRoutes: Routes = [
     path: 'upload',
     component: FileUploadComponent,
     data: { title: 'Upload', animation: 'upload' }
+  },
+  {
+    path: 'vert',
+    component: VertScrollComponent,
+    data: { title: 'Vert', animation: 'vert' }
   },
   {
     path: '',
@@ -87,6 +93,7 @@ const appRoutes: Routes = [
   providers: [
     FileUploadService
     , BehaviorSubjectService
+    , ShowcasesService
     , Config
     , HttpClient
     , ReversePipe

@@ -4,3 +4,21 @@
     flex: 1 1 auto;
 }
     
+.toolbarMenuItem{
+    margin: 5% 0 1%;
+    border: none;
+
+}
+.userAccountMenuItem{
+    margin: 3% 10px 1%;
+    border: none;
+    text-align: right;
+    width:41px;
+
+    
+}
+.menuBtn{
+    margin:-13px 15px; 
+    height: 41px; 
+    width: 41px;
+}

@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <title>MeBloggy</title>
@@ -7,9 +8,26 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="manifest" href="./assets/manifest.json">
 </head>
+
 <body>
   <app-root></app-root>
-
+  <script type="text/javascript">
+    if (navigator.serviceWorker) {
+      navigator.serviceWorker.register('./assets/js/sw.js').then(function (registration) {
+        console.log('ServiceWorker registration successful with scope:', registration.scope);
+      }).catch(function (error) {
+        console.log('ServiceWorker registration failed:', error);
+      });
+    }
+    window.addEventListener('beforeinstallprompt', (e) => {
+    // Prevent Chrome 67 and earlier from automatically showing the prompt
+    e.preventDefault();
+    // Stash the event so it can be triggered later.
+    deferredPrompt = e;
+  });
+  </script>
 </body>
+
 </html>

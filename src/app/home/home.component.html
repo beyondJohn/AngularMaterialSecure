@@ -1,6 +1,6 @@
 <!-- <mat-icon svgIcon="thumbs-up"></mat-icon> -->
 
-<button mat-button (click)="openDialog()">Hello there!</button>
+<button mat-button (click)="openDialog()" style="font-size:10px; color:rgb(2, 216, 216)">via beyondlogical.com</button>
 
 <mat-card class="example-card">
   <mat-card-header>
@@ -20,10 +20,14 @@
   </mat-card-actions>
 </mat-card>
 <br />
-<div class="showcaseHeader" *ngFor="let showcaseIndex of db; let s = index;">
-  {{showcases[dbTypesArray[s]].viewValue.toUpperCase()}}
-  <div class="myWorkContent">
-    <img *ngFor="let card of showcaseIndex; let i = index;" src="{{db[s][i].url}}" height="200" (click)="updateImg(i,s)"
-      style="margin:0 4px;">
+<div *ngIf="showcases.length > 0">
+  <div class="showcaseHeader" *ngFor="let showcaseIndex of db; let s = index;">
+    <div (click)="openVert(showcases[s].viewValue)">
+      {{showcases[s].viewValue.toUpperCase()}}
+    </div>
+    <div class="myWorkContent">
+      <img *ngFor="let card of showcaseIndex; let i = index;" src="{{db[s][i].url}}" height="200" (click)="updateImg(i,s)"
+        style="margin:0 4px;">
+    </div>
   </div>
 </div>

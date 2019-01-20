@@ -4,11 +4,9 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubjectService } from '../services/behavior-subject.service';
 import { DialogDefaultComponent } from '../dialog-default/dialog-default.component';
 import { EditComponent } from '../edit/edit.component';
+import { Router } from '@angular/router';
+import { ShowcasesService } from '../services/showcases.service';
 
-export interface Showcase {
-  value: string;
-  viewValue: string;
-}
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -16,25 +14,25 @@ export interface Showcase {
 })
 
 export class HomeComponent implements OnInit {
-  showcases: Showcase[] = [
-    { value: '0', viewValue: 'Family' },
-    { value: '1', viewValue: 'Friends' },
-    { value: '2', viewValue: 'Fun' },
-    { value: '3', viewValue: 'Food' },
-    { value: '4', viewValue: 'Nature' }
-  ];
+  showcases = [];
   constructor(
     public dialog: MatDialog
     , private http: HttpClient
     , private _behaviorSubject: BehaviorSubjectService
+    , private _showcaseTypesService: ShowcasesService
+    , private _router: Router
   ) { }
   myPosition = [];
   imageObjects = [];
   db = [];
   dbTypesArray = [];
-  description = "meBloggy";
-  date = "Thursday December 26, 2018";
-  comment = "";
+  description;
+  date;
+  comment;
+  openVert(type) {
+    localStorage.setItem("activeType", type);
+    this._router.navigate(['/vert']);
+  }
   myImg() {
 
     // check if array of showcases 'db' is loaded before attempting to access each showcase's image objects  
@@ -43,16 +41,14 @@ export class HomeComponent implements OnInit {
       this.description = this.db[this.myPosition[0]][this.myPosition[1]].description;
       this.date = this.db[this.myPosition[0]][this.myPosition[1]].date;
       this.comment = this.db[this.myPosition[0]][this.myPosition[1]].comment;
+      localStorage.setItem("activeType", this.db[this.myPosition[0]][this.myPosition[1]].type)
       return this.db[this.myPosition[0]][this.myPosition[1]].url;
     }
     return "";
   }
   updateImg(i, s) {
     this.myPosition = [s, i];
-    console.log("hello" + i);
-
     var top = document.getElementById("card").offsetTop + 10; //Getting Y of target element
-    console.log("offset" + top);
     window.scrollTo({
       top: top,
       behavior: 'smooth',
@@ -72,7 +68,8 @@ export class HomeComponent implements OnInit {
     for (let i = 0; i < this.dbTypesArray.length; i++) {
       let tempShowcase = [];
       this.imageObjects.forEach(imageObj => {
-        if (imageObj.type == this.dbTypesArray[i]) {
+        if (imageObj.type.toUpperCase() == this.dbTypesArray[i].toUpperCase()) {
+          imageObj.type = imageObj.type.toUpperCase();
           tempShowcase.push(imageObj);
         }
       });
@@ -81,19 +78,33 @@ export class HomeComponent implements OnInit {
     this.myPosition = [0, 1]
     // End sort & organize image types into type arrays
   }
-  getImages() {
-    this.http.get('https://switchmagic.com:4111/getImages').subscribe(imagesDB => { console.log(imagesDB); this.processImages(imagesDB); });
+  processShowcaseTypes(imagesDB: Object) {
+    this._showcaseTypesService.refreshshowcasesDb(imagesDB);
   }
+  getImages() {
+    this.http.get('https://switchmagic.com:4111/getImages')
+      .subscribe(imagesDB => {
+        this.processImages(imagesDB);
+        this.processShowcaseTypes(imagesDB);
+      });
+  }
+
   ngOnInit() {
     this.getImages();
     let that = this;
     this._behaviorSubject.elements.subscribe(event => {
       setTimeout(function () {
-        console.log("get images!");
         that.getImages();
       }, 1000);
 
     });
+    this._showcaseTypesService.showcasesDb.subscribe(showcases => {
+      that.showcases = [];
+      
+      showcases['showcaseTypesArray'].forEach(typeObj => {
+        that.showcases.push(typeObj);
+      });
+    })
 
   }
   openDialog() {
@@ -105,8 +116,7 @@ export class HomeComponent implements OnInit {
     let type = this.db[this.myPosition[0]][this.myPosition[1]].type;
     let image = this.db[this.myPosition[0]][this.myPosition[1]].image;
     let timestamp = this.db[this.myPosition[0]][this.myPosition[1]].timestamp;
-    this.dialog.open(EditComponent, { data: { img: img, description: desc, comment: comm, type: type, timestamp: timestamp, image:image } });
-    console.log('img: ', img);
+    this.dialog.open(EditComponent, { data: { img: img, description: desc, comment: comm, type: type, timestamp: timestamp, image: image } });
   }
 
 }

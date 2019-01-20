@@ -1,0 +1,24 @@
+{
+    "showcases": [
+        {
+            "value": "1",
+            "viewValue": "Family"
+        },
+        {
+            "value": "2",
+            "viewValue": "Friends"
+        },
+        {
+            "value": "3",
+            "viewValue": "Fun"
+        },
+        {
+            "value": "4",
+            "viewValue": "Food"
+        },
+        {
+            "value": "5",
+            "viewValue": "Nature"
+        }
+    ]
+}

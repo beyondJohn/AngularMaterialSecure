@@ -1,0 +1,23 @@
+{
+    "short_name": "meBloggy",
+    "name": "MeBloggy Photo Fun",
+    "icons": [
+      {
+        "src": "./img/monkey.png",
+        "type": "image/png",
+        "sizes": "192x192"
+      },
+      {
+        "src": "./img/monkey.png",
+        "type": "image/png",
+        "sizes": "512x512"
+      }
+    ],
+    "start_url": ".",
+    "background_color": "#3367D6",
+    "display": "standalone",
+    "related_applications": [{
+      "platform": "web"
+  }],
+    "theme_color": "#3367D6"
+  }
