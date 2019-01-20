@@ -111,12 +111,13 @@ export class HomeComponent implements OnInit {
     this.dialog.open(DialogDefaultComponent);
   }
   edit(img) {
+    let date = this.db[this.myPosition[0]][this.myPosition[1]].date;
     let desc = this.db[this.myPosition[0]][this.myPosition[1]].description;
     let comm = this.db[this.myPosition[0]][this.myPosition[1]].comment;
     let type = this.db[this.myPosition[0]][this.myPosition[1]].type;
     let image = this.db[this.myPosition[0]][this.myPosition[1]].image;
     let timestamp = this.db[this.myPosition[0]][this.myPosition[1]].timestamp;
-    this.dialog.open(EditComponent, { data: { img: img, description: desc, comment: comm, type: type, timestamp: timestamp, image: image } });
+    this.dialog.open(EditComponent, { data: { date:date, img: img, description: desc, comment: comm, type: type, timestamp: timestamp, image: image } });
   }
 
 }
