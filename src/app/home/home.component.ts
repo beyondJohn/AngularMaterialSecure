@@ -46,7 +46,9 @@ export class HomeComponent implements OnInit {
     }
     return "";
   }
-  updateImg(i, s) {
+  updateImg(s, i) {
+    console.log("this.myPosition: ",this.myPosition);
+    console.log("this.db: ",this.db);
     this.myPosition = [s, i];
     var top = document.getElementById("card").offsetTop + 10; //Getting Y of target element
     window.scrollTo({
@@ -75,7 +77,7 @@ export class HomeComponent implements OnInit {
       });
       this.db.push(tempShowcase.reverse());
     }
-    this.myPosition = [0, 1]
+    this.myPosition = [0, 0]
     // End sort & organize image types into type arrays
   }
   processShowcaseTypes(imagesDB: Object) {
