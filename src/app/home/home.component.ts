@@ -48,7 +48,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
     return "";
   }
-  updateImg(i, s) {
+  updateImg(s, i) {
+    console.log("this.myPosition: ",this.myPosition);
+    console.log("this.db: ",this.db);
     this.myPosition = [s, i];
     var top = document.getElementById("card").offsetTop + 10; //Getting Y of target element
     window.scrollTo({
@@ -80,7 +82,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       });
       this.db.push(tempShowcase.reverse());
     }
-    this.myPosition = [0, 1]
+    this.myPosition = [0, 0]
     // End sort & organize image types into type arrays
     this.description = this.db[this.myPosition[0]][this.myPosition[1]].description;
       this.date = this.db[this.myPosition[0]][this.myPosition[1]].date;
@@ -122,12 +124,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.dialog.open(DialogDefaultComponent);
   }
   edit(img) {
+    let date = this.db[this.myPosition[0]][this.myPosition[1]].date;
     let desc = this.db[this.myPosition[0]][this.myPosition[1]].description;
     let comm = this.db[this.myPosition[0]][this.myPosition[1]].comment;
     let type = this.db[this.myPosition[0]][this.myPosition[1]].type;
     let image = this.db[this.myPosition[0]][this.myPosition[1]].image;
     let timestamp = this.db[this.myPosition[0]][this.myPosition[1]].timestamp;
-    this.dialog.open(EditComponent, { data: { img: img, description: desc, comment: comm, type: type, timestamp: timestamp, image: image } });
+    this.dialog.open(EditComponent, { data: { date:date, img: img, description: desc, comment: comm, type: type, timestamp: timestamp, image: image } });
   }
 
 }

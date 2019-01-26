@@ -93,7 +93,7 @@ export class FileUploadComponent implements OnInit, AfterViewInit {
     if (event.target.files && event.target.files.length > 0) {
       let file = event.target.files[0];
       reader.readAsDataURL(file);
-      document.getElementsByClassName("mat-button-wrapper")[1].innerHTML = "Change";
+      document.getElementsByClassName("mat-button-wrapper")[1].innerHTML = "Cancel";
       reader.onload = () => {
         this.preview(<string>reader.result);
         this.form.get('image').setValue({
