@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, AfterViewInit, AfterContentChecked } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubjectService } from '../services/behavior-subject.service';
@@ -13,7 +13,7 @@ import { ShowcasesService } from '../services/showcases.service';
   styleUrls: ['./home.component.css']
 })
 
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, AfterViewInit {
   showcases = [];
   constructor(
     public dialog: MatDialog
@@ -21,7 +21,9 @@ export class HomeComponent implements OnInit {
     , private _behaviorSubject: BehaviorSubjectService
     , private _showcaseTypesService: ShowcasesService
     , private _router: Router
-  ) { }
+  ) {
+    this.description = "";
+   }
   myPosition = [];
   imageObjects = [];
   db = [];
@@ -38,9 +40,9 @@ export class HomeComponent implements OnInit {
     // check if array of showcases 'db' is loaded before attempting to access each showcase's image objects  
     if (this.db.length > 0) {
       // set string values for description, date, & comment before returning the image url to the view
-      this.description = this.db[this.myPosition[0]][this.myPosition[1]].description;
-      this.date = this.db[this.myPosition[0]][this.myPosition[1]].date;
-      this.comment = this.db[this.myPosition[0]][this.myPosition[1]].comment;
+      // this.description = this.db[this.myPosition[0]][this.myPosition[1]].description;
+      // this.date = this.db[this.myPosition[0]][this.myPosition[1]].date;
+      // this.comment = this.db[this.myPosition[0]][this.myPosition[1]].comment;
       localStorage.setItem("activeType", this.db[this.myPosition[0]][this.myPosition[1]].type)
       return this.db[this.myPosition[0]][this.myPosition[1]].url;
     }
@@ -53,6 +55,9 @@ export class HomeComponent implements OnInit {
       top: top,
       behavior: 'smooth',
     });
+    this.description = this.db[this.myPosition[0]][this.myPosition[1]].description;
+      this.date = this.db[this.myPosition[0]][this.myPosition[1]].date;
+      this.comment = this.db[this.myPosition[0]][this.myPosition[1]].comment;
   }
   processImages(imagesDB) {
     this.db = [];
@@ -77,6 +82,9 @@ export class HomeComponent implements OnInit {
     }
     this.myPosition = [0, 1]
     // End sort & organize image types into type arrays
+    this.description = this.db[this.myPosition[0]][this.myPosition[1]].description;
+      this.date = this.db[this.myPosition[0]][this.myPosition[1]].date;
+      this.comment = this.db[this.myPosition[0]][this.myPosition[1]].comment;
   }
   processShowcaseTypes(imagesDB: Object) {
     this._showcaseTypesService.refreshshowcasesDb(imagesDB);
@@ -90,7 +98,11 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getImages();
+    //this.getImages();
+    
+
+  }
+  ngAfterViewInit(){
     let that = this;
     this._behaviorSubject.elements.subscribe(event => {
       setTimeout(function () {
@@ -105,7 +117,6 @@ export class HomeComponent implements OnInit {
         that.showcases.push(typeObj);
       });
     })
-
   }
   openDialog() {
     this.dialog.open(DialogDefaultComponent);
