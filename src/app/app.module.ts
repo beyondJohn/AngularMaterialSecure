@@ -20,42 +20,63 @@ import { UploadComponent } from './upload/upload.component';
 import { FileUploadComponent } from './file-upload/file-upload.component';
 import { HomeComponent } from './home/home.component';
 import { EditComponent } from './edit/edit.component';
+import { VertScrollComponent } from './vert-scroll/vert-scroll.component';
+import { CustomersComponent } from './customers/customers.component';
+import { LoginComponent } from './login/login.component';
+
 
 import { FileUploadService } from './services/file-upload.service';
 import { BehaviorSubjectService } from './services/behavior-subject.service';
 import { HttpInterceptorService } from './services/http-interceptor.service';
 import { ShowcasesService } from './services/showcases.service';
+import { AuthGuardService } from './services/auth-guard.service';
 
 import { Config } from './config';
 import { ReversePipe } from './pipes/reverse.pipe';
-import { VertScrollComponent } from './vert-scroll/vert-scroll.component';
+
+import { JwtHelper } from 'angular2-jwt';
+
 
 
 const appRoutes: Routes = [
   {
     path: 'home',
     component: HomeComponent,
-    data: { title: 'Home', animation: 'home' }
+    data: { title: 'Home', animation: 'home' },
+    canActivate: [AuthGuardService]
   },
   {
     path: 'upload',
     component: FileUploadComponent,
-    data: { title: 'Upload', animation: 'upload' }
+    data: { title: 'Upload', animation: 'upload' },
+    canActivate: [AuthGuardService]
   },
   {
     path: 'vert',
     component: VertScrollComponent,
-    data: { title: 'Vert', animation: 'vert' }
+    data: { title: 'Vert', animation: 'vert' },
+    canActivate: [AuthGuardService]
   },
   {
     path: '',
-    component: HomeComponent
+    component: HomeComponent,
+    canActivate: [AuthGuardService]
 
+  },
+  {
+    path: 'customers',
+    component: CustomersComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'login',
+    component: LoginComponent
   },
   {
     path: "",
     redirectTo: 'home',
-    pathMatch: 'full'
+    pathMatch: 'full',
+    canActivate: [AuthGuardService]
   }
 ]
 
@@ -68,7 +89,9 @@ const appRoutes: Routes = [
     HomeComponent,
     EditComponent,
     ReversePipe,
-    VertScrollComponent
+    VertScrollComponent,
+    LoginComponent,
+    CustomersComponent
   ],
   imports: [
     BrowserModule
@@ -97,6 +120,8 @@ const appRoutes: Routes = [
     , Config
     , HttpClient
     , ReversePipe
+    , AuthGuardService
+    , JwtHelper
   ],
   bootstrap: [AppComponent],
   entryComponents: [DialogDefaultComponent, EditComponent]
