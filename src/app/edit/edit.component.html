@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>EDIT</h2>
 <mat-dialog-content class="mat-typography">
-  <img [src]="data.img" width="100%">
+  <img [src]="data.img" width="100%" (click)="openDialog()">
   <mat-form-field class="example-full-width">
       <mat-select placeholder="Showcase" [(ngModel)]="selectedValue" [ngModelOptions]="{standalone: true}" [(value)]="selectedValue" name="type">
           <mat-option *ngFor="let type of showcases" [value]="type.viewValue">

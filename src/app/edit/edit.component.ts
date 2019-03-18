@@ -6,7 +6,8 @@ import { Observable } from 'rxjs';
 import { BehaviorSubjectService } from '../services/behavior-subject.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ShowcasesService } from '../services/showcases.service';
-
+import { MatDialog } from '@angular/material';
+import { ChatComponent } from '../chat/chat.component';
 
 @Component({
   selector: 'app-edit',
@@ -22,6 +23,7 @@ export class EditComponent implements OnInit {
     , private _behaviorSubject: BehaviorSubjectService
     , public dialogRef: MatDialogRef<EditComponent>
     , private _showcaseTypesService: ShowcasesService
+    , public dialog: MatDialog
   ) {
     this.selectedValue = this.data.type;
     this.describe = this.data.description;
@@ -82,5 +84,12 @@ export class EditComponent implements OnInit {
       this.dialogRef.close();
     });
 
+  }
+  imgClick(){
+    console.log("image click");
+  }
+
+  openDialog() {
+    this.dialog.open(ChatComponent);
   }
 }

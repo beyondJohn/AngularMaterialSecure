@@ -17,7 +17,7 @@ export class LoginComponent implements OnInit {
 
   login(form: NgForm) {
       let credentials = JSON.stringify(form.value);
-      this.http.post("http://localhost:50984/api/auth/login", credentials, {
+      this.http.post("https://switchmagic.com/api/auth/login", credentials, {
         headers: new HttpHeaders({
           "Content-Type": "application/json"
         })

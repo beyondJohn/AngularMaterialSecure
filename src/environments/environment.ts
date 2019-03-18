@@ -4,5 +4,8 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  CHAT_URL : "ws://switchmagic.com:3000/socket.io/?EIO=3&transport=websocket&sid=W1xKSz8m-BT0ZnpcAAAG"
+  //"ws://echo.websocket.org/"
 };
+

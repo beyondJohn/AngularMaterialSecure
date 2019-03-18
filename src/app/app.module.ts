@@ -35,6 +35,9 @@ import { Config } from './config';
 import { ReversePipe } from './pipes/reverse.pipe';
 
 import { JwtHelper } from 'angular2-jwt';
+import { WebsocketService } from './services/websocket.service';
+import { ChatService } from './services/chat.service';
+import { ChatComponent } from './chat/chat.component';
 
 
 
@@ -91,7 +94,8 @@ const appRoutes: Routes = [
     ReversePipe,
     VertScrollComponent,
     LoginComponent,
-    CustomersComponent
+    CustomersComponent,
+    ChatComponent
   ],
   imports: [
     BrowserModule
@@ -122,8 +126,12 @@ const appRoutes: Routes = [
     , ReversePipe
     , AuthGuardService
     , JwtHelper
+    , WebsocketService
+    , ChatService
+    , ChatComponent
+
   ],
   bootstrap: [AppComponent],
-  entryComponents: [DialogDefaultComponent, EditComponent]
+  entryComponents: [DialogDefaultComponent, EditComponent, ChatComponent]
 })
 export class AppModule { }

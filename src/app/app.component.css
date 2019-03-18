@@ -5,15 +5,17 @@
 }
     
 .toolbarMenuItem{
-    margin: 5% 0 1%;
+    /* margin: 5% 0 1%; */
+    padding-top:15px;
     border: none;
 
 }
 .userAccountMenuItem{
-    margin: 3% 10px 1%;
+    padding-top: 8px;
+    /* margin: 3% 10px 1%; */
     border: none;
-    text-align: right;
-    width:41px;
+    /* text-align: right;
+    width:41px; */
 
     
 }
