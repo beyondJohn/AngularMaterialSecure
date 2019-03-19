@@ -38,10 +38,16 @@ import { JwtHelper } from 'angular2-jwt';
 import { WebsocketService } from './services/websocket.service';
 import { ChatService } from './services/chat.service';
 import { ChatComponent } from './chat/chat.component';
+import { CreateAccountComponent } from './create-account/create-account.component';
 
 
 
 const appRoutes: Routes = [
+  {
+    path: 'newacc',
+    component: CreateAccountComponent,
+    data: { title: 'NewAccount', animation: 'newacc' }
+  },
   {
     path: 'home',
     component: HomeComponent,
@@ -64,7 +70,6 @@ const appRoutes: Routes = [
     path: '',
     component: HomeComponent,
     canActivate: [AuthGuardService]
-
   },
   {
     path: 'customers',
@@ -95,7 +100,8 @@ const appRoutes: Routes = [
     VertScrollComponent,
     LoginComponent,
     CustomersComponent,
-    ChatComponent
+    ChatComponent,
+    CreateAccountComponent
   ],
   imports: [
     BrowserModule

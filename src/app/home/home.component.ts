@@ -92,7 +92,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this._showcaseTypesService.refreshshowcasesDb(imagesDB);
   }
   getImages() {
-    this.http.get('https://switchmagic.com:4111/getImages')
+    this.http.get('https://switchmagic.com:4111/getImages?id=54321')
       .subscribe(imagesDB => {
         this.processImages(imagesDB);
         this.processShowcaseTypes(imagesDB);
