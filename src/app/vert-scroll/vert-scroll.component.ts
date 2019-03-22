@@ -58,10 +58,8 @@ export class VertScrollComponent implements OnInit {
   }
   updateImg(i) {
     this.myPosition = [i];
-    console.log("hello" + i);
 
     var top = document.getElementById("card").offsetTop + 10; //Getting Y of target element
-    console.log("offset" + top);
     window.scrollTo({
       top: top,
       behavior: 'smooth',
@@ -86,7 +84,9 @@ export class VertScrollComponent implements OnInit {
     // End sort only 1 type of images into showcase array 
   }
   getImages() {
-    this.http.get('https://switchmagic.com:4111/getImages').subscribe(imagesDB => { console.log(imagesDB); this.processImages(imagesDB); });
+    var id = localStorage.getItem("acc");
+    this.http.get('https://switchmagic.com:4111/getImages?id='+ id)
+    .subscribe(imagesDB => { console.log(imagesDB); this.processImages(imagesDB); });
   }
   ngOnInit() {
     this.activeType = localStorage.getItem("activeType").toUpperCase();

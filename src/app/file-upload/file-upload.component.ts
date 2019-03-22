@@ -127,6 +127,7 @@ export class FileUploadComponent implements OnInit, AfterViewInit {
     let that = this;
     document.getElementById('complete').innerText = '';
     this.loading = true;
+    var id = localStorage.getItem("acc");
     //let contentSelector = document.getElementById('contentAreaSelector') as HTMLSelectElement;
     //let contentArea = contentSelector.value.replace(' ','');
     let img = document.getElementById("image") as HTMLInputElement;
@@ -137,6 +138,7 @@ export class FileUploadComponent implements OnInit, AfterViewInit {
     formdata.append('description', this.describe);
     formdata.append('date', new Date().toDateString());
     formdata.append('comment', this.comment);
+    formdata.append('id', id);
     formdata.append('timestamp', new Date().toLocaleTimeString());
 
     this._httpClient.post(this.apiEndPoint + '/imageupload/HeaderLogo', formdata
