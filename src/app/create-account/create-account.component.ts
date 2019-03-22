@@ -16,7 +16,7 @@ export class CreateAccountComponent implements OnInit {
     private _httpClient: HttpClient
     , private _router: Router
     , private _config: Config
-  ) {  }
+  ) { }
   invalidLogin;
   apiEndPoint = this._config.urls.apiEndPoint;
   @ViewChild('password') password: ElementRef;
@@ -24,45 +24,38 @@ export class CreateAccountComponent implements OnInit {
   @ViewChild('userName') userName: ElementRef;
   @ViewChild('email') email: ElementRef;
   loginMessage;
-  
+  loading = false;
   ngOnInit() {
     this.loginMessage = document.getElementById('loginMessage');
   }
 
-  login(form: NgForm) {
+  createAccount(form: NgForm) {
     this.loginMessage.innerHTML = "";
     let credentials = JSON.stringify(form.value);
     if (this.password.nativeElement.value != '' && this.confirmPassword.nativeElement.value != '') {
       if (this.password.nativeElement.value == this.confirmPassword.nativeElement.value) {
         if (this.userName.nativeElement.value !== '' && this.email.nativeElement.value !== '') {
-          this._httpClient.post('http://localhost:50983/api/values', credentials
+          this.loading = true;
+          this._httpClient.post('https://switchmagic.com/api/values', credentials
             , {
               headers: new HttpHeaders({
                 "Content-Type": "application/json"
-              }),
-              reportProgress: true,
-              observe: 'events'
+              })
             }
           )
             .subscribe(
-              (event) => {
-                console.log(event);
-                console.log('checking for body' + event['body']);
-                if (event['type'] == 1 && event['loaded'] && event['total']) {
-                  let percent = 100 - Math.round(parseFloat(event['total']) / parseFloat(event['loaded']));
-                  console.log(percent);
-                  //that.value = percent;
-                  //percent > 98 ? document.getElementById('complete').innerText = 'COMPLETING...' : document.getElementById('complete').innerText = percent + '% COMPLETE';
+              (res) => {
+                
+                console.log(res);
+                console.log(res["status"]);
+                var status = res["status"];
+                if(status != "success"){
+                  this.loginMessage.innerHTML = status;        
                 }
-                else if (event['type'] > 1) {
-                  if (event['body'] !== undefined) {
-                    console.log("event['body']: ", event['body']);
-                  }
-                  // this.loading = false;
-                  // this.disabled = true;
-                  // this._behaviorSubject.refreshImagesDB('refresh');
-                  this._router.navigate(['/home']);
-                }
+                this.createDB(res["userNumber"],form);
+                // this.disabled = true;
+                // this._behaviorSubject.refreshImagesDB('refresh');
+                //this._router.navigate(['/home']);
               },
               err => console.log(err)
             );
@@ -82,5 +75,48 @@ export class CreateAccountComponent implements OnInit {
       this.loginMessage.innerHTML = "Please complete before submitting";
       return;
     }
+  }
+  createDB(id, form) {
+    console.log("sending db create request");
+    this._httpClient.get('https://switchmagic.com:4111/createdb?id=' + id)
+      .subscribe(response => {
+        localStorage.setItem("acc",id);
+        this.login(form);
+        
+      });
+  }
+  login(form: NgForm){
+    let credentials = JSON.stringify(form.value);
+    let loginVals = form.value;
+    //credentials:  {"username":"jpjpiesco@gmail.com","password":"mebloggy123$"}
+    let loginObject = { username: loginVals["email"], password: loginVals["password"]  };
+    this._httpClient.post("https://switchmagic.com/api/auth/login", loginObject, {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json"
+      })
+    }).subscribe(response => {
+      let token = (<any>response).token;
+      localStorage.setItem("jwt", token);
+      let userNumber = (<any>response).userNumber;
+      console.log(userNumber);
+      localStorage.setItem("acc", userNumber);
+      this.loading = false;
+      //this.invalidLogin = false;
+      this._router.navigate(["/home"]);
+    }, err => {
+      //this.invalidLogin = true;
+    });
+  }
+  showhide = true;
+  showhidepassword() {
+    if (this.showhide) {
+      this.password.nativeElement.type = "text";
+      this.confirmPassword.nativeElement.type = "text";
+    }
+    else {
+      this.password.nativeElement.type = "password";
+      this.confirmPassword.nativeElement.type = "password";
+    }
+    this.showhide = !this.showhide;
   }
 }

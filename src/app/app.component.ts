@@ -91,6 +91,12 @@ export class AppComponent {
     iconRegistry.addSvgIcon(
       'menu2',
       sanitizer.bypassSecurityTrustResourceUrl('assets/materialIconsSVGs/menu2.svg'));
+    iconRegistry.addSvgIcon(
+      'visible',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/materialIconsSVGs/visibility.svg'));
+    iconRegistry.addSvgIcon(
+      'visibleoff',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/materialIconsSVGs/visibility_off.svg'));
   }
   myPosition = 0;
   myImg() {

@@ -57,9 +57,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
       top: top,
       behavior: 'smooth',
     });
+    if (this.db.length > 0) {
     this.description = this.db[this.myPosition[0]][this.myPosition[1]].description;
       this.date = this.db[this.myPosition[0]][this.myPosition[1]].date;
       this.comment = this.db[this.myPosition[0]][this.myPosition[1]].comment;
+    }
   }
   processImages(imagesDB) {
     this.db = [];
@@ -84,15 +86,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
     this.myPosition = [0, 0]
     // End sort & organize image types into type arrays
+    if (this.db.length > 0) {
     this.description = this.db[this.myPosition[0]][this.myPosition[1]].description;
       this.date = this.db[this.myPosition[0]][this.myPosition[1]].date;
       this.comment = this.db[this.myPosition[0]][this.myPosition[1]].comment;
+    }
   }
   processShowcaseTypes(imagesDB: Object) {
     this._showcaseTypesService.refreshshowcasesDb(imagesDB);
   }
   getImages() {
-    this.http.get('https://switchmagic.com:4111/getImages?id=54321')
+    var id = localStorage.getItem("acc");
+    this.http.get('https://switchmagic.com:4111/getImages?id='+ id)
       .subscribe(imagesDB => {
         this.processImages(imagesDB);
         this.processShowcaseTypes(imagesDB);
