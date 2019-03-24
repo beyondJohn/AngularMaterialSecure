@@ -23,7 +23,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     , private _router: Router
   ) {
     this.description = "";
-   }
+  }
   myPosition = [];
   imageObjects = [];
   db = [];
@@ -31,26 +31,45 @@ export class HomeComponent implements OnInit, AfterViewInit {
   description;
   date;
   comment;
-  openVert(type) {
-    localStorage.setItem("activeType", type);
-    this._router.navigate(['/vert']);
+  ngOnInit() {
+
   }
+  isMyImgInit = true;
   myImg() {
 
+    // set default home main showcase image if exists in localstorage, else load first img from first showacse
+    if (this.isMyImgInit) {
+      if (this.db.length > 0) {
+        if(localStorage.getItem("DefaultImage")){
+          var showcaseType = localStorage.getItem("DefaultImage").split("---")[2];
+          for(var i = 0; i < this.db.length; i ++){
+            if(this.db[i][0].type == showcaseType){
+              var timestamp = localStorage.getItem("DefaultImage").split("---")[0];
+              var imgName = localStorage.getItem("DefaultImage").split("---")[1];
+              var countRecord = 0;
+              for(var r = 0; r < this.db[i].length; r++){
+                if(this.db[i][r]["timestamp"] == timestamp && this.db[i][r]["image"] == imgName){
+                  this.myPosition = [i,r];
+                }
+              }
+            }
+          }
+        }
+        console.log(this.db);
+        this.isMyImgInit = !this.isMyImgInit;
+      }
+    }
     // check if array of showcases 'db' is loaded before attempting to access each showcase's image objects  
     if (this.db.length > 0) {
       // set string values for description, date, & comment before returning the image url to the view
-      // this.description = this.db[this.myPosition[0]][this.myPosition[1]].description;
-      // this.date = this.db[this.myPosition[0]][this.myPosition[1]].date;
-      // this.comment = this.db[this.myPosition[0]][this.myPosition[1]].comment;
       localStorage.setItem("activeType", this.db[this.myPosition[0]][this.myPosition[1]].type)
       return this.db[this.myPosition[0]][this.myPosition[1]].url;
     }
     return "";
   }
   updateImg(s, i) {
-    console.log("this.myPosition: ",this.myPosition);
-    console.log("this.db: ",this.db);
+    console.log("this.myPosition: ", this.myPosition);
+    console.log("this.db: ", this.db);
     this.myPosition = [s, i];
     var top = document.getElementById("card").offsetTop + 10; //Getting Y of target element
     window.scrollTo({
@@ -58,7 +77,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       behavior: 'smooth',
     });
     if (this.db.length > 0) {
-    this.description = this.db[this.myPosition[0]][this.myPosition[1]].description;
+      this.description = this.db[this.myPosition[0]][this.myPosition[1]].description;
       this.date = this.db[this.myPosition[0]][this.myPosition[1]].date;
       this.comment = this.db[this.myPosition[0]][this.myPosition[1]].comment;
     }
@@ -87,7 +106,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.myPosition = [0, 0]
     // End sort & organize image types into type arrays
     if (this.db.length > 0) {
-    this.description = this.db[this.myPosition[0]][this.myPosition[1]].description;
+      this.description = this.db[this.myPosition[0]][this.myPosition[1]].description;
       this.date = this.db[this.myPosition[0]][this.myPosition[1]].date;
       this.comment = this.db[this.myPosition[0]][this.myPosition[1]].comment;
     }
@@ -97,19 +116,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
   getImages() {
     var id = localStorage.getItem("acc");
-    this.http.get('https://switchmagic.com:4111/getImages?id='+ id)
+    this.http.get('https://switchmagic.com:4111/getImages?id=' + id)
       .subscribe(imagesDB => {
         this.processImages(imagesDB);
         this.processShowcaseTypes(imagesDB);
       });
   }
 
-  ngOnInit() {
-    //this.getImages();
-    
-
-  }
-  ngAfterViewInit(){
+  ngAfterViewInit() {
     let that = this;
     this._behaviorSubject.elements.subscribe(event => {
       setTimeout(function () {
@@ -119,7 +133,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
     this._showcaseTypesService.showcasesDb.subscribe(showcases => {
       that.showcases = [];
-      
+
       showcases['showcaseTypesArray'].forEach(typeObj => {
         that.showcases.push(typeObj);
       });
@@ -135,7 +149,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
     let type = this.db[this.myPosition[0]][this.myPosition[1]].type;
     let image = this.db[this.myPosition[0]][this.myPosition[1]].image;
     let timestamp = this.db[this.myPosition[0]][this.myPosition[1]].timestamp;
-    this.dialog.open(EditComponent, { data: { date:date, img: img, description: desc, comment: comm, type: type, timestamp: timestamp, image: image } });
+    this.dialog.open(EditComponent, { data: { date: date, img: img, description: desc, comment: comm, type: type, timestamp: timestamp, image: image } });
+  }
+  openVert(type) {
+    // vert screen will use activeType to find the correct collection to show
+    localStorage.setItem("activeType", type);
+    this._router.navigate(['/vert']);
   }
 
 }

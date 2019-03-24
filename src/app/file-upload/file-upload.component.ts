@@ -87,6 +87,7 @@ export class FileUploadComponent implements OnInit, AfterViewInit {
     }
     return (this.myImage);
   }
+  activeFile;
   onFileChange(event) {
     var id = localStorage.getItem("acc");
     this.found = false;
@@ -95,6 +96,7 @@ export class FileUploadComponent implements OnInit, AfterViewInit {
     let reader = new FileReader();
     if (event.target.files && event.target.files.length > 0) {
       let file = event.target.files[0];
+      this.activeFile = file;
       reader.readAsDataURL(file);
       document.getElementsByClassName("mat-button-wrapper")[1].innerHTML = "Cancel";
       reader.onload = () => {
@@ -178,13 +180,14 @@ export class FileUploadComponent implements OnInit, AfterViewInit {
     var that = this;
     localStorage.setItem("showcaseType", showcaseType);
     let formdata = new FormData();
+    var timestamp = new Date().toLocaleTimeString();
     formdata.append('image', img.files[0]);
     formdata.append('type', showcaseType.toUpperCase());
     formdata.append('description', this.describe);
     formdata.append('date', new Date().toDateString());
     formdata.append('comment', this.comment);
     formdata.append('id', id);
-    formdata.append('timestamp', new Date().toLocaleTimeString());
+    formdata.append('timestamp', timestamp);
 
     this._httpClient.post(this.apiEndPoint + '/imageupload/HeaderLogo', formdata
       , {
@@ -203,6 +206,8 @@ export class FileUploadComponent implements OnInit, AfterViewInit {
             this.loading = false;
             this.disabled = true;
             this._behaviorSubject.refreshImagesDB('refresh');
+            console.log("event: ",event);
+            localStorage.setItem("DefaultImage", timestamp + "---" + this.activeFile["name"] + "---" + showcaseType);
             this._router.navigate(['/home']);
           }
         },

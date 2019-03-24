@@ -40,6 +40,7 @@ import { ChatService } from './services/chat.service';
 import { ChatComponent } from './chat/chat.component';
 import { CreateAccountComponent } from './create-account/create-account.component';
 import { EditImageComponent } from './edit-image/edit-image.component';
+import { AccountComponent } from './account/account.component';
 
 
 
@@ -103,7 +104,8 @@ const appRoutes: Routes = [
     CustomersComponent,
     ChatComponent,
     CreateAccountComponent,
-    EditImageComponent
+    EditImageComponent,
+    AccountComponent
   ],
   imports: [
     BrowserModule
@@ -140,6 +142,6 @@ const appRoutes: Routes = [
 
   ],
   bootstrap: [AppComponent],
-  entryComponents: [DialogDefaultComponent, EditComponent, ChatComponent, EditImageComponent]
+  entryComponents: [DialogDefaultComponent, EditComponent, ChatComponent, EditImageComponent, AccountComponent]
 })
 export class AppModule { }

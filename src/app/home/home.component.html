@@ -2,13 +2,13 @@
 
 <button mat-button (click)="openDialog()" style="font-size:10px; color:rgb(2, 216, 216)">via beyondlogical.com</button>
 
-<mat-card class="example-card">
+<mat-card class="example-card" [ngStyle]="{display: showcases.length > 0 ? 'block' : 'none'}">
   <mat-card-header>
     <div mat-card-avatar class="icon-image"></div>
     <mat-card-title>{{description}}</mat-card-title>
     <mat-card-subtitle>{{date}}</mat-card-subtitle>
   </mat-card-header>
-  <img mat-card-image [src]="myImg()" alt="kids skatin peir village" id="card" (click)="edit(myImg())">
+  <img mat-card-image [src]="myImg()" alt="meBloggy" id="card" (click)="edit(myImg())">
   <mat-card-content>
     <p>
       {{comment}}
@@ -20,7 +20,7 @@
   </mat-card-actions>
 </mat-card>
 <br />
-<div *ngIf="showcases.length > 0">
+<div [ngStyle]="{display: showcases.length > 0 ? 'block' : 'none'}">
   <div class="showcaseHeader" *ngFor="let showcaseIndex of db; let s = index;">
     <div (click)="openVert(showcases[s].viewValue)">
       {{showcases[s].viewValue.toUpperCase()}}
@@ -29,5 +29,10 @@
       <img *ngFor="let card of showcaseIndex; let i = index;" src="{{db[s][i].url}}" height="200" (click)="updateImg(s,i)"
         style="margin:0 4px;">
     </div>
+  </div>
+</div>
+<div [ngStyle]="{display: showcases.length > 0 ? 'none' : 'block'}" style="position: absolute; width:100%; top:25%;">
+  <div style="position: relative; width:100%; ">
+    <mat-spinner style="margin: auto;"></mat-spinner>
   </div>
 </div>

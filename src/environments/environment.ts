@@ -5,7 +5,7 @@
 
 export const environment = {
   production: false,
-  CHAT_URL : "ws://switchmagic.com:3000/socket.io/?EIO=3&transport=websocket&sid=W1xKSz8m-BT0ZnpcAAAG"
+  CHAT_URL : "wss://switchmagic.com:3000/socket.io/?EIO=3&transport=websocket&sid=W1xKSz8m-BT0ZnpcAAAG"
   //"ws://echo.websocket.org/"
 };
 
