@@ -8,6 +8,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { ShowcasesService } from '../services/showcases.service';
 import { MatDialog } from '@angular/material';
 import { ChatComponent } from '../chat/chat.component';
+import { EditImageComponent } from '../edit-image/edit-image.component';
 
 @Component({
   selector: 'app-edit',
@@ -53,7 +54,8 @@ export class EditComponent implements OnInit {
     }
   }
   delete(img): Observable<void> {
-    return this._httpClient.delete<void>(this._config.urls.apiEndPoint + "/delete/" + img);
+    var userid = localStorage.getItem("acc");
+    return this._httpClient.delete<void>(this._config.urls.apiEndPoint + "/delete/" + img + "/userid/" + userid);
   }
   deleteImage(img) {
     let image = this.data.image.replace(".jpg", "") + "---" + this.data.timestamp;
@@ -64,6 +66,7 @@ export class EditComponent implements OnInit {
 
   }
   update(img): Observable<void> {
+    var id = localStorage.getItem("acc");
     // Initialize Params Object
     let params = new HttpParams();
 
@@ -74,6 +77,7 @@ export class EditComponent implements OnInit {
     params = params.append('type', this.selectedValue);
     params = params.append('description', this.describe);
     params = params.append('comment', this.comment);
+    params = params.append('id', id);
 
     return this._httpClient.patch<void>(this._config.urls.apiEndPoint + "/patch", params);
   }

@@ -39,6 +39,7 @@ import { WebsocketService } from './services/websocket.service';
 import { ChatService } from './services/chat.service';
 import { ChatComponent } from './chat/chat.component';
 import { CreateAccountComponent } from './create-account/create-account.component';
+import { EditImageComponent } from './edit-image/edit-image.component';
 
 
 
@@ -101,7 +102,8 @@ const appRoutes: Routes = [
     LoginComponent,
     CustomersComponent,
     ChatComponent,
-    CreateAccountComponent
+    CreateAccountComponent,
+    EditImageComponent
   ],
   imports: [
     BrowserModule
@@ -138,6 +140,6 @@ const appRoutes: Routes = [
 
   ],
   bootstrap: [AppComponent],
-  entryComponents: [DialogDefaultComponent, EditComponent, ChatComponent]
+  entryComponents: [DialogDefaultComponent, EditComponent, ChatComponent, EditImageComponent]
 })
 export class AppModule { }

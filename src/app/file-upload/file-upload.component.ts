@@ -46,18 +46,20 @@ export class FileUploadComponent implements OnInit, AfterViewInit {
     this._showcaseTypesService.showcasesDb.subscribe(showcases => {
       this.showcases = [];
       showcases['showcaseTypesArray'].forEach(typeObj => {
-        this.showcases.push(typeObj);  
+        this.showcases.push(typeObj);
       });
     });
 
     let showcaseLocalStorage = localStorage.getItem('showcasetypes');
-    if(showcaseLocalStorage){
+    if (showcaseLocalStorage) {
       this.showcases = [];
       let tempShowcaseTypes = JSON.parse(showcaseLocalStorage);
       tempShowcaseTypes.forEach(typeObj => {
-        this.showcases.push(typeObj);  
+        this.showcases.push(typeObj);
       });
-    } 
+    }
+    this.getDefaultShowcaseType();
+    this.selectedValue = this.defaultShowcaseType;
   }
   ngAfterViewInit() {
     this.openInput();
@@ -73,9 +75,9 @@ export class FileUploadComponent implements OnInit, AfterViewInit {
   // }
   found = false;
   myImage = '../../assets/img/search.png';
-  imgPreviewClass(){
+  imgPreviewClass() {
     let imgPrevClass = "imagePreview";
-    this.loading ?  imgPrevClass = "imgPreviewUploading" :  imgPrevClass = "imgPreview"; 
+    this.loading ? imgPrevClass = "imgPreviewUploading" : imgPrevClass = "imgPreview";
     return imgPrevClass;
   }
   preview(img) {
@@ -86,6 +88,7 @@ export class FileUploadComponent implements OnInit, AfterViewInit {
     return (this.myImage);
   }
   onFileChange(event) {
+    var id = localStorage.getItem("acc");
     this.found = false;
     document.getElementById('complete').innerText = '';
     this.disabled = false;
@@ -121,17 +124,59 @@ export class FileUploadComponent implements OnInit, AfterViewInit {
     this._router.navigate(['/home']);
   }
 
-
-
+  defaultShowcaseType;
+  getDefaultShowcaseType() {
+    if (localStorage.getItem("showcaseType") != undefined) {
+      var checkTypeExists;
+      this.showcases.forEach(showcase => {
+        if (showcase["viewValue"] == localStorage.getItem("showcaseType")) {
+          checkTypeExists = true;
+        }
+      });
+      if (checkTypeExists) {
+        this.defaultShowcaseType = localStorage.getItem("showcaseType");
+      }
+    }
+  }
   onSubmit() {
     let that = this;
     document.getElementById('complete').innerText = '';
-    this.loading = true;
+    
     var id = localStorage.getItem("acc");
     //let contentSelector = document.getElementById('contentAreaSelector') as HTMLSelectElement;
     //let contentArea = contentSelector.value.replace(' ','');
     let img = document.getElementById("image") as HTMLInputElement;
-    let showcaseType = !this.newTitle ? this.selectedValue == "undefined" ? "FAMILY" : this.selectedValue : this.newTitle; 
+    this.getDefaultShowcaseType();
+    // if new showcase type has been added or selected use it instead of the stored showcase type
+    let showcaseType;
+
+    if (!this.newTitle) {
+      if (!this.selectedValue) {
+        if (!this.defaultShowcaseType) {
+          alert("You forgot to select a Showcase type ;-)");
+        }
+        else{
+          this.loading = true;
+          showcaseType = this.defaultShowcaseType;
+          this.processImage(showcaseType, img, id);
+        }
+      }
+      else{
+        this.loading = true;
+        showcaseType = this.selectedValue;
+        this.processImage(showcaseType, img, id);
+      }
+    }
+    else {
+      this.loading = true;
+      showcaseType = this.newTitle;
+      this.processImage(this.newTitle, img, id);
+    }
+    
+  }
+  processImage(showcaseType, img, id) {
+    var that = this;
+    localStorage.setItem("showcaseType", showcaseType);
     let formdata = new FormData();
     formdata.append('image', img.files[0]);
     formdata.append('type', showcaseType.toUpperCase());
@@ -163,9 +208,6 @@ export class FileUploadComponent implements OnInit, AfterViewInit {
         },
         err => console.log(err)
       );
-    //
-    //
-
   }
   disabled = false;
 }
