@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubjectService } from '../services/behavior-subject.service';
 import { DialogDefaultComponent } from '../dialog-default/dialog-default.component';
-import { EditComponent } from '../edit/edit.component';
+import { EditComponent } from '../edit/edit.component'
 import { Router } from '@angular/router';
 import { ShowcasesService } from '../services/showcases.service';
 
@@ -37,7 +37,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   isMyImgInit = true;
   myImg() {
 
-    // set default home main showcase image if exists in localstorage, else load first img from first showacse
+    // set default home main showcase image if exists in localstorage, else load first img from first showcase
     if (this.isMyImgInit) {
       if (this.db.length > 0) {
         if(localStorage.getItem("DefaultImage")){
@@ -46,7 +46,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
             if(this.db[i][0].type == showcaseType){
               var timestamp = localStorage.getItem("DefaultImage").split("---")[0];
               var imgName = localStorage.getItem("DefaultImage").split("---")[1];
-              var countRecord = 0;
               for(var r = 0; r < this.db[i].length; r++){
                 if(this.db[i][r]["timestamp"] == timestamp && this.db[i][r]["image"] == imgName){
                   this.myPosition = [i,r];
@@ -80,6 +79,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.description = this.db[this.myPosition[0]][this.myPosition[1]].description;
       this.date = this.db[this.myPosition[0]][this.myPosition[1]].date;
       this.comment = this.db[this.myPosition[0]][this.myPosition[1]].comment;
+      localStorage.setItem("DefaultImage", this.db[this.myPosition[0]][this.myPosition[1]].timestamp + "---" + this.db[this.myPosition[0]][this.myPosition[1]].image + "---" + this.db[this.myPosition[0]][this.myPosition[1]].type);
     }
   }
   processImages(imagesDB) {

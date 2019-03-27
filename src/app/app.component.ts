@@ -4,6 +4,7 @@ import { DialogDefaultComponent } from './dialog-default/dialog-default.componen
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatIconRegistry } from '@angular/material';
 import { trigger, state, style, animate, transition, query } from '@angular/animations';
+import { AccountComponent } from './account/account.component';
 
 @Component({
   selector: 'app-root',
@@ -54,6 +55,7 @@ export class AppComponent {
   constructor(
     iconRegistry: MatIconRegistry
     , sanitizer: DomSanitizer
+    , public dialog: MatDialog
   ) {
     iconRegistry.addSvgIcon(
       'thumbs-up',
@@ -97,6 +99,12 @@ export class AppComponent {
     iconRegistry.addSvgIcon(
       'visibleoff',
       sanitizer.bypassSecurityTrustResourceUrl('assets/materialIconsSVGs/visibility_off.svg'));
+    iconRegistry.addSvgIcon(
+      'people',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/materialIconsSVGs/people.svg'));
+    iconRegistry.addSvgIcon(
+      'person_add',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/materialIconsSVGs/person_add.svg'));
   }
   myPosition = 0;
   myImg() {
@@ -112,5 +120,8 @@ export class AppComponent {
   }
   getRouteAnimation(outlet) {
     return outlet.activatedRouteData.animation;
+  }
+  openAccount() {
+    this.dialog.open(AccountComponent);
   }
 }

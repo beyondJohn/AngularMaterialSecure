@@ -24,7 +24,7 @@
   <!-- This fills the remaining space of the current row -->
   <span class="example-fill-remaining-space"></span>
   <button mat-menu-item class="userAccountMenuItem" >
-    <mat-icon svgIcon="account" style="height:100% !important; width:34px !important;" >Account</mat-icon>
+    <mat-icon svgIcon="account" style="height:100% !important; width:34px !important;" (click)="openAccount()" >Account</mat-icon>
     <!-- <span>Account</span> -->
   </button>
   <span>{{title}}</span>

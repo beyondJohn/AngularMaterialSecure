@@ -1,4 +1,18 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
-body{
+body {
     margin: 0;
+}
+
+.x2 {
+    transform: scale(2);
+}
+.x1_5 {
+    transform: scale(1.5);
+}
+
+/* center the mat-icon with a parent wrapper, https://stackoverflow.com/questions/43887701/how-to-change-md-icon-size-in-material */
+.centerInParent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

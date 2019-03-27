@@ -41,6 +41,8 @@ import { ChatComponent } from './chat/chat.component';
 import { CreateAccountComponent } from './create-account/create-account.component';
 import { EditImageComponent } from './edit-image/edit-image.component';
 import { AccountComponent } from './account/account.component';
+import { FriendsComponent } from './friends/friends.component';
+import { NotificationComponent } from './notification/notification.component';
 
 
 
@@ -48,7 +50,8 @@ const appRoutes: Routes = [
   {
     path: 'newacc',
     component: CreateAccountComponent,
-    data: { title: 'NewAccount', animation: 'newacc' }
+    data: { title: 'NewAccount', animation: 'newacc' },
+    canActivate: [AuthGuardService]
   },
   {
     path: 'home',
@@ -105,7 +108,9 @@ const appRoutes: Routes = [
     ChatComponent,
     CreateAccountComponent,
     EditImageComponent,
-    AccountComponent
+    AccountComponent,
+    FriendsComponent,
+    NotificationComponent
   ],
   imports: [
     BrowserModule
@@ -142,6 +147,6 @@ const appRoutes: Routes = [
 
   ],
   bootstrap: [AppComponent],
-  entryComponents: [DialogDefaultComponent, EditComponent, ChatComponent, EditImageComponent, AccountComponent]
+  entryComponents: [DialogDefaultComponent, EditComponent, ChatComponent, EditImageComponent, AccountComponent, FriendsComponent, NotificationComponent]
 })
 export class AppModule { }

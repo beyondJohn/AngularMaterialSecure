@@ -1,3 +1,17 @@
-<p>
-  account works!
-</p>
+<h2 mat-dialog-title>Account</h2>
+<mat-dialog-content class="mat-typography">
+  <div style="cursor:pointer; padding-bottom: 20px;" (click)="openPeople()">
+    <table>
+      <tr>
+        <td>
+          <mat-icon svgIcon="people" class="menuBtn x1_5">People</mat-icon>
+        </td>
+        <td><div style="padding-left: 7px; font-size: 16px;">View People</div></td>
+      </tr>
+    </table>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close mat-raised-button color="accent">Cancel</button>
+  <!-- <button mat-button (click)="updateImage(this)" [mat-dialog-close]="true" cdkFocusInitial mat-raised-button color="primary" >Save</button> -->
+</mat-dialog-actions>
