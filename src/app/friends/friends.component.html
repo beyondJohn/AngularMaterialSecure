@@ -29,7 +29,7 @@
           <div id="divInvite" style="padding-bottom: 20px;">
             <p class="my-bold">Select Showcases to share with {{userName}}:</p>
             <div *ngFor="let showcase of showcases">
-              <mat-checkbox>{{showcase.viewValue}}</mat-checkbox>
+              <mat-checkbox (click)="checkBox(showcase.viewValue)">{{showcase.viewValue}}</mat-checkbox>
             </div>
           </div>
           <button mat-button mat-raised-button color="warn" type="button" [ngStyle]="{display:personFound ? 'block' : 'none'}"
