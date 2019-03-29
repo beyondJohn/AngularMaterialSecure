@@ -16,6 +16,7 @@ export class FriendsComponent implements OnInit {
   ) { }
   search = false;
   personFound;
+  personFoundStage1;
   invalidPerson;
   userName;
   showcases = [];
@@ -29,6 +30,7 @@ export class FriendsComponent implements OnInit {
   }
   clearSearch() {
     this.personFound = undefined;
+    this.personFoundStage1 = undefined;
     this.userName = undefined;
     this.invalidPerson = undefined;
     this.search = false;
@@ -36,10 +38,10 @@ export class FriendsComponent implements OnInit {
   addPeople() {
     this.search = !this.search;
   }
-  remove(removeValue){
+  remove(removeValue) {
     var tempArray = [];
     this.checkboxShowcases.forEach(showcase => {
-      if(showcase != removeValue){
+      if (showcase != removeValue) {
         tempArray.push(showcase);
       }
     });
@@ -52,22 +54,9 @@ export class FriendsComponent implements OnInit {
     if (this.checkboxShowcases.indexOf(boxName) == -1) {
       this.checkboxShowcases.push(boxName);
     }
-    else{
+    else {
       this.remove(boxName);
     }
-  }
-  sendInvite() {
-    console.log("sending invite:", this.inviteUserNumber);
-    let acc = localStorage.getItem("acc");
-    this._http.post("https://switchmagic.com:4111/api/invite", { userNumber: this.inviteUserNumber, id: acc, showcaseArray: JSON.stringify(this.checkboxShowcases) }, {
-      headers: new HttpHeaders({
-        "Content-Type": "application/json"
-      })
-    }).subscribe(response => {
-      console.log(response);
-    }, err => {
-      console.log("Something went wrong");
-    });
   }
   inviteUserNumber;
   searchPeople(form: NgForm) {
@@ -81,6 +70,7 @@ export class FriendsComponent implements OnInit {
       if (response["found"]) {
         //let searchTerm = JSON.stringify(form.value);
         this.personFound = true;
+        this.personFoundStage1 = true;
         this.userName = form.value["username"];
         this.inviteUserNumber = response["userNumber"];
       }
@@ -89,6 +79,23 @@ export class FriendsComponent implements OnInit {
       }
       console.log(response);
 
+    }, err => {
+      console.log("Something went wrong");
+    });
+  }
+  invitationSent;
+  sendInvite() {
+    console.log("sending invite:", this.inviteUserNumber);
+    let acc = localStorage.getItem("acc");
+    let idName = localStorage.getItem("userName");
+    this._http.post("https://switchmagic.com:4111/api/invite", { userNumber: this.inviteUserNumber, id: acc, showcaseArray: JSON.stringify(this.checkboxShowcases), idName: idName }, {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json"
+      })
+    }).subscribe(response => {
+      console.log(response);
+      this.personFound = undefined;
+      this.invitationSent = true;
     }, err => {
       console.log("Something went wrong");
     });

@@ -12,6 +12,6 @@
   </div>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
+  <button mat-button (click)="logOut()" [mat-dialog-close]="true" cdkFocusInitial mat-raised-button color="primary" >Log Out</button>
   <button mat-button mat-dialog-close mat-raised-button color="accent">Cancel</button>
-  <!-- <button mat-button (click)="updateImage(this)" [mat-dialog-close]="true" cdkFocusInitial mat-raised-button color="primary" >Save</button> -->
 </mat-dialog-actions>

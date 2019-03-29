@@ -19,21 +19,26 @@
       <div class="container-fluid">
         <div *ngIf="invalidPerson" class="alert alert-danger">Person not found :-(</div>
         <br />
-        <mat-form-field class="example-full-width" [ngStyle]="{display:personFound ? 'none' : 'block'}">
+        <mat-form-field class="example-full-width" [ngStyle]="{display:personFoundStage1 ? 'none' : 'block'}">
           <input matInput placeholder="User Name" type="email" id="username" name="username" ngModel required autofocus>
         </mat-form-field>
         <br />
-        <button mat-button mat-raised-button color="primary" type="submit" [ngStyle]="{display:personFound ? 'none' : 'block'}">Search</button>
+        <button mat-button mat-raised-button color="primary" type="submit" [ngStyle]="{display:personFoundStage1 ? 'none' : 'block'}">Search</button>
         <div [ngStyle]="{display:personFound ? 'block' : 'none'}" style="position: relative; top: -20px;">
-          <span id="labelFoundUser" class="my-bold">Found: </span>{{userName}} <span class="my-bold">!</span>
+          <span id="labelFoundUser" class="my-bold">Found: </span> <span class="my-bold-un">{{userName.toUpperCase()}}</span>
           <div id="divInvite" style="padding-bottom: 20px;">
-            <p class="my-bold">Select Showcases to share with {{userName}}:</p>
+            <p class="my-bold">Select Showcases to share:</p>
             <div *ngFor="let showcase of showcases">
               <mat-checkbox (click)="checkBox(showcase.viewValue)">{{showcase.viewValue}}</mat-checkbox>
             </div>
           </div>
           <button mat-button mat-raised-button color="warn" type="button" [ngStyle]="{display:personFound ? 'block' : 'none'}"
             (click)="sendInvite()" class="btnNewAcc">Send Invitation</button>
+        </div>
+        <div [ngStyle]="{display:invitationSent ? 'block' : 'none'}" style="position: relative; top: -20px; text-align: center;">
+          <span id="labelInvitationSent" class="my-bold-un">Invitation sent to </span><br/><br/>
+          <span id="labelInvitationSent" class="my-bold-un">{{userName.toUpperCase()}}</span><br/><br/>
+          <mat-icon svgIcon="thumb_up" class="menuBtn x2">People</mat-icon><br/><br/>
         </div>
       </div>
     </form>

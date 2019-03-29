@@ -6,6 +6,7 @@ import { DialogDefaultComponent } from '../dialog-default/dialog-default.compone
 import { EditComponent } from '../edit/edit.component'
 import { Router } from '@angular/router';
 import { ShowcasesService } from '../services/showcases.service';
+import { NotificationsService } from '../services/notifications.service';
 
 @Component({
   selector: 'app-home',
@@ -21,6 +22,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     , private _behaviorSubject: BehaviorSubjectService
     , private _showcaseTypesService: ShowcasesService
     , private _router: Router
+    , private _notification: NotificationsService
   ) {
     this.description = "";
   }
@@ -114,12 +116,36 @@ export class HomeComponent implements OnInit, AfterViewInit {
   processShowcaseTypes(imagesDB: Object) {
     this._showcaseTypesService.refreshshowcasesDb(imagesDB);
   }
+  notifications = [];
+  invitationsSent = [];
+  invitationsReceived = [];
+  processNotifications(imagesDB: Object){
+    this.invitationsReceived = imagesDB["people"]["invitations"]["received"];
+    this.invitationsSent = imagesDB["people"]["invitations"]["sent"];
+    let activeReceivedInvites = [];
+    this.invitationsReceived.forEach(invitation => {
+      if(invitation['status'] == "0"){
+        activeReceivedInvites.push(invitation);
+      }
+    });
+    if(activeReceivedInvites.length > 0){
+      this._notification.refreshNotifications(activeReceivedInvites);
+    }
+
+    // Begin sort images into showcase arrays & add image types to type array
+    this.imageObjects.forEach(imgObj => {
+      if (this.dbTypesArray.indexOf(imgObj.type) == -1) {
+        this.dbTypesArray.push(imgObj.type);
+      }
+    });
+  }
   getImages() {
     var id = localStorage.getItem("acc");
     this.http.get('https://switchmagic.com:4111/getImages?id=' + id)
       .subscribe(imagesDB => {
         this.processImages(imagesDB);
         this.processShowcaseTypes(imagesDB);
+        this.processNotifications(imagesDB);
       });
   }
 

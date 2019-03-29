@@ -1,10 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { DialogDefaultComponent } from './dialog-default/dialog-default.component';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatIconRegistry } from '@angular/material';
 import { trigger, state, style, animate, transition, query } from '@angular/animations';
 import { AccountComponent } from './account/account.component';
+import { NotificationComponent } from './notification/notification.component';
+import { NotificationsService } from './services/notifications.service';
+import { AuthGuardService } from './services/auth-guard.service';
 
 @Component({
   selector: 'app-root',
@@ -48,7 +51,7 @@ import { AccountComponent } from './account/account.component';
     ])
   ]
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
   title = 'meBloggy';
   db = [];
@@ -56,6 +59,8 @@ export class AppComponent {
     iconRegistry: MatIconRegistry
     , sanitizer: DomSanitizer
     , public dialog: MatDialog
+    , public _noification: NotificationsService
+    , private _authService: AuthGuardService
   ) {
     iconRegistry.addSvgIcon(
       'thumbs-up',
@@ -105,6 +110,19 @@ export class AppComponent {
     iconRegistry.addSvgIcon(
       'person_add',
       sanitizer.bypassSecurityTrustResourceUrl('assets/materialIconsSVGs/person_add.svg'));
+    iconRegistry.addSvgIcon(
+      'thumb_up',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/materialIconsSVGs/thumb_up.svg'));
+  }
+  isInit = true;
+  ngOnInit() {
+    this._noification.notification.subscribe(notify => {
+      console.log("notify: ", notify);
+      if (!this.isInit) {
+        this.dialog.open(NotificationComponent, { data: { notify: notify } });
+      }
+    });
+    this.isInit = false;
   }
   myPosition = 0;
   myImg() {
@@ -122,6 +140,8 @@ export class AppComponent {
     return outlet.activatedRouteData.animation;
   }
   openAccount() {
-    this.dialog.open(AccountComponent);
+    if (this._authService.canActivate()) {
+      this.dialog.open(AccountComponent);
+    }
   }
 }

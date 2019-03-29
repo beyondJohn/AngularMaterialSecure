@@ -43,6 +43,7 @@ import { EditImageComponent } from './edit-image/edit-image.component';
 import { AccountComponent } from './account/account.component';
 import { FriendsComponent } from './friends/friends.component';
 import { NotificationComponent } from './notification/notification.component';
+import { NotificationsService } from './services/notifications.service';
 
 
 
@@ -50,8 +51,7 @@ const appRoutes: Routes = [
   {
     path: 'newacc',
     component: CreateAccountComponent,
-    data: { title: 'NewAccount', animation: 'newacc' },
-    canActivate: [AuthGuardService]
+    data: { title: 'NewAccount', animation: 'newacc' }
   },
   {
     path: 'home',
@@ -143,7 +143,8 @@ const appRoutes: Routes = [
     , JwtHelper
     , WebsocketService
     , ChatService
-    , ChatComponent
+    , ChatComponent,
+    , NotificationsService
 
   ],
   bootstrap: [AppComponent],

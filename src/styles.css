@@ -16,3 +16,19 @@ body {
     align-items: center;
     justify-content: center;
 }
+
+.my-bold{
+    font-weight: 600;
+    color: #3F51B5;
+}
+.my-bold-un{
+    font-weight: 600;
+    color: #3F51B5;
+    font-size: 1.8em;
+}
+
+.my-bold-xlg{
+    font-weight: 600;
+    color: #3F51B5;
+    font-size: 2em;
+}
