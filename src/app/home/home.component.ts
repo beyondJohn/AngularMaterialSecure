@@ -24,7 +24,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     , private _showcaseTypesService: ShowcasesService
     , private _router: Router
     , private _notification: NotificationsService
-    , private _config: Config 
+    , private _config: Config
   ) {
     this.description = "";
     this.imgAPI = _config.urls.getImgAPI;
@@ -43,21 +43,36 @@ export class HomeComponent implements OnInit, AfterViewInit {
   ngOnInit() {
 
   }
+  cleanShowcaseTitle(showcaseTitle) {
+    return "Shared By: " + showcaseTitle.viewValue.split("---")[1] + "-" + showcaseTitle.viewValue.split("---")[2];
+  }
+  // figure out which directory to get images from, 
+  // might be default /uploads, or owners /uploads/imagesuser#, or from shared user /uploads/imagesinvitors#
+  directoryName(imgJSON) {
+    if (imgJSON.isSeed) {
+      return '';
+    }
+    // get invitors number from the type string, username & # appended to type string when shared images are compiled 
+    if (imgJSON.isShared) {
+      return '/images' + imgJSON.type.split('---')[0];
+    }
+    return '/images' + this.userId;
+  }
   isMyImgInit = true;
   myImg() {
 
     // set default home main showcase image if exists in localstorage, else load first img from first showcase
     if (this.isMyImgInit) {
       if (this.db.length > 0) {
-        if(localStorage.getItem("DefaultImage")){
+        if (localStorage.getItem("DefaultImage")) {
           var showcaseType = localStorage.getItem("DefaultImage").split("---")[2];
-          for(var i = 0; i < this.db.length; i ++){
-            if(this.db[i][0].type == showcaseType){
+          for (var i = 0; i < this.db.length; i++) {
+            if (this.db[i][0].type == showcaseType) {
               var timestamp = localStorage.getItem("DefaultImage").split("---")[0];
               var imgName = localStorage.getItem("DefaultImage").split("---")[1];
-              for(var r = 0; r < this.db[i].length; r++){
-                if(this.db[i][r]["timestamp"] == timestamp && this.db[i][r]["image"] == imgName){
-                  this.myPosition = [i,r];
+              for (var r = 0; r < this.db[i].length; r++) {
+                if (this.db[i][r]["timestamp"] == timestamp && this.db[i][r]["image"] == imgName) {
+                  this.myPosition = [i, r];
                 }
               }
             }
@@ -88,7 +103,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.description = this.db[this.myPosition[0]][this.myPosition[1]].description;
       this.date = this.db[this.myPosition[0]][this.myPosition[1]].date;
       this.comment = this.db[this.myPosition[0]][this.myPosition[1]].comment;
-      localStorage.setItem("DefaultImage", this.db[this.myPosition[0]][this.myPosition[1]].timestamp + "---" + this.db[this.myPosition[0]][this.myPosition[1]].image + "---" + this.db[this.myPosition[0]][this.myPosition[1]].type);
+
+      localStorage.setItem("DefaultImage", this.db[this.myPosition[0]][this.myPosition[1]].timestamp 
+      + "---" + this.db[this.myPosition[0]][this.myPosition[1]].image 
+      + "---" + this.db[this.myPosition[0]][this.myPosition[1]].type
+      + "---" + this.db[this.myPosition[0]][this.myPosition[1]].description
+      + "---" + this.db[this.myPosition[0]][this.myPosition[1]].date
+      + "---" + this.db[this.myPosition[0]][this.myPosition[1]].comment
+      );
+
     }
   }
   processImages(imagesDB) {
@@ -115,9 +138,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.myPosition = [0, 0]
     // End sort & organize image types into type arrays
     if (this.db.length > 0) {
-      this.description = this.db[this.myPosition[0]][this.myPosition[1]].description;
-      this.date = this.db[this.myPosition[0]][this.myPosition[1]].date;
-      this.comment = this.db[this.myPosition[0]][this.myPosition[1]].comment;
+      if (localStorage.getItem('DefaultImage')) {
+        var storedImage = localStorage.getItem('DefaultImage');
+        this.description = storedImage.split('---')[3];
+        this.date = storedImage.split('---')[4];
+        this.comment = storedImage.split('---')[5];
+      }
+      else {
+        this.description = this.db[this.myPosition[0]][this.myPosition[1]].description;
+        this.date = this.db[this.myPosition[0]][this.myPosition[1]].date;
+        this.comment = this.db[this.myPosition[0]][this.myPosition[1]].comment;
+      }
+
     }
   }
   processShowcaseTypes(imagesDB: Object) {
@@ -126,16 +158,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
   notifications = [];
   invitationsSent = [];
   invitationsReceived = [];
-  processNotifications(imagesDB: Object){
+  processNotifications(imagesDB: Object) {
     this.invitationsReceived = imagesDB["people"]["invitations"]["received"];
     this.invitationsSent = imagesDB["people"]["invitations"]["sent"];
     let activeReceivedInvites = [];
     this.invitationsReceived.forEach(invitation => {
-      if(invitation['status'] == "0"){
+      if (invitation['status'] == "0") {
         activeReceivedInvites.push(invitation);
       }
     });
-    if(activeReceivedInvites.length > 0){
+    if (activeReceivedInvites.length > 0) {
       this._notification.refreshNotifications(activeReceivedInvites);
     }
 
@@ -176,10 +208,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.dialog.open(DialogDefaultComponent);
   }
   edit(img) {
-    if(this.db[this.myPosition[0]][this.myPosition[1]].isShared){
+    if (this.db[this.myPosition[0]][this.myPosition[1]].isShared) {
 
     }
-    else{
+    else {
       let date = this.db[this.myPosition[0]][this.myPosition[1]].date;
       let desc = this.db[this.myPosition[0]][this.myPosition[1]].description;
       let comm = this.db[this.myPosition[0]][this.myPosition[1]].comment;

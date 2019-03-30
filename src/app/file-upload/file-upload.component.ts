@@ -39,7 +39,7 @@ export class FileUploadComponent implements OnInit, AfterViewInit {
   value = 0;
   describe = "meBloggy Rocks!";
   newTitle;
-  comment = "What a great time!";
+  comment = "I &hearts; meBloggy!";
   apiEndPoint = this._config.urls.apiEndPoint;
   ngOnInit() {
 
