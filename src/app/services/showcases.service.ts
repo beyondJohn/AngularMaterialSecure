@@ -8,15 +8,7 @@ export class ShowcasesService {
   constructor(
     private _http: HttpClient
   ) { }
-  // getShowcases(){
-  //   var showcaseTitlesDB = [];
-  //   this._http.get('https://switchmagic.com:4111/api/showcaseTypes')
-  //   .subscribe(showcaseTypes => { 
-  //     showcaseTitlesDB = showcaseTypes['showcases'];
-  //     localStorage.setItem('showcasetitles', showcaseTypes['showcases']);
-  //     this.showcasesDb.next(showcaseTitlesDB);
-  //    });
-  // }
+
   showcasesObj: object = { showcaseTypesArray: [] };
   showcasesDb = new BehaviorSubject<object>(this.updateshowcasesDb());
   imageObjects = [];

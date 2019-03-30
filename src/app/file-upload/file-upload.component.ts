@@ -39,7 +39,7 @@ export class FileUploadComponent implements OnInit, AfterViewInit {
   value = 0;
   describe = "meBloggy Rocks!";
   newTitle;
-  comment = "I &hearts; meBloggy!";
+  comment = 'I &hearts; meBloggy!';
   apiEndPoint = this._config.urls.apiEndPoint;
   ngOnInit() {
 
@@ -143,7 +143,7 @@ export class FileUploadComponent implements OnInit, AfterViewInit {
   onSubmit() {
     let that = this;
     document.getElementById('complete').innerText = '';
-    
+
     var id = localStorage.getItem("acc");
     //let contentSelector = document.getElementById('contentAreaSelector') as HTMLSelectElement;
     //let contentArea = contentSelector.value.replace(' ','');
@@ -157,13 +157,13 @@ export class FileUploadComponent implements OnInit, AfterViewInit {
         if (!this.defaultShowcaseType) {
           alert("You forgot to select a Showcase type ;-)");
         }
-        else{
+        else {
           this.loading = true;
           showcaseType = this.defaultShowcaseType;
           this.processImage(showcaseType, img, id);
         }
       }
-      else{
+      else {
         this.loading = true;
         showcaseType = this.selectedValue;
         this.processImage(showcaseType, img, id);
@@ -172,9 +172,9 @@ export class FileUploadComponent implements OnInit, AfterViewInit {
     else {
       this.loading = true;
       showcaseType = this.newTitle;
-      this.processImage(this.newTitle, img, id);
+      this.processImage(showcaseType, img, id);
     }
-    
+
   }
   processImage(showcaseType, img, id) {
     var that = this;
@@ -206,8 +206,15 @@ export class FileUploadComponent implements OnInit, AfterViewInit {
             this.loading = false;
             this.disabled = true;
             this._behaviorSubject.refreshImagesDB('refresh');
-            console.log("event: ",event);
-            localStorage.setItem("DefaultImage", timestamp + "---" + this.activeFile["name"] + "---" + showcaseType);
+            console.log("event: ", event);
+            localStorage.setItem("DefaultImage", timestamp
+              + "---" + this.activeFile["name"]
+              + "---" + showcaseType
+              + "---" + this.describe
+              + "---" + new Date().toDateString()
+              + "---" + this.comment
+            );
+            localStorage.setItem("activeType", showcaseType.toUpperCase());
             this._router.navigate(['/home']);
           }
         },

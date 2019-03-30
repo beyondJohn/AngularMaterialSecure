@@ -43,6 +43,22 @@ export class HomeComponent implements OnInit, AfterViewInit {
   ngOnInit() {
 
   }
+  ngAfterViewInit() {
+    let that = this;
+    this._behaviorSubject.elements.subscribe(event => {
+      setTimeout(function () {
+        that.getImages();
+      }, 1000);
+
+    });
+    this._showcaseTypesService.showcasesDb.subscribe(showcases => {
+      that.showcases = [];
+
+      showcases['showcaseTypesArray'].forEach(typeObj => {
+        that.showcases.push(typeObj);
+      });
+    })
+  }
   cleanShowcaseTitle(showcaseTitle) {
     return "Shared By: " + showcaseTitle.viewValue.split("---")[1] + "-" + showcaseTitle.viewValue.split("---")[2];
   }
@@ -65,7 +81,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     if (this.isMyImgInit) {
       if (this.db.length > 0) {
         if (localStorage.getItem("DefaultImage")) {
-          var showcaseType = localStorage.getItem("DefaultImage").split("---")[2];
+          var showcaseType = localStorage.getItem("DefaultImage").split("---")[2].toUpperCase();
           for (var i = 0; i < this.db.length; i++) {
             if (this.db[i][0].type == showcaseType) {
               var timestamp = localStorage.getItem("DefaultImage").split("---")[0];
@@ -85,7 +101,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     // check if array of showcases 'db' is loaded before attempting to access each showcase's image objects  
     if (this.db.length > 0) {
       // set string values for description, date, & comment before returning the image url to the view
-      localStorage.setItem("activeType", this.db[this.myPosition[0]][this.myPosition[1]].type)
+      localStorage.setItem("activeType", this.db[this.myPosition[0]][this.myPosition[1]].type);
       return this.db[this.myPosition[0]][this.myPosition[1]].url;
     }
     return "";
@@ -188,22 +204,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       });
   }
 
-  ngAfterViewInit() {
-    let that = this;
-    this._behaviorSubject.elements.subscribe(event => {
-      setTimeout(function () {
-        that.getImages();
-      }, 1000);
-
-    });
-    this._showcaseTypesService.showcasesDb.subscribe(showcases => {
-      that.showcases = [];
-
-      showcases['showcaseTypesArray'].forEach(typeObj => {
-        that.showcases.push(typeObj);
-      });
-    })
-  }
   openDialog() {
     this.dialog.open(DialogDefaultComponent);
   }
