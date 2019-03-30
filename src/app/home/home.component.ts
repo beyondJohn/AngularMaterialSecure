@@ -7,6 +7,7 @@ import { EditComponent } from '../edit/edit.component'
 import { Router } from '@angular/router';
 import { ShowcasesService } from '../services/showcases.service';
 import { NotificationsService } from '../services/notifications.service';
+import { Config } from '../config';
 
 @Component({
   selector: 'app-home',
@@ -23,8 +24,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
     , private _showcaseTypesService: ShowcasesService
     , private _router: Router
     , private _notification: NotificationsService
+    , private _config: Config 
   ) {
     this.description = "";
+    this.imgAPI = _config.urls.getImgAPI;
+    this.userId = localStorage.getItem("acc");
   }
   myPosition = [];
   imageObjects = [];
@@ -33,6 +37,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
   description;
   date;
   comment;
+  imgAPI;
+  imgSrcType = "/thumbMd";
+  userId;
   ngOnInit() {
 
   }
