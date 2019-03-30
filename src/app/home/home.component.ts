@@ -169,13 +169,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.dialog.open(DialogDefaultComponent);
   }
   edit(img) {
-    let date = this.db[this.myPosition[0]][this.myPosition[1]].date;
-    let desc = this.db[this.myPosition[0]][this.myPosition[1]].description;
-    let comm = this.db[this.myPosition[0]][this.myPosition[1]].comment;
-    let type = this.db[this.myPosition[0]][this.myPosition[1]].type;
-    let image = this.db[this.myPosition[0]][this.myPosition[1]].image;
-    let timestamp = this.db[this.myPosition[0]][this.myPosition[1]].timestamp;
-    this.dialog.open(EditComponent, { data: { date: date, img: img, description: desc, comment: comm, type: type, timestamp: timestamp, image: image } });
+    if(this.db[this.myPosition[0]][this.myPosition[1]].isShared){
+
+    }
+    else{
+      let date = this.db[this.myPosition[0]][this.myPosition[1]].date;
+      let desc = this.db[this.myPosition[0]][this.myPosition[1]].description;
+      let comm = this.db[this.myPosition[0]][this.myPosition[1]].comment;
+      let type = this.db[this.myPosition[0]][this.myPosition[1]].type;
+      let image = this.db[this.myPosition[0]][this.myPosition[1]].image;
+      let timestamp = this.db[this.myPosition[0]][this.myPosition[1]].timestamp;
+      this.dialog.open(EditComponent, { data: { date: date, img: img, description: desc, comment: comm, type: type, timestamp: timestamp, image: image } });
+    }
   }
   openVert(type) {
     // vert screen will use activeType to find the correct collection to show
