@@ -35,6 +35,55 @@
       </tr>
     </table>
   </div>
+
+  <!-- start adding people -->
+
+  <div style="cursor:pointer; position: relative;" (click)="addPeople()">
+      <table>
+        <tr>
+          <td>
+            <mat-icon svgIcon="person_add" class="menuBtn x1_5">People</mat-icon>
+          </td>
+          <td>
+            <div style="padding-left: 7px; font-size: 16px;">Add People</div>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div [ngStyle]="{display:search ? 'block' : 'none'}" style="padding-bottom: 20px; position: relative;">
+        <form class="form-search" #searchForm="ngForm" (ngSubmit)="searchPeople(searchForm)" style="padding:20px; padding-top:0px;">
+          <div class="container-fluid">
+            <div *ngIf="invalidPerson" class="alert alert-danger">Person not found :-(</div>
+            <br />
+            <mat-form-field class="example-full-width">
+                <input matInput placeholder="User Name" type="email" id="username" name="username" ngModel required autofocus>
+              </mat-form-field>
+          </div>
+          <!-- insert below -->
+          <br />
+        <button mat-button mat-raised-button color="primary" type="submit" [ngStyle]="{display:personFoundStage1 ? 'none' : 'block'}">Search</button>
+        <div [ngStyle]="{display:personFound ? 'block' : 'none'}" style="position: relative; top: -20px;">
+          <span id="labelFoundUser" class="my-bold">Found: </span> <span class="my-bold-un">{{getUserName4UI()}}</span>
+          <div id="divInvite" style="padding-bottom: 20px;">
+            <p class="my-bold">Select Showcases to share:</p>
+            <div *ngFor="let showcase of showcases">
+              <mat-checkbox (click)="checkBox(showcase.viewValue)">{{showcase.viewValue}}</mat-checkbox>
+            </div>
+          </div>
+          <button mat-button mat-raised-button color="warn" type="button" [ngStyle]="{display:personFound ? 'block' : 'none'}"
+            (click)="sendInvite()" class="btnNewAcc">Send Invitation</button>
+            <div [ngStyle]="{display:invitationSent ? 'block' : 'none'}" style="position: relative; top: -20px; text-align: center;">
+                <span id="labelInvitationSent" class="my-bold-un">Invitation sent to </span><br/><br/>
+                <span id="labelInvitationSent" class="my-bold-un">{{getUserName4UI()}}</span><br/><br/>
+                <mat-icon svgIcon="thumb_up" class="menuBtn x2">People</mat-icon><br/><br/>
+              </div>
+        </div>
+          <!-- insert above -->
+          </form>
+    </div>
+  
+  <!-- finish adding people -->
+
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <!-- <button mat-button (click)="logOut()" [mat-dialog-close]="true" cdkFocusInitial mat-raised-button color="primary" >Log Out</button> -->
