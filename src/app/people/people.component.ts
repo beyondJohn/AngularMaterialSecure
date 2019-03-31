@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material';
 import { NotificationsService } from '../services/notifications.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ShowcasesService } from '../services/showcases.service';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-people',
@@ -18,6 +19,7 @@ export class PeopleComponent implements OnInit {
     , public _noification: NotificationsService
     , private _http: HttpClient
     , public _showcases: ShowcasesService
+    , public dialogRef: MatDialogRef<PeopleComponent>
   ) { }
   countConnected;
   connections = [];
@@ -47,9 +49,9 @@ export class PeopleComponent implements OnInit {
       });
     });
   }
-  getUserName4UI(){
-    
-    if(this.userName){
+  getUserName4UI() {
+
+    if (this.userName) {
       return this.userName.toUpperCase();
     }
     return
@@ -124,19 +126,58 @@ export class PeopleComponent implements OnInit {
         "Content-Type": "application/json"
       })
     }).subscribe(response => {
-      if (response["found"]) {
-        //let searchTerm = JSON.stringify(form.value);
-        this.personFound = true;
-        this.personFoundStage1 = true;
-        this.userName = form.value["username"];
-        this.inviteUserNumber = response["userNumber"];
+      if (response["userNumber"] == localStorage.getItem("acc")) {
+        alert("You can't send invitations to yourself. You need to get out more, make some friends ;-)");
+        this.dialogRef.close();
+      }
+      var imgDb = JSON.parse(localStorage.getItem('imagesDB'));
+      var connectionAlreadyExists;
+      imgDb["people"]["connections"].forEach(connection => {
+        // check if user already a connection
+        if (connection.inviterNumber == response["userNumber"]) {
+          connectionAlreadyExists = true;
+        }
+      });
+      if (connectionAlreadyExists) {
+        alert("You are already connected to " + response["userName"] +"!");
+        this.dialogRef.close();
+      }
+      if(connectionAlreadyExists == undefined){
+        // check for pending invitations and declined invitations
+        imgDb["people"]["invitations"]["received"].forEach(receivedInvitation => {
+          if(receivedInvitation.userNumber == response["userNumber"]){
+            // already received invitation, check status
+            // if not yet accepted/declined
+            if(receivedInvitation.status == 0){
+              alert('You already have a pending invitation from ' + response["userName"] + ". Please repond to the existing invitation");
+              this.dialogRef.close();
+            }
+            // if already declined
+            else if(receivedInvitation.status == 2){
+              var confirm = confirm('You have already declined an invitation from ' + response["userName"] + ". Would you like to continue with sending this invitation?");
+              if (confirm == true) {
+                
+              } else {
+                this.dialogRef.close();
+              }
+            }
+          }
+        });
       }
       else {
-        console.log("user not found, try again");
-        this.invalidPerson = true;
+        if (response["found"]) {
+          //let searchTerm = JSON.stringify(form.value);
+          this.personFound = true;
+          this.personFoundStage1 = true;
+          this.userName = form.value["username"];
+          this.inviteUserNumber = response["userNumber"];
+        }
+        else {
+          console.log("user not found, try again");
+          this.invalidPerson = true;
+        }
+        console.log(response);
       }
-      console.log(response);
-
     }, err => {
       console.log("Something went wrong");
     });

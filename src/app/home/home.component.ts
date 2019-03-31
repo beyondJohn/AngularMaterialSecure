@@ -198,6 +198,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     var id = localStorage.getItem("acc");
     this.http.get('https://switchmagic.com:4111/getImages?id=' + id)
       .subscribe(imagesDB => {
+        localStorage.setItem('imagesDB', JSON.stringify(imagesDB));
         this.processImages(imagesDB);
         this.processShowcaseTypes(imagesDB);
         this.processNotifications(imagesDB);
