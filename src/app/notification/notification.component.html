@@ -1,7 +1,7 @@
 <mat-icon svgIcon="notifications_active" class="menuBtn x2">Notifications</mat-icon>
 <mat-dialog-content class="mat-typography" style="padding-bottom: 20px; padding-top: 30px;">
   <div id="divInvitationsNotify" [ngStyle]="{display:hasInvitation ? 'block' : 'none'}">
-    <span class="my-bold-label">You have <span style="color:red">({{count}})</span> Invitation<span [ngStyle]="{display:count > 1 ? 'block' : 'none'}">s</span>
+    <span class="my-bold-label">You have <span style="color:red">({{count}})</span> Invitation<span [ngStyle]="{display:count > 1 ? 'inline-block' : 'none'}">s</span>
     </span>
     <br /><br />
     <button mat-button mat-raised-button color="warn" (click)="manageInvitations()">Manage Invitations</button>
