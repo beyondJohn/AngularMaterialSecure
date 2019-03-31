@@ -24,6 +24,7 @@ export class InvitationsComponent implements OnInit {
     this.hasInvitation = true;
     this.notifications = this.data.notify;
     this.inviterNumber = this.data.inviterNumber;
+    this.notifications =  this.notifications.filter((notification) => {return notification.userNumber == this.inviterNumber });
     this.count = this.notifications.length;
     this.notifications.forEach(invite => {
       if (invite.status != 0 && invite.userNumber == this.inviterNumber) {
