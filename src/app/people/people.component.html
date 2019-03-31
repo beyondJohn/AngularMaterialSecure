@@ -1,0 +1,42 @@
+<mat-dialog-content class="mat-typography">
+  <div style="cursor:pointer; padding-bottom: 20px;">
+    <table>
+      <tr>
+        <td colspan="2" style="padding-bottom: 15px;">
+          <mat-icon svgIcon="people" class="menuBtn x2">People</mat-icon>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" style="padding-bottom: 15px;">
+            <div class="my-bold-label">Connected People (<span style="color: red;">{{countConnected}}</span>)</div>
+        </td>
+      </tr>
+      <tr *ngFor="let connection of connections">
+        <td style="padding-bottom: 10px; border-bottom: 1px solid #ddd;">
+          {{connection.InviterName}}
+        </td>
+        <td style="padding-bottom: 10px; border-bottom: 1px solid #ddd;">
+          <button mat-button mat-raised-button color="warn" (click)="viewPerson(connection.userNumber)" type="button">Settings</button>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" style="padding-bottom: 10px; padding-top: 15px;">
+            <div class="my-bold-label">Invitations (<span style="color: red;">{{notify.length}}</span>)</div>
+        </td>
+      </tr>
+      <tr *ngFor="let invitation of activeInvitations">
+        <td style="padding-bottom: 10px; border-bottom: 1px solid #ddd;">
+            <div class="my-bold-label"><span style="color: red;">{{invitation.inviterName}}</span></div>
+        </td>
+        <td style="padding-bottom: 10px; border-bottom: 1px solid #ddd;">
+            <button mat-button mat-raised-button color="warn" (click)="viewInvitation(invitation.userNumber)" type="button">View Invitation</button>
+            <!-- <button mat-button mat-dialog-close mat-raised-button color="warn" (click)="viewInvitation(invitation.userNumber)" type="button">View Invitation</button> -->
+        </td>
+      </tr>
+    </table>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <!-- <button mat-button (click)="logOut()" [mat-dialog-close]="true" cdkFocusInitial mat-raised-button color="primary" >Log Out</button> -->
+  <button mat-button mat-dialog-close mat-raised-button color="accent">Exit</button>
+</mat-dialog-actions>

@@ -44,6 +44,8 @@ import { AccountComponent } from './account/account.component';
 import { FriendsComponent } from './friends/friends.component';
 import { NotificationComponent } from './notification/notification.component';
 import { NotificationsService } from './services/notifications.service';
+import { PeopleComponent } from './people/people.component';
+import { InvitationsComponent } from './invitations/invitations.component';
 
 
 
@@ -110,7 +112,9 @@ const appRoutes: Routes = [
     EditImageComponent,
     AccountComponent,
     FriendsComponent,
-    NotificationComponent
+    NotificationComponent,
+    PeopleComponent,
+    InvitationsComponent
   ],
   imports: [
     BrowserModule
@@ -148,6 +152,9 @@ const appRoutes: Routes = [
 
   ],
   bootstrap: [AppComponent],
-  entryComponents: [DialogDefaultComponent, EditComponent, ChatComponent, EditImageComponent, AccountComponent, FriendsComponent, NotificationComponent]
+  entryComponents: [DialogDefaultComponent, EditComponent, ChatComponent, 
+    EditImageComponent, AccountComponent, FriendsComponent, NotificationComponent
+    ,InvitationsComponent, PeopleComponent
+  ]
 })
 export class AppModule { }

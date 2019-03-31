@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { FriendsComponent } from '../friends/friends.component';
+import { PeopleComponent } from '../people/people.component';
 import { Router } from '@angular/router';
 
 @Component({
@@ -18,7 +19,8 @@ export class AccountComponent implements OnInit {
   ngOnInit() {
   }
   openPeople() {
-    this.dialog.open(FriendsComponent);
+    // this.dialog.open(FriendsComponent);
+    this.dialog.open(PeopleComponent);
   }
   logOut(){
     localStorage.removeItem('jwt');

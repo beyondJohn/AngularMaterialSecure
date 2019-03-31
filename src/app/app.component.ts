@@ -113,6 +113,12 @@ export class AppComponent implements OnInit {
     iconRegistry.addSvgIcon(
       'thumb_up',
       sanitizer.bypassSecurityTrustResourceUrl('assets/materialIconsSVGs/thumb_up.svg'));
+    iconRegistry.addSvgIcon(
+      'notifications_active',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/materialIconsSVGs/notifications_active.svg'));
+    iconRegistry.addSvgIcon(
+      'notifications',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/materialIconsSVGs/notifications.svg'));
   }
   isInit = true;
   ngOnInit() {

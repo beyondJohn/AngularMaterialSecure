@@ -6,7 +6,7 @@ export class NotificationsService {
 
   constructor() { }
 
-  notificationDBObj: Array<object> = [{ }];
+  notificationDBObj: Array<object> = [];
   notification = new BehaviorSubject<Array<object>>(this.updateNotifications());
   refreshNotifications(notifications): void {
     this.notificationDBObj = notifications;

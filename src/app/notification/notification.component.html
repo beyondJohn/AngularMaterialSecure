@@ -1,36 +1,12 @@
-<h2 mat-dialog-title>Notifications</h2>
-<mat-dialog-content class="mat-typography">
-  <div id="divInvitationsNotify" [ngStyle]="{display:preDecision && hasInvitation ? 'block' : 'none'}" >
-      <span class="my-bold">You have <span style="color:red">({{count}})</span> Invitation from:</span>
-      <br /><br />
-    <div *ngFor="let invite of notifications" style="text-align: center;">
-        <span class="my-bold-un">{{invite.inviterName.toUpperCase()}}</span>
-    </div>
-    <br />
-  </div>
-  <div id="divAccepted" [ngStyle]="{display:accepted ? 'block' : 'none'}" style="text-align: center;">
-      <span class="my-bold">Share showcases with</span>
-    <br /><br />
-    <span class="my-bold-un">
-      {{inviterName.toUpperCase()}}
+<mat-icon svgIcon="notifications_active" class="menuBtn x2">Notifications</mat-icon>
+<mat-dialog-content class="mat-typography" style="padding-bottom: 20px; padding-top: 30px;">
+  <div id="divInvitationsNotify" [ngStyle]="{display:hasInvitation ? 'block' : 'none'}">
+    <span class="my-bold-label">You have <span style="color:red">({{count}})</span> Invitation<span [ngStyle]="{display:count > 1 ? 'block' : 'none'}">s</span>
     </span>
     <br /><br />
-    <div *ngFor="let showcase of showcases" style="text-align:left;">
-      <mat-checkbox (click)="checkBox(showcase.viewValue)">{{showcase.viewValue}}</mat-checkbox>
-    </div>
-    <br [ngStyle]="{display:checkboxShowcases.length > 0 ? 'block' : 'none'}" />
-    <br [ngStyle]="{display:checkboxShowcases.length > 0 ? 'block' : 'none'}" />
-    
-            <br [ngStyle]="{display:!checkboxShowcases.length > 0 ? 'block' : 'none'}" />
-    <br [ngStyle]="{display:!checkboxShowcases.length > 0 ? 'block' : 'none'}" />
+    <button mat-button mat-raised-button color="warn" (click)="manageInvitations()">Manage Invitations</button>
   </div>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button mat-button mat-raised-button color="warn" [ngStyle]="{display:preDecision ? 'block' : 'none'}" (click)="accept()">Accept</button>
-  <button mat-button mat-dialog-close mat-raised-button color="accent" [ngStyle]="{display:preDecision ? 'block' : 'none'}"
-    (click)="decline()">Decline</button>
-  <button mat-button [mat-dialog-close]="true" [ngStyle]="{display:!accepted ? 'block' : 'none'}" cdkFocusInitial mat-raised-button color="primary">cancel</button>
-  <button mat-button [mat-dialog-close]="true" [ngStyle]="{display:accepted && !checkboxShowcases.length > 0 ? 'block' : 'none'}" cdkFocusInitial mat-raised-button color="primary">Finished</button>
-  <button mat-button [mat-dialog-close]="true" mat-raised-button color="warn" type="button" [ngStyle]="{display:checkboxShowcases.length > 0 ? 'block' : 'none'}"
-      (click)="share()" class="btnNewAcc">Share</button>
+  <button mat-button [mat-dialog-close]="true" cdkFocusInitial mat-raised-button color="primary">Exit</button>
 </mat-dialog-actions>
