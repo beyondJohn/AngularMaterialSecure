@@ -55,7 +55,7 @@
           <div class="container-fluid">
             <div *ngIf="invalidPerson" class="alert alert-danger">Person not found :-(</div>
             <br />
-            <mat-form-field class="example-full-width">
+            <mat-form-field class="example-full-width" [ngStyle]="{display:personFoundStage1 ? 'none' : 'block'}">
                 <input matInput placeholder="User Name" type="email" id="username" name="username" ngModel required autofocus>
               </mat-form-field>
           </div>

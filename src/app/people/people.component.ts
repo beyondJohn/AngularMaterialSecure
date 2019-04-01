@@ -163,8 +163,6 @@ export class PeopleComponent implements OnInit {
             }
           }
         });
-      }
-      else {
         if (response["found"]) {
           //let searchTerm = JSON.stringify(form.value);
           this.personFound = true;
@@ -177,6 +175,9 @@ export class PeopleComponent implements OnInit {
           this.invalidPerson = true;
         }
         console.log(response);
+      }
+      else {
+        
       }
     }, err => {
       console.log("Something went wrong");
