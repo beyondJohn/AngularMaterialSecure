@@ -14,8 +14,9 @@ export class LoginComponent implements OnInit {
   invalidLogin;
   ngOnInit() {
   }
-
+  loading;
   login(form: NgForm) {
+    this.loading = true;
     let credentials = JSON.stringify(form.value);
     this.http.post("https://switchmagic.com/api/auth/login", credentials, {
       headers: new HttpHeaders({
@@ -34,7 +35,7 @@ export class LoginComponent implements OnInit {
       this.invalidLogin = true;
     });
   }
-  newAcc(){
+  newAcc() {
     this.router.navigate(["/newacc"]);
   }
 }
