@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Config } from '../config';
 import { MatDialogRef } from '@angular/material/dialog';
+import { GetImageDbService } from '../services/get-image-db.service';
 
 @Component({
   selector: 'app-invitations',
@@ -20,20 +21,26 @@ export class InvitationsComponent implements OnInit {
     , private _httpClient: HttpClient
     , private _config: Config
     , public dialogRef: MatDialogRef<InvitationsComponent>
+    , private _getImageDb: GetImageDbService
   ) {
     this.hasInvitation = true;
     this.notifications = this.data.notify;
     this.inviterNumber = this.data.inviterNumber;
-    this.notifications =  this.notifications.filter((notification) => {return notification.userNumber == this.inviterNumber });
-    this.count = this.notifications.length;
+    //this.notifications = this.notifications.filter((notification) => { return notification.userNumber == this.inviterNumber });
+    
     this.notifications.forEach(invite => {
       if (invite.status != 0 && invite.userNumber == this.inviterNumber) {
         // hasInvitation was included before this component was made dynamic, thus it's probably useless 
         // and will likely never get to this point
         this.hasInvitation = false;
       }
+      if(invite.userNumber == this.inviterNumber){
+        this.filteredNotification.push(invite);
+      }
     });
+    this.count = this.filteredNotification.length;
   }
+  filteredNotification = [];
   preDecision;
   accepted;
   declined;
@@ -48,19 +55,49 @@ export class InvitationsComponent implements OnInit {
       showcases['showcaseTypesArray'].forEach(typeObj => {
         this.showcases.push(typeObj);
       });
+      this.filterShowcases();
     });
   }
-  accept() {
+  shareWith() {
+    if (this.inviterName != undefined) {
+      return this.inviterName.toUpperCase();
+    }
+
+  }
+  filteredShowcases = [];
+  filterShowcases() {
+    this.filteredShowcases = [];
+    this.showcases.forEach(showcase => {
+      if (showcase.viewValue.indexOf("---") == -1) {
+        console.log("72invitations.ts-showcase.viewValue: ", showcase.viewValue)
+        this.filteredShowcases.push(showcase);
+      }
+    });
+  }
+  getInviterName4UI(inviterNumber) {
+    var userName;
+    console.log("inviterNumber: ", inviterNumber);
+    this.notifications.forEach(notification => {
+      console.log("notification: ", notification.userNumber);
+      if (inviterNumber == notification.userNumber) {
+        this.inviterName = notification.inviterName;
+        console.log("notification.inviterName.toUpperCase(): ", notification.inviterName.toUpperCase());
+        userName = this.inviterName.toUpperCase();
+      }
+    });
+    return userName;
+  }
+  accept(inviterNumber) {
+    this.notifications.forEach(notification => {
+      if (notification.userNumber == inviterNumber) {
+        this.inviterName = notification.inviterName;
+      }
+    });
     // update JSON - set received invite status to 1
     this.updateInvitation("1").subscribe(() => {
       this.preDecision = undefined;
       this.accepted = true;
-      this.notifications.forEach(notification => {
-        if(notification.userNumber == this.inviterNumber){
-          this.inviterName = notification.inviterName;
-        }
-      });
-      
+      this._getImageDb.refreshImagesDB();
       //this.dialogRef.close();
     });
   }
@@ -69,6 +106,7 @@ export class InvitationsComponent implements OnInit {
     this.updateInvitation("2").subscribe(() => {
       this.preDecision = undefined;
       this.declined = true;
+
       //this.dialogRef.close();
     });
   }
@@ -78,11 +116,15 @@ export class InvitationsComponent implements OnInit {
     // Initialize Params Object
     let params = new HttpParams();
     // Begin assigning parameters
+    console.log('inviter', inviter);
+    console.log('status', status);
+    console.log('id', id);
+    console.log('inviterName', this.inviterName);
     params = params.append('inviter', inviter);
     params = params.append('status', status);
     params = params.append('id', id);
     params = params.append('inviterName', this.inviterName);
-    return this._httpClient.patch<void>(this._config.urls.apiEndPoint + "/invitationResponse", params);
+    return this._httpClient.post<void>(this._config.urls.apiEndPoint + "/invitationResponse", params);
   }
   share() {
 
@@ -97,7 +139,7 @@ export class InvitationsComponent implements OnInit {
       }
     });
     this.checkboxShowcases = tempArray;
-    console.log(this.checkboxShowcases);
+    //console.log(this.checkboxShowcases);
   }
   checkboxShowcases = [];
   checkBox(boxName) {
@@ -108,5 +150,11 @@ export class InvitationsComponent implements OnInit {
     else {
       this.remove(boxName);
     }
+  }
+  checkBoxLabels(showcase){
+    if(showcase != undefined){
+      return showcase["viewValue"];
+    }
+    return 
   }
 }

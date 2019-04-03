@@ -46,6 +46,8 @@ import { NotificationComponent } from './notification/notification.component';
 import { NotificationsService } from './services/notifications.service';
 import { PeopleComponent } from './people/people.component';
 import { InvitationsComponent } from './invitations/invitations.component';
+import { GetImageDbService } from './services/get-image-db.service';
+import { FilterPipe } from './pipes/filter.pipe';
 
 
 
@@ -114,7 +116,8 @@ const appRoutes: Routes = [
     FriendsComponent,
     NotificationComponent,
     PeopleComponent,
-    InvitationsComponent
+    InvitationsComponent,
+    FilterPipe
   ],
   imports: [
     BrowserModule
@@ -149,6 +152,8 @@ const appRoutes: Routes = [
     , ChatService
     , ChatComponent,
     , NotificationsService
+    , GetImageDbService
+    , FilterPipe
 
   ],
   bootstrap: [AppComponent],

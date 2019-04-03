@@ -8,6 +8,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { ShowcasesService } from '../services/showcases.service';
 import { MatDialog } from '@angular/material';
 import { ChatComponent } from '../chat/chat.component';
+import { GetImageDbService } from '../services/get-image-db.service';
 import { EditImageComponent } from '../edit-image/edit-image.component';
 
 @Component({
@@ -25,6 +26,7 @@ export class EditComponent implements OnInit {
     , public dialogRef: MatDialogRef<EditComponent>
     , private _showcaseTypesService: ShowcasesService
     , public dialog: MatDialog
+    , private _getImageDb: GetImageDbService
   ) {
     this.selectedValue = this.data.type;
     this.describe = this.data.description;
@@ -77,14 +79,24 @@ export class EditComponent implements OnInit {
     params = params.append('type', this.selectedValue);
     params = params.append('description', this.describe);
     params = params.append('comment', this.comment);
-    params = params.append('id', id);
+    params = params.append('id', id);    
+    localStorage.setItem("activeType",this.selectedValue);
+    localStorage.setItem("showcaseType",this.selectedValue);
+    localStorage.setItem("DefaultImage", this.data.timestamp
+        + "---" + this.data.image
+        + "---" + this.selectedValue
+        + "---" + this.describe
+        + "---" + this.date
+        + "---" + this.comment
+      );
 
     return this._httpClient.patch<void>(this._config.urls.apiEndPoint + "/patch", params);
   }
   updateImage(img) {
     let image = this.data.image.replace(".jpg", "") + "---" + this.data.timestamp;
     this.update(image).subscribe(() => {
-      this._behaviorSubject.refreshElements('refresh');
+      //this._behaviorSubject.refreshElements('refresh');
+      this._getImageDb.refreshImagesDB();
       this.dialogRef.close();
     });
 

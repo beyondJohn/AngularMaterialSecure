@@ -174,7 +174,7 @@ export class PeopleComponent implements OnInit {
           console.log("user not found, try again");
           this.invalidPerson = true;
         }
-        console.log(response);
+        console.log("check response: ", response);
       }
       else {
         
@@ -184,11 +184,16 @@ export class PeopleComponent implements OnInit {
     });
   }
   invitationSent;
-  sendInvite() {
+  sendInvite(inviteeUserName) {
     console.log("sending invite:", this.inviteUserNumber);
     let acc = localStorage.getItem("acc");
     let idName = localStorage.getItem("userName");
-    this._http.post("https://switchmagic.com:4111/api/invite", { userNumber: this.inviteUserNumber, id: acc, showcaseArray: JSON.stringify(this.checkboxShowcases), idName: idName }, {
+    this._http.post("https://switchmagic.com:4111/api/invite", { 
+      userNumber: this.inviteUserNumber
+      , id: acc
+      , showcaseArray: JSON.stringify(this.checkboxShowcases)
+      , idName: idName
+      , inviteeUserName: inviteeUserName }, {
       headers: new HttpHeaders({
         "Content-Type": "application/json"
       })

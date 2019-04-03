@@ -21,8 +21,8 @@
 <br />
 <div [ngStyle]="{display: showcases.length > 0 ? 'block' : 'none'}">
   <div class="showcaseHeader" *ngFor="let showcaseIndex of db; let s = index;">
-    <div (click)="openVert(showcases[s].viewValue)">
-      {{showcases[s].viewValue.indexOf('---') != -1 ? cleanShowcaseTitle(showcases[s]) : showcases[s].viewValue.toUpperCase()}}
+    <div (click)="openVert(showcaseTitles(showcases[s]))">
+      {{showcaseTitles(showcases[s])}}
     </div>
     <div class="myWorkContent">
       <img *ngFor="let card of showcaseIndex; let i = index;" src="{{imgAPI}}{{directoryName(card)}}{{imgSrcType}}{{db[s][i].image}}" height="200" (click)="updateImg(s,i)"

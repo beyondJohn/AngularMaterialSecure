@@ -33,6 +33,7 @@ export class LoginComponent implements OnInit {
       this.router.navigate(["/home"]);
     }, err => {
       this.invalidLogin = true;
+      this.loading = undefined;
     });
   }
   newAcc() {

@@ -72,7 +72,7 @@
                   </div>
                 </div>
                 <button mat-button mat-raised-button color="warn" type="button" [ngStyle]="{display:personFound ? 'block' : 'none'}"
-                  (click)="sendInvite()" class="btnNewAcc">Send Invitation</button>
+                  (click)="sendInvite(getUserName4UI())" class="btnNewAcc">Send Invitation</button>
                 <div [ngStyle]="{display:invitationSent ? 'block' : 'none'}" style="position: relative; top: -20px; text-align: center;">
                   <span id="labelInvitationSent" class="my-bold-un">Invitation sent to </span><br /><br />
                   <span id="labelInvitationSent" class="my-bold-un">{{getUserName4UI()}}</span><br /><br />

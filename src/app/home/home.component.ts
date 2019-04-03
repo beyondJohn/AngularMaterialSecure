@@ -8,6 +8,8 @@ import { Router } from '@angular/router';
 import { ShowcasesService } from '../services/showcases.service';
 import { NotificationsService } from '../services/notifications.service';
 import { Config } from '../config';
+import { GetImageDbService } from '../services/get-image-db.service';
+import { initDomAdapter } from '@angular/platform-browser/src/browser';
 
 @Component({
   selector: 'app-home',
@@ -25,6 +27,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     , private _router: Router
     , private _notification: NotificationsService
     , private _config: Config
+    , private _getImageDb: GetImageDbService
   ) {
     this.description = "";
     this.imgAPI = _config.urls.getImgAPI;
@@ -43,13 +46,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
   ngOnInit() {
 
   }
+  afterInit;
   ngAfterViewInit() {
     let that = this;
     this._behaviorSubject.elements.subscribe(event => {
-      setTimeout(function () {
-        that.getImages();
-      }, 1000);
-
+      setTimeout(() => {
+        this._getImageDb.getImages().subscribe(imagesDB => {
+          localStorage.setItem('imagesDB', JSON.stringify(imagesDB));
+          this.processImages(imagesDB);
+          this.processShowcaseTypes(imagesDB);
+          this.processNotifications(imagesDB);
+        });
+      }, 100);
     });
     this._showcaseTypesService.showcasesDb.subscribe(showcases => {
       that.showcases = [];
@@ -57,10 +65,33 @@ export class HomeComponent implements OnInit, AfterViewInit {
       showcases['showcaseTypesArray'].forEach(typeObj => {
         that.showcases.push(typeObj);
       });
-    })
+    });
+
+    this._getImageDb.imagesDB.subscribe(imagesDB => {
+      if (this.afterInit) {
+        setTimeout(() => {
+          localStorage.setItem('imagesDB', JSON.stringify(imagesDB));
+
+          this.processImages(imagesDB);
+          //if (localStorage.getItem("DefaultImage")) {
+          var storedImage = localStorage.getItem('DefaultImage');
+          if(storedImage != null){
+            this.description = storedImage.split('---')[3];
+            this.date = storedImage.split('---')[4];
+            this.comment = storedImage.split('---')[5];
+          }
+          
+          //}
+
+          // this.processShowcaseTypes(imagesDB);
+          //this.processNotifications(imagesDB);
+        }, 200);
+      }
+      this.afterInit = true;
+    });
   }
   cleanShowcaseTitle(showcaseTitle) {
-    return "Shared By: " + showcaseTitle.viewValue.split("---")[1] + "-" + showcaseTitle.viewValue.split("---")[2];
+    return "Shared By: " + showcaseTitle.split("---")[1] + "-" + showcaseTitle.split("---")[2];
   }
   // figure out which directory to get images from, 
   // might be default /uploads, or owners /uploads/imagesuser#, or from shared user /uploads/imagesinvitors#
@@ -120,12 +151,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.date = this.db[this.myPosition[0]][this.myPosition[1]].date;
       this.comment = this.db[this.myPosition[0]][this.myPosition[1]].comment;
 
-      localStorage.setItem("DefaultImage", this.db[this.myPosition[0]][this.myPosition[1]].timestamp 
-      + "---" + this.db[this.myPosition[0]][this.myPosition[1]].image 
-      + "---" + this.db[this.myPosition[0]][this.myPosition[1]].type
-      + "---" + this.db[this.myPosition[0]][this.myPosition[1]].description
-      + "---" + this.db[this.myPosition[0]][this.myPosition[1]].date
-      + "---" + this.db[this.myPosition[0]][this.myPosition[1]].comment
+      localStorage.setItem("DefaultImage", this.db[this.myPosition[0]][this.myPosition[1]].timestamp
+        + "---" + this.db[this.myPosition[0]][this.myPosition[1]].image
+        + "---" + this.db[this.myPosition[0]][this.myPosition[1]].type
+        + "---" + this.db[this.myPosition[0]][this.myPosition[1]].description
+        + "---" + this.db[this.myPosition[0]][this.myPosition[1]].date
+        + "---" + this.db[this.myPosition[0]][this.myPosition[1]].comment
       );
 
     }
@@ -134,39 +165,66 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.db = [];
     this.dbTypesArray = []
     this.imageObjects = imagesDB["imagesDB"];
-
-    // Begin sort images into showcase arrays & add image types to type array
-    this.imageObjects.forEach(imgObj => {
-      if (this.dbTypesArray.indexOf(imgObj.type) == -1) {
-        this.dbTypesArray.push(imgObj.type);
-      }
-    });
-    for (let i = 0; i < this.dbTypesArray.length; i++) {
-      let tempShowcase = [];
-      this.imageObjects.forEach(imageObj => {
-        if (imageObj.type.toUpperCase() == this.dbTypesArray[i].toUpperCase()) {
-          imageObj.type = imageObj.type.toUpperCase();
-          tempShowcase.push(imageObj);
+    if (this.imageObjects.length > 0 ) {
+      // Begin sort images into showcase arrays & add image types to type array
+      this.imageObjects.forEach(imgObj => {
+        if (this.dbTypesArray.indexOf(imgObj.type) == -1) {
+          this.dbTypesArray.push(imgObj.type);
         }
       });
-      this.db.push(tempShowcase.reverse());
-    }
-    this.myPosition = [0, 0]
-    // End sort & organize image types into type arrays
-    if (this.db.length > 0) {
-      if (localStorage.getItem('DefaultImage')) {
-        var storedImage = localStorage.getItem('DefaultImage');
-        this.description = storedImage.split('---')[3];
-        this.date = storedImage.split('---')[4];
-        this.comment = storedImage.split('---')[5];
+      for (let i = 0; i < this.dbTypesArray.length; i++) {
+        let tempShowcase = [];
+        this.imageObjects.forEach(imageObj => {
+          if (imageObj.type.toUpperCase() == this.dbTypesArray[i].toUpperCase()) {
+            imageObj.type = imageObj.type.toUpperCase();
+            tempShowcase.push(imageObj);
+          }
+        });
+        this.db.push(tempShowcase.reverse());
       }
-      else {
-        this.description = this.db[this.myPosition[0]][this.myPosition[1]].description;
-        this.date = this.db[this.myPosition[0]][this.myPosition[1]].date;
-        this.comment = this.db[this.myPosition[0]][this.myPosition[1]].comment;
-      }
+      this.myPosition = [0, 0]
+      // End sort & organize image types into type arrays
+      if (this.db.length > 0) {
+        if (localStorage.getItem('DefaultImage')) {
+          var storedImage = localStorage.getItem('DefaultImage');
+          this.description = storedImage.split('---')[3];
+          this.date = storedImage.split('---')[4];
+          this.comment = storedImage.split('---')[5];
+        }
+        else {
 
+          this.description = this.db[this.myPosition[0]][this.myPosition[1]].description;
+          this.date = this.db[this.myPosition[0]][this.myPosition[1]].date;
+          this.comment = this.db[this.myPosition[0]][this.myPosition[1]].comment;
+        }
+
+      }
     }
+
+  }
+  showcaseTitles(showcaseData){
+    console.log("203 home.ts showcaseData: ", showcaseData);
+    try{
+      if(showcaseData.viewValue != undefined)
+      {
+        return showcaseData.viewValue;  
+      }
+    }
+    catch{
+      // this whole try catch and get images block is a bit of a hack and should be handled more gracefully but I dont have the time or the patience now
+      // when user accepts invitation somewhere the shared users showcase titles get lost, but are found if we grab a fresh imagedb from server 
+      setTimeout(() => {
+        this._getImageDb.getImages().subscribe(imagesDB => {
+          localStorage.setItem('imagesDB', JSON.stringify(imagesDB));
+          this.processImages(imagesDB);
+          this.processShowcaseTypes(imagesDB);
+          this.processNotifications(imagesDB);
+        });
+      }, 100);
+    }
+    
+    return;
+    //showcases[s].indexOf('---') != -1 ? cleanShowcaseTitle(showcases[s]) : showcases[s]
   }
   processShowcaseTypes(imagesDB: Object) {
     this._showcaseTypesService.refreshshowcasesDb(imagesDB);
@@ -194,17 +252,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
     });
   }
-  getImages() {
-    var id = localStorage.getItem("acc");
-    this.http.get('https://switchmagic.com:4111/getImages?id=' + id)
-      .subscribe(imagesDB => {
-        localStorage.setItem('imagesDB', JSON.stringify(imagesDB));
-        this.processImages(imagesDB);
-        this.processShowcaseTypes(imagesDB);
-        this.processNotifications(imagesDB);
-      });
-  }
-
   openDialog() {
     this.dialog.open(DialogDefaultComponent);
   }
