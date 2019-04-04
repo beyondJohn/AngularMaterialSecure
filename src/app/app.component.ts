@@ -124,8 +124,10 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this._noification.notification.subscribe(notify => {
       console.log("notify: ", notify);
-      if (!this.isInit) {
-        this.dialog.open(NotificationComponent, { data: { notify: notify } });
+      if(notify.length > 0){
+        if (!this.isInit) {
+          this.dialog.open(NotificationComponent, { data: { notify: notify } });
+        }
       }
     });
     this.isInit = false;

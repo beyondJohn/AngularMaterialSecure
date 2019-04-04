@@ -73,6 +73,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
           localStorage.setItem('imagesDB', JSON.stringify(imagesDB));
 
           this.processImages(imagesDB);
+          this.processShowcaseTypes(imagesDB);
+          this.processNotifications(imagesDB);
           //if (localStorage.getItem("DefaultImage")) {
           var storedImage = localStorage.getItem('DefaultImage');
           if(storedImage != null){

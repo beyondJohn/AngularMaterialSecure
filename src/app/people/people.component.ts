@@ -55,8 +55,10 @@ export class PeopleComponent implements OnInit {
     });
     this._behaviorSubject.acceptedInvite.subscribe(accepted =>{
       if(accepted['accept'] == 'accept'){
-        
+        //reset accepted value
+        this._behaviorSubject.refreshAccepted({accept:''});
         this.dialogRef.close();
+
       }
     })
   }

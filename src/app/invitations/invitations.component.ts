@@ -7,6 +7,7 @@ import { Config } from '../config';
 import { MatDialogRef } from '@angular/material/dialog';
 import { GetImageDbService } from '../services/get-image-db.service';
 import { BehaviorSubjectService } from '../services/behavior-subject.service';
+import { NotificationsService } from "../services/notifications.service";
 
 @Component({
   selector: 'app-invitations',
@@ -22,21 +23,22 @@ export class InvitationsComponent implements OnInit {
     , private _httpClient: HttpClient
     , private _config: Config
     , public dialogRef: MatDialogRef<InvitationsComponent>
-    , private _acceptInviteService: BehaviorSubjectService 
+    , private _acceptInviteService: BehaviorSubjectService
     , private _getImageDb: GetImageDbService
+    , private _notifications: NotificationsService
   ) {
     this.hasInvitation = true;
     this.notifications = this.data.notify;
     this.inviterNumber = this.data.inviterNumber;
     //this.notifications = this.notifications.filter((notification) => { return notification.userNumber == this.inviterNumber });
-    
+
     this.notifications.forEach(invite => {
       if (invite.status != 0 && invite.userNumber == this.inviterNumber) {
         // hasInvitation was included before this component was made dynamic, thus it's probably useless 
         // and will likely never get to this point
         this.hasInvitation = false;
       }
-      if(invite.userNumber == this.inviterNumber){
+      if (invite.userNumber == this.inviterNumber) {
         this.filteredNotification.push(invite);
       }
     });
@@ -129,9 +131,10 @@ export class InvitationsComponent implements OnInit {
     return this._httpClient.post<void>(this._config.urls.apiEndPoint + "/invitationResponse", params);
   }
   share() {
-      this._getImageDb.refreshImagesDB(this.acceptReturnedDb);
-      this._acceptInviteService.refreshAccepted({accept:"accept"});
-      this.dialogRef.close();
+    this._getImageDb.refreshImagesDB(this.acceptReturnedDb);
+    this._acceptInviteService.refreshAccepted({ accept: "accept" });
+    this._notifications.refreshNotifications([]);
+    this.dialogRef.close();
   }
 
   // checkbox Utility
@@ -155,10 +158,10 @@ export class InvitationsComponent implements OnInit {
       this.remove(boxName);
     }
   }
-  checkBoxLabels(showcase){
-    if(showcase != undefined){
+  checkBoxLabels(showcase) {
+    if (showcase != undefined) {
       return showcase["viewValue"];
     }
-    return 
+    return
   }
 }
