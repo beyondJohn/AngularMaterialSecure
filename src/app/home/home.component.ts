@@ -49,7 +49,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   afterInit;
   ngAfterViewInit() {
     let that = this;
-    this._behaviorSubject.elements.subscribe(event => {
+    this._behaviorSubject.acceptedInvite.subscribe(event => {
       setTimeout(() => {
         this._getImageDb.getImages().subscribe(imagesDB => {
           localStorage.setItem('imagesDB', JSON.stringify(imagesDB));
@@ -57,7 +57,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
           this.processShowcaseTypes(imagesDB);
           this.processNotifications(imagesDB);
         });
-      }, 100);
+      }, 200);
     });
     this._showcaseTypesService.showcasesDb.subscribe(showcases => {
       that.showcases = [];

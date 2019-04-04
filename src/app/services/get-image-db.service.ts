@@ -12,11 +12,18 @@ export class GetImageDbService {
 
   imagesDBObj: object = {};
   imagesDB = new BehaviorSubject<object>(this.updateDB());
-  refreshImagesDB(): void {
-    this.getImages().subscribe(imagesDB =>{
-      this.imagesDBObj = imagesDB;
-      this.imagesDB.next(this.imagesDBObj);
-    })
+  refreshImagesDB(db): void {
+    if(db == null){
+      this.getImages().subscribe(imagesDB =>{
+        this.imagesDBObj = imagesDB;
+        
+      });
+    }
+    else{
+      this.imagesDBObj = db;
+    }
+    this.imagesDB.next(this.imagesDBObj);
+    
   }
   private updateDB(): object {
     return this.imagesDBObj;

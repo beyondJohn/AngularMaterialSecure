@@ -6,6 +6,9 @@ import { NotificationsService } from '../services/notifications.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ShowcasesService } from '../services/showcases.service';
 import { MatDialogRef } from '@angular/material/dialog';
+import { BehaviorSubjectService } from '../services/behavior-subject.service';
+import { GetImageDbService } from '../services/get-image-db.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-people',
@@ -20,6 +23,8 @@ export class PeopleComponent implements OnInit {
     , private _http: HttpClient
     , public _showcases: ShowcasesService
     , public dialogRef: MatDialogRef<PeopleComponent>
+    , private _behaviorSubject: BehaviorSubjectService
+    , private _getImageDb: GetImageDbService
   ) { }
   countConnected;
   connections = [];
@@ -48,6 +53,12 @@ export class PeopleComponent implements OnInit {
         this.showcases.push(typeObj);
       });
     });
+    this._behaviorSubject.acceptedInvite.subscribe(accepted =>{
+      if(accepted['accept'] == 'accept'){
+        
+        this.dialogRef.close();
+      }
+    })
   }
   getUserName4UI() {
 

@@ -96,7 +96,7 @@ export class EditComponent implements OnInit {
     let image = this.data.image.replace(".jpg", "") + "---" + this.data.timestamp;
     this.update(image).subscribe(() => {
       //this._behaviorSubject.refreshElements('refresh');
-      this._getImageDb.refreshImagesDB();
+      this._getImageDb.refreshImagesDB(null);
       this.dialogRef.close();
     });
 

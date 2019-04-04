@@ -28,5 +28,14 @@ export class BehaviorSubjectService {
         return this.elementsObj;
     }
 
+    acceptedInviteObj: object = {accept:''};
+    acceptedInvite = new BehaviorSubject<object>(this.updateAcceptedInvite());
+    refreshAccepted(accept): void {
+        this.acceptedInviteObj = { accept: accept['accept'] };
+        this.acceptedInvite.next(accept);
+    }
+    private updateAcceptedInvite(): object {
+        return this.acceptedInviteObj;
+    }
 
 }

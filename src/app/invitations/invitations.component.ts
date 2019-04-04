@@ -6,6 +6,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Config } from '../config';
 import { MatDialogRef } from '@angular/material/dialog';
 import { GetImageDbService } from '../services/get-image-db.service';
+import { BehaviorSubjectService } from '../services/behavior-subject.service';
 
 @Component({
   selector: 'app-invitations',
@@ -21,6 +22,7 @@ export class InvitationsComponent implements OnInit {
     , private _httpClient: HttpClient
     , private _config: Config
     , public dialogRef: MatDialogRef<InvitationsComponent>
+    , private _acceptInviteService: BehaviorSubjectService 
     , private _getImageDb: GetImageDbService
   ) {
     this.hasInvitation = true;
@@ -87,6 +89,7 @@ export class InvitationsComponent implements OnInit {
     });
     return userName;
   }
+  acceptReturnedDb;
   accept(inviterNumber) {
     this.notifications.forEach(notification => {
       if (notification.userNumber == inviterNumber) {
@@ -94,16 +97,15 @@ export class InvitationsComponent implements OnInit {
       }
     });
     // update JSON - set received invite status to 1
-    this.updateInvitation("1").subscribe(() => {
+    this.updateInvitation("1").subscribe(res => {
       this.preDecision = undefined;
       this.accepted = true;
-      this._getImageDb.refreshImagesDB();
-      //this.dialogRef.close();
+      this.acceptReturnedDb = JSON.parse(res["back"]);
     });
   }
   decline() {
     // update JSON - set received invite status to 2
-    this.updateInvitation("2").subscribe(() => {
+    this.updateInvitation("2").subscribe(res => {
       this.preDecision = undefined;
       this.declined = true;
 
@@ -127,7 +129,9 @@ export class InvitationsComponent implements OnInit {
     return this._httpClient.post<void>(this._config.urls.apiEndPoint + "/invitationResponse", params);
   }
   share() {
-
+      this._getImageDb.refreshImagesDB(this.acceptReturnedDb);
+      this._acceptInviteService.refreshAccepted({accept:"accept"});
+      this.dialogRef.close();
   }
 
   // checkbox Utility
