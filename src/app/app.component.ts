@@ -121,12 +121,18 @@ export class AppComponent implements OnInit {
       sanitizer.bypassSecurityTrustResourceUrl('assets/materialIconsSVGs/notifications.svg'));
   }
   isInit = true;
+  isNotificationOpen;
   ngOnInit() {
     this._noification.notification.subscribe(notify => {
       console.log("notify: ", notify);
-      if(notify.length > 0){
-        if (!this.isInit) {
-          this.dialog.open(NotificationComponent, { data: { notify: notify } });
+      if (notify.length > 0) {
+        if (!this.isInit && this.isNotificationOpen == undefined) {
+          this.isNotificationOpen = true;
+          this.dialog.open(NotificationComponent, { data: { notify: notify } })
+          .afterClosed()
+          .subscribe(() => {
+            this.isNotificationOpen = undefined;
+          });
         }
       }
     });
