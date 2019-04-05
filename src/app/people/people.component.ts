@@ -41,7 +41,6 @@ export class PeopleComponent implements OnInit {
   ngOnInit() {
     this._noification.notification.subscribe(notify => {
       // notify is an array of invitations with 4 properties: date, inviterName, status,userNumber
-      console.log("notify: ", notify);
       this.notify = notify;
       this.buildInvitations(notify);
       this.buildConnections();
@@ -91,11 +90,10 @@ export class PeopleComponent implements OnInit {
       });
   }
   viewInvitation(inviterNumber) {
-    console.log("inviterNumber: ", inviterNumber);
     this.dialog.open(InvitationsComponent, { data: { notify: this.notify, inviterNumber: inviterNumber } });
   }
   viewPerson(userNumber) {
-    console.log(userNumber);
+    console.log(userNumber)
   }
   //
   //
@@ -117,11 +115,9 @@ export class PeopleComponent implements OnInit {
       }
     });
     this.checkboxShowcases = tempArray;
-    console.log(this.checkboxShowcases);
   }
   checkboxShowcases = [];
   checkBox(boxName) {
-    console.log(boxName);
     if (this.checkboxShowcases.indexOf(boxName) == -1) {
       this.checkboxShowcases.push(boxName);
     }
@@ -187,7 +183,6 @@ export class PeopleComponent implements OnInit {
           console.log("user not found, try again");
           this.invalidPerson = true;
         }
-        console.log("check response: ", response);
       }
       else {
         
@@ -198,7 +193,6 @@ export class PeopleComponent implements OnInit {
   }
   invitationSent;
   sendInvite(inviteeUserName) {
-    console.log("sending invite:", this.inviteUserNumber);
     let acc = localStorage.getItem("acc");
     let idName = localStorage.getItem("userName");
     this._http.post("https://switchmagic.com:4111/api/invite", { 
@@ -211,7 +205,6 @@ export class PeopleComponent implements OnInit {
         "Content-Type": "application/json"
       })
     }).subscribe(response => {
-      console.log(response);
       this.personFound = undefined;
       this.invitationSent = true;
     }, err => {

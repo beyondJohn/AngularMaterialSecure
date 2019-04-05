@@ -16,7 +16,8 @@
         <td style="padding: 15px 0; border-bottom: 1px solid #ddd;">
           <div class="my-bold-label"><span style="color: red;">{{invitation.inviterName}}</span></div>
           <br />
-          <button mat-button mat-raised-button color="warn" (click)="viewInvitation(invitation.userNumber)" type="button">View Invitation</button>
+          <button mat-button mat-raised-button color="warn" (click)="viewInvitation(invitation.userNumber)" type="button">View
+            Invitation</button>
         </td>
       </tr>
       <!-- finish invitations -->
@@ -28,10 +29,9 @@
       </tr>
       <tr *ngFor="let connection of connections">
         <td style="padding-bottom: 10px; border-bottom: 1px solid #ddd;">
-          {{connection.InviterName}}
-        </td>
-        <td style="padding-bottom: 10px; border-bottom: 1px solid #ddd;">
-          <button mat-button mat-raised-button color="warn" (click)="viewPerson(connection.userNumber)" type="button">Settings</button>
+          <div class="my-bold-un" style="padding-bottom: 10px;" (click)="viewPerson(connection.inviterNumber)">{{connection.inviterName}}</div>
+          
+          <button mat-button mat-raised-button color="warn" (click)="viewPerson(connection.inviterNumber)" type="button">Settings</button>
         </td>
       </tr>
       <!-- finish connected people -->

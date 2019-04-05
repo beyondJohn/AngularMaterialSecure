@@ -127,7 +127,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
             }
           }
         }
-        console.log(this.db);
         this.isMyImgInit = !this.isMyImgInit;
       }
     }
@@ -140,8 +139,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
     return "";
   }
   updateImg(s, i) {
-    console.log("this.myPosition: ", this.myPosition);
-    console.log("this.db: ", this.db);
     this.myPosition = [s, i];
     var top = document.getElementById("card").offsetTop + 10; //Getting Y of target element
     window.scrollTo({
@@ -205,11 +202,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   }
   showcaseTitles(showcaseData){
-    console.log("203 home.ts showcaseData: ", showcaseData);
     try{
       if(showcaseData.viewValue != undefined)
       {
-        return showcaseData.viewValue;  
+        return showcaseData.viewValue.indexOf('---') != -1 ? this.cleanShowcaseTitle(showcaseData.viewValue) : showcaseData.viewValue;  
       }
     }
     catch{
@@ -224,9 +220,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         });
       }, 100);
     }
-    
     return;
-    //showcases[s].indexOf('---') != -1 ? cleanShowcaseTitle(showcases[s]) : showcases[s]
   }
   processShowcaseTypes(imagesDB: Object) {
     this._showcaseTypesService.refreshshowcasesDb(imagesDB);

@@ -36,7 +36,6 @@ var addImageToDB = function(image, type){
     }
     let newImagesObject = {imagesDB:[kidsarray,headerlogoarray,mainbgarray,playerbgarray,footerchannelarray]};
     fs.writeFile( "./dist/assets/images/imagesDB.json", JSON.stringify(newImagesObject), "utf8");
-    console.log(newImagesObject.imagesDB);
 
 }
 router.post('/imageupload/HeaderBackground', upload.single('image'),  (req, res, next) => {

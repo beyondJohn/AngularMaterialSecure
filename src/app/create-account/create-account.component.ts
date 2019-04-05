@@ -46,8 +46,6 @@ export class CreateAccountComponent implements OnInit {
             .subscribe(
               (res) => {
                 
-                console.log(res);
-                console.log(res["status"]);
                 var status = res["status"];
                 if(status != "success"){
                   this.loginMessage.innerHTML = status;        
@@ -77,7 +75,6 @@ export class CreateAccountComponent implements OnInit {
     }
   }
   createDB(id, form) {
-    console.log("sending db create request");
     this._httpClient.get('https://switchmagic.com:4111/createdb?id=' + id)
       .subscribe(response => {
         localStorage.setItem("acc",id);
@@ -98,7 +95,6 @@ export class CreateAccountComponent implements OnInit {
       let token = (<any>response).token;
       localStorage.setItem("jwt", token);
       let userNumber = (<any>response).userNumber;
-      console.log(userNumber);
       localStorage.setItem("acc", userNumber);
       this.loading = false;
       //this.invalidLogin = false;

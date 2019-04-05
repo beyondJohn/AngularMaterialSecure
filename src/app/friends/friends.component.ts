@@ -46,11 +46,9 @@ export class FriendsComponent implements OnInit {
       }
     });
     this.checkboxShowcases = tempArray;
-    console.log(this.checkboxShowcases);
   }
   checkboxShowcases = [];
   checkBox(boxName) {
-    console.log(boxName);
     if (this.checkboxShowcases.indexOf(boxName) == -1) {
       this.checkboxShowcases.push(boxName);
     }
@@ -77,7 +75,6 @@ export class FriendsComponent implements OnInit {
       else {
         console.log("user not found, try again");
       }
-      console.log(response);
 
     }, err => {
       console.log("Something went wrong");
@@ -85,7 +82,6 @@ export class FriendsComponent implements OnInit {
   }
   invitationSent;
   sendInvite() {
-    console.log("sending invite:", this.inviteUserNumber);
     let acc = localStorage.getItem("acc");
     let idName = localStorage.getItem("userName");
     this._http.post("https://switchmagic.com:4111/api/invite", { userNumber: this.inviteUserNumber, id: acc, showcaseArray: JSON.stringify(this.checkboxShowcases), idName: idName }, {
@@ -93,7 +89,6 @@ export class FriendsComponent implements OnInit {
         "Content-Type": "application/json"
       })
     }).subscribe(response => {
-      console.log(response);
       this.personFound = undefined;
       this.invitationSent = true;
     }, err => {

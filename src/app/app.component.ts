@@ -124,7 +124,6 @@ export class AppComponent implements OnInit {
   isNotificationOpen;
   ngOnInit() {
     this._noification.notification.subscribe(notify => {
-      console.log("notify: ", notify);
       if (notify.length > 0) {
         if (!this.isInit && this.isNotificationOpen == undefined) {
           this.isNotificationOpen = true;
@@ -144,10 +143,8 @@ export class AppComponent implements OnInit {
   }
   updateImg(i) {
     this.myPosition = i;
-    console.log("hello" + i);
 
     var top = document.getElementById("card").offsetTop + 120; //Getting Y of target element
-    console.log("offset" + top);
     window.scrollTo(200, top);
   }
   getRouteAnimation(outlet) {

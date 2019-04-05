@@ -41,13 +41,8 @@ export class VertScrollComponent implements OnInit {
   src = "";
 
   myImg() {
-    console.log("this.db[imagesDB]: ", this.db);
     // check if array of showcases 'db' is loaded before attempting to access each showcase's image objects  
     if (this.db) {
-      console.log("this.db: ", this.db);
-      console.log("this.db[0][this.myPosition[0]].description: ", this.db[0][this.myPosition[0]].description);
-      console.log("this.db[0][this.myPosition[0]].url: ", this.db[0][this.myPosition[0]].url);
-      console.log("this.myPosition[0]: ", this.myPosition[0]);
       // set string values for description, date, & comment before returning the image url to the view
       this.description = this.db[0][this.myPosition[0]].description;
       this.date = this.db[0][this.myPosition[0]].date;
@@ -78,7 +73,6 @@ export class VertScrollComponent implements OnInit {
       }
     });
     this.db.push(tempShowcase.reverse());
-    console.log("this.db now: ", this.db);
     this.myPosition = [0];
     //this.myImg();
     // End sort only 1 type of images into showcase array 
@@ -86,7 +80,7 @@ export class VertScrollComponent implements OnInit {
   getImages() {
     var id = localStorage.getItem("acc");
     this.http.get('https://switchmagic.com:4111/getImages?id='+ id)
-    .subscribe(imagesDB => { console.log(imagesDB); this.processImages(imagesDB); });
+    .subscribe(imagesDB => { this.processImages(imagesDB); });
   }
   ngOnInit() {
     this.activeType = localStorage.getItem("activeType").toUpperCase();
@@ -94,7 +88,6 @@ export class VertScrollComponent implements OnInit {
     let that = this;
     this._behaviorSubject.elements.subscribe(event => {
       setTimeout(function () {
-        console.log("get images!");
         that.getImages();
       }, 1000);
 
@@ -126,7 +119,6 @@ export class VertScrollComponent implements OnInit {
     let image = this.db[0][this.myPosition[0]].image;
     let timestamp = this.db[0][this.myPosition[0]].timestamp;
     this.dialog.open(EditComponent, { data: { img: img, description: desc, comment: comm, type: type, timestamp: timestamp, image: image } });
-    console.log('img: ', img);
   }
 
 }

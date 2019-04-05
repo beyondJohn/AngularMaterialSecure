@@ -16,7 +16,6 @@ export class HttpInterceptorService {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
     // add a custom header
-    console.log('inside interceptor: ' + JSON.stringify(request));
     //let customReq: HttpRequest<any> = undefined;
     if (request.url.indexOf('pse.online.scea.com') !== -1) {
       const token = localStorage.getItem('authToken');
@@ -49,7 +48,6 @@ export class HttpInterceptorService {
         headers
       });
       return next.handle(myrequest).catch(() => {
-        console.log("caught");
         return next.handle(myrequest);
       });
     }
@@ -59,7 +57,6 @@ export class HttpInterceptorService {
         headers
       });
       //return next.handle(myrequest).catch(() => {
-      console.log("caught");
       return next.handle(request);
       //});
     }

@@ -206,7 +206,6 @@ export class FileUploadComponent implements OnInit, AfterViewInit {
             this.loading = false;
             this.disabled = true;
             this._behaviorSubject.refreshImagesDB(null);
-            console.log("event: ", event);
             localStorage.setItem("DefaultImage", timestamp
               + "---" + this.activeFile["name"]
               + "---" + showcaseType
