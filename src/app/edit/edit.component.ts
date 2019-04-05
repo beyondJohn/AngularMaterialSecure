@@ -61,11 +61,10 @@ export class EditComponent implements OnInit {
   }
   deleteImage(img) {
     let image = this.data.image.replace(".jpg", "") + "---" + this.data.timestamp;
-    this.delete(image).subscribe(() => {
-      this._behaviorSubject.refreshElements('refresh');
-      this.dialogRef.close();
+    this.delete(image).subscribe(db => {
+        this._behaviorSubject.refreshDelete({refresh:db["back"]});
+        this.dialogRef.close();
     });
-
   }
   update(img): Observable<void> {
     var id = localStorage.getItem("acc");
@@ -94,12 +93,10 @@ export class EditComponent implements OnInit {
   }
   updateImage(img) {
     let image = this.data.image.replace(".jpg", "") + "---" + this.data.timestamp;
-    this.update(image).subscribe(() => {
-      //this._behaviorSubject.refreshElements('refresh');
-      this._getImageDb.refreshImagesDB(null);
+    this.update(image).subscribe(db => {
+      this._getImageDb.refreshImagesDB(JSON.parse(db["back"]));
       this.dialogRef.close();
     });
-
   }
   imgClick(){
     console.log("image click");

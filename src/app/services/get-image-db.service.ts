@@ -16,14 +16,13 @@ export class GetImageDbService {
     if(db == null){
       this.getImages().subscribe(imagesDB =>{
         this.imagesDBObj = imagesDB;
-        
+        this.imagesDB.next(this.imagesDBObj);
       });
     }
     else{
       this.imagesDBObj = db;
+      this.imagesDB.next(this.imagesDBObj);
     }
-    this.imagesDB.next(this.imagesDBObj);
-    
   }
   private updateDB(): object {
     return this.imagesDBObj;

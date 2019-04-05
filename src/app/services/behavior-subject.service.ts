@@ -6,6 +6,15 @@ export class BehaviorSubjectService {
 
     constructor() { }
 
+    deleteObj: object = { refresh: 'refresh' };
+    delete = new BehaviorSubject<object>(this.updateDeletes());
+    refreshDelete(refresh): void {
+        this.deleteObj = { refresh: refresh['refresh'] };
+        this.delete.next(refresh);
+    }
+    private updateDeletes(): object {
+        return this.deleteObj;
+    }
 
     imagesDBObj: object = { refresh: 'refresh' };
     imagesDB = new BehaviorSubject<object>(this.updateImagesDB());

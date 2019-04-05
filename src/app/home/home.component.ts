@@ -47,8 +47,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   }
   afterInit;
+  deleted;
   ngAfterViewInit() {
     let that = this;
+    this._behaviorSubject.delete.subscribe(deleted=>{
+      if(deleted['refresh'] != 'refresh'){
+        this.deleted = true;
+        console.log(deleted['refresh']);
+        this._getImageDb.refreshImagesDB(JSON.parse(deleted['refresh']));
+        this._behaviorSubject.refreshDelete({refresh:'refresh'});
+      }
+    })
     this._behaviorSubject.acceptedInvite.subscribe(event => {
       setTimeout(() => {
         this._getImageDb.getImages().subscribe(imagesDB => {
@@ -77,12 +86,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
           this.processNotifications(imagesDB);
           //if (localStorage.getItem("DefaultImage")) {
           var storedImage = localStorage.getItem('DefaultImage');
-          if(storedImage != null){
+          if (storedImage != null) {
             this.description = storedImage.split('---')[3];
             this.date = storedImage.split('---')[4];
             this.comment = storedImage.split('---')[5];
           }
-          
+
           //}
 
           // this.processShowcaseTypes(imagesDB);
@@ -108,6 +117,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
     return '/images' + this.userId;
   }
   isMyImgInit = true;
+  url;
+  setdate;
+  desc;
+  comm;
+  type;
+  image;
+  timestamp;
   myImg() {
 
     // set default home main showcase image if exists in localstorage, else load first img from first showcase
@@ -121,7 +137,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
               var imgName = localStorage.getItem("DefaultImage").split("---")[1];
               for (var r = 0; r < this.db[i].length; r++) {
                 if (this.db[i][r]["timestamp"] == timestamp && this.db[i][r]["image"] == imgName) {
-                  this.myPosition = [i, r];
+                  if(this.deleted != undefined){
+                    this.myPosition = [0, 0];
+                    this.deleted = undefined;
+                  }
+                  else{
+                    this.myPosition = [i, r];
+                  }
                 }
               }
             }
@@ -130,13 +152,43 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.isMyImgInit = !this.isMyImgInit;
       }
     }
+
     // check if array of showcases 'db' is loaded before attempting to access each showcase's image objects  
     if (this.db.length > 0) {
       // set string values for description, date, & comment before returning the image url to the view
-      localStorage.setItem("activeType", this.db[this.myPosition[0]][this.myPosition[1]].type);
-      return this.db[this.myPosition[0]][this.myPosition[1]].url;
+      //localStorage.setItem("activeType", this.db[this.myPosition[0]][this.myPosition[1]].type);
+      if (localStorage.getItem("DefaultImage") != undefined) {
+        if (localStorage.getItem("DefaultImage").indexOf(this.db[this.myPosition[0]][this.myPosition[1]].image) != -1) {
+          var showcaseType = localStorage.getItem("DefaultImage").split("---")[2].toUpperCase();
+          for (var i = 0; i < this.db.length; i++) {
+            if (this.db[i][0].type == showcaseType) {
+              var timestamp = localStorage.getItem("DefaultImage").split("---")[0];
+              var imgName = localStorage.getItem("DefaultImage").split("---")[1];
+              for (var r = 0; r < this.db[i].length; r++) {
+                if (this.db[i][r]["timestamp"] == timestamp && this.db[i][r]["image"] == imgName) {
+                  if(this.deleted != undefined){
+                    this.myPosition = [0, 0];
+                    this.deleted = undefined;
+                  }
+                  else{
+                    this.myPosition = [i, r];
+                  }
+                }
+              }
+            }
+          }
+          this.date = this.db[this.myPosition[0]][this.myPosition[1]].date;
+          this.desc = this.db[this.myPosition[0]][this.myPosition[1]].description;
+          this.comm = this.db[this.myPosition[0]][this.myPosition[1]].comment;
+          this.type = this.db[this.myPosition[0]][this.myPosition[1]].type;
+          this.image = this.db[this.myPosition[0]][this.myPosition[1]].image;
+          this.timestamp = this.db[this.myPosition[0]][this.myPosition[1]].timestamp;
+          this.url = this.db[this.myPosition[0]][this.myPosition[1]].url;
+        }
+      }
+      //return 
     }
-    return "";
+    return this.url;
   }
   updateImg(s, i) {
     this.myPosition = [s, i];
@@ -146,6 +198,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
       behavior: 'smooth',
     });
     if (this.db.length > 0) {
+      if (localStorage.getItem("DefaultImage") != undefined) {
+        if (localStorage.getItem("DefaultImage").indexOf(this.db[this.myPosition[0]][this.myPosition[1]].image) != -1) {
+        }
+      }
+      else {
+
+      }
       this.description = this.db[this.myPosition[0]][this.myPosition[1]].description;
       this.date = this.db[this.myPosition[0]][this.myPosition[1]].date;
       this.comment = this.db[this.myPosition[0]][this.myPosition[1]].comment;
@@ -164,7 +223,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.db = [];
     this.dbTypesArray = []
     this.imageObjects = imagesDB["imagesDB"];
-    if (this.imageObjects.length > 0 ) {
+    if (this.imageObjects.length > 0) {
       // Begin sort images into showcase arrays & add image types to type array
       this.imageObjects.forEach(imgObj => {
         if (this.dbTypesArray.indexOf(imgObj.type) == -1) {
@@ -181,7 +240,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         });
         this.db.push(tempShowcase.reverse());
       }
-      this.myPosition = [0, 0]
+      //this.myPosition = [0, 0]
       // End sort & organize image types into type arrays
       if (this.db.length > 0) {
         if (localStorage.getItem('DefaultImage')) {
@@ -201,11 +260,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
 
   }
-  showcaseTitles(showcaseData){
-    try{
-      if(showcaseData.viewValue != undefined)
-      {
-        return showcaseData.viewValue.indexOf('---') != -1 ? this.cleanShowcaseTitle(showcaseData.viewValue) : showcaseData.viewValue;  
+  showcaseTitles(showcaseData) {
+    try {
+      if (showcaseData.viewValue != undefined) {
+        return showcaseData.viewValue.indexOf('---') != -1 ? this.cleanShowcaseTitle(showcaseData.viewValue) : showcaseData.viewValue;
       }
     }
     catch{
@@ -256,13 +314,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     }
     else {
-      let date = this.db[this.myPosition[0]][this.myPosition[1]].date;
+      if(this.setdate == undefined){
+        let date = this.db[this.myPosition[0]][this.myPosition[1]].date;
       let desc = this.db[this.myPosition[0]][this.myPosition[1]].description;
       let comm = this.db[this.myPosition[0]][this.myPosition[1]].comment;
       let type = this.db[this.myPosition[0]][this.myPosition[1]].type;
       let image = this.db[this.myPosition[0]][this.myPosition[1]].image;
       let timestamp = this.db[this.myPosition[0]][this.myPosition[1]].timestamp;
       this.dialog.open(EditComponent, { data: { date: date, img: img, description: desc, comment: comm, type: type, timestamp: timestamp, image: image } });
+      }
+      else{
+        this.dialog.open(EditComponent, { data: { date: this.setdate, img: img, description: this.desc, comment: this.comm, type: this.type, timestamp: this.timestamp, image: this.image } });
+      }
     }
   }
   openVert(type) {

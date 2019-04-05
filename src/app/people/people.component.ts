@@ -44,7 +44,6 @@ export class PeopleComponent implements OnInit {
       this.notify = notify;
       this.buildInvitations(notify);
       this.buildConnections();
-      this.countConnected = 0;
     });
     this._showcases.showcasesDb.subscribe(showcases => {
       this.showcases = [];
@@ -87,6 +86,7 @@ export class PeopleComponent implements OnInit {
             this.connections.push(connection);
           }
         });
+        this.countConnected = this.connections.length;
       });
   }
   viewInvitation(inviterNumber) {

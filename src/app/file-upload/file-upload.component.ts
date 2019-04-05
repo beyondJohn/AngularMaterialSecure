@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { Config } from '../config';
 import { BehaviorSubjectService } from '../services/behavior-subject.service';
 import { ShowcasesService } from '../services/showcases.service';
+import { GetImageDbService } from '../services/get-image-db.service';
 
 export interface Showcase {
   value: string;
@@ -30,6 +31,7 @@ export class FileUploadComponent implements OnInit, AfterViewInit {
     , private _behaviorSubject: BehaviorSubjectService
     , private _showcaseTypesService: ShowcasesService
     , private _router: Router
+    , private _getImageDb: GetImageDbService
   ) {
     this.createForm();
   }
@@ -203,18 +205,26 @@ export class FileUploadComponent implements OnInit, AfterViewInit {
             percent > 98 ? document.getElementById('complete').innerText = 'COMPLETING...' : document.getElementById('complete').innerText = percent + '% COMPLETE';
           }
           else if (event['type'] > 1) {
-            this.loading = false;
-            this.disabled = true;
-            this._behaviorSubject.refreshImagesDB(null);
-            localStorage.setItem("DefaultImage", timestamp
-              + "---" + this.activeFile["name"]
-              + "---" + showcaseType
-              + "---" + this.describe
-              + "---" + new Date().toDateString()
-              + "---" + this.comment
-            );
-            localStorage.setItem("activeType", showcaseType.toUpperCase());
-            this._router.navigate(['/home']);
+
+            console.log("event: ", event);
+            if (event["body"] != undefined) {
+              if (event["body"]["db"] != undefined) {
+                var db = event["body"]["db"];
+                localStorage.setItem("DefaultImage", timestamp
+                  + "---" + this.activeFile["name"]
+                  + "---" + showcaseType
+                  + "---" + this.describe
+                  + "---" + new Date().toDateString()
+                  + "---" + this.comment
+                );
+                this._getImageDb.refreshImagesDB(JSON.parse(db));
+                setTimeout(() => {
+                  this.loading = false;
+                  this.disabled = true;
+                  this._router.navigate(['/home']);
+                }, 1000);
+              }
+            }
           }
         },
         err => console.log(err)
