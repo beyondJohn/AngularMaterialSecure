@@ -17,7 +17,7 @@ import { EditImageComponent } from '../edit-image/edit-image.component';
   styleUrls: ['./edit.component.css']
 })
 export class EditComponent implements OnInit {
-  
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any
     , private _httpClient: HttpClient
@@ -33,16 +33,19 @@ export class EditComponent implements OnInit {
     this.comment = this.data.comment;
     this.date = this.data.date;
   }
-  date:string;
-  describe:string;
-  comment:string;
+  date: string;
+  describe: string;
+  comment: string;
   selectedValue: string;
   showcases = [];
   ngOnInit() {
     this._showcaseTypesService.showcasesDb.subscribe(showcases => {
       this.showcases = [];
       showcases['showcaseTypesArray'].forEach(typeObj => {
-        this.showcases.push(typeObj);
+        //"515639---TESTACC---FUN"
+        if (typeObj['viewValue'].indexOf("---") == -1) {
+          this.showcases.push(typeObj);
+        }
       });
     });
 
@@ -51,7 +54,9 @@ export class EditComponent implements OnInit {
       this.showcases = [];
       let tempShowcaseTypes = JSON.parse(showcaseLocalStorage);
       tempShowcaseTypes.forEach(typeObj => {
-        this.showcases.push(typeObj);
+        if (typeObj['viewValue'].indexOf("---") == -1) {
+          this.showcases.push(typeObj);
+        }
       });
     }
   }
@@ -62,19 +67,8 @@ export class EditComponent implements OnInit {
   deleteImage(img) {
     let image = this.data.image.replace(".jpg", "") + "---" + this.data.timestamp;
     this.delete(image).subscribe(db => {
-      // // set default image
-      // var returnedDB = (JSON.parse(db["back"]));
-      // var tempData = returnedDB['imagesDB'];
-      // localStorage.setItem("DefaultImage", 
-      //             tempData[0]["timestamp"]
-      //   + "---" + tempData[0]["image"]
-      //   + "---" + tempData[0]["type"]
-      //   + "---" + tempData[0]["description"]
-      //   + "---" + tempData[0]["date"]
-      //   + "---" + tempData[0]["comment"]
-      // );
-        this._behaviorSubject.refreshDelete({refresh:db["back"]});
-        this.dialogRef.close();
+      this._behaviorSubject.refreshDelete({ refresh: db["back"] });
+      this.dialogRef.close();
     });
   }
   update(img): Observable<void> {
@@ -89,16 +83,16 @@ export class EditComponent implements OnInit {
     params = params.append('type', this.selectedValue);
     params = params.append('description', this.describe);
     params = params.append('comment', this.comment);
-    params = params.append('id', id);    
-    localStorage.setItem("activeType",this.selectedValue);
-    localStorage.setItem("showcaseType",this.selectedValue);
+    params = params.append('id', id);
+    localStorage.setItem("activeType", this.selectedValue);
+    localStorage.setItem("showcaseType", this.selectedValue);
     localStorage.setItem("DefaultImage", this.data.timestamp
-        + "---" + this.data.image
-        + "---" + this.selectedValue
-        + "---" + this.describe
-        + "---" + this.date
-        + "---" + this.comment
-      );
+      + "---" + this.data.image
+      + "---" + this.selectedValue
+      + "---" + this.describe
+      + "---" + this.date
+      + "---" + this.comment
+    );
 
     return this._httpClient.patch<void>(this._config.urls.apiEndPoint + "/patch", params);
   }
@@ -109,7 +103,7 @@ export class EditComponent implements OnInit {
       this.dialogRef.close();
     });
   }
-  imgClick(){
+  imgClick() {
     console.log("image click");
   }
 

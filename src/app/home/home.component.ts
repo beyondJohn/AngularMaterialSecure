@@ -200,13 +200,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
       behavior: 'smooth',
     });
     if (this.db.length > 0) {
-      if (localStorage.getItem("DefaultImage") != undefined) {
-        if (localStorage.getItem("DefaultImage").indexOf(this.db[this.myPosition[0]][this.myPosition[1]].image) != -1) {
-        }
-      }
-      else {
+      // if (localStorage.getItem("DefaultImage") != undefined) {
+      //   if (localStorage.getItem("DefaultImage").indexOf(this.db[this.myPosition[0]][this.myPosition[1]].image) != -1) {
+      //   }
+      // }
+      // else {
 
-      }
+      // }
       this.description = this.db[this.myPosition[0]][this.myPosition[1]].description;
       this.date = this.db[this.myPosition[0]][this.myPosition[1]].date;
       this.comment = this.db[this.myPosition[0]][this.myPosition[1]].comment;
@@ -257,6 +257,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
           this.description = this.db[this.myPosition[0]][this.myPosition[1]].description;
           this.date = this.db[this.myPosition[0]][this.myPosition[1]].date;
           this.comment = this.db[this.myPosition[0]][this.myPosition[1]].comment;
+          this.url = this.db[this.myPosition[0]][this.myPosition[1]].url;
         }
 
       }
