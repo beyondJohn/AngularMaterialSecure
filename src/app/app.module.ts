@@ -48,6 +48,7 @@ import { PeopleComponent } from './people/people.component';
 import { InvitationsComponent } from './invitations/invitations.component';
 import { GetImageDbService } from './services/get-image-db.service';
 import { FilterPipe } from './pipes/filter.pipe';
+import { ShareSettingsComponent } from './share-settings/share-settings.component';
 
 
 
@@ -117,7 +118,8 @@ const appRoutes: Routes = [
     NotificationComponent,
     PeopleComponent,
     InvitationsComponent,
-    FilterPipe
+    FilterPipe,
+    ShareSettingsComponent
   ],
   imports: [
     BrowserModule
@@ -159,7 +161,7 @@ const appRoutes: Routes = [
   bootstrap: [AppComponent],
   entryComponents: [DialogDefaultComponent, EditComponent, ChatComponent, 
     EditImageComponent, AccountComponent, FriendsComponent, NotificationComponent
-    ,InvitationsComponent, PeopleComponent
+    ,InvitationsComponent, PeopleComponent, ShareSettingsComponent
   ]
 })
 export class AppModule { }

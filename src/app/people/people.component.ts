@@ -8,6 +8,7 @@ import { ShowcasesService } from '../services/showcases.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import { BehaviorSubjectService } from '../services/behavior-subject.service';
 import { GetImageDbService } from '../services/get-image-db.service';
+import { ShareSettingsComponent } from '../share-settings/share-settings.component';
 import { BehaviorSubject } from 'rxjs';
 
 @Component({
@@ -51,10 +52,10 @@ export class PeopleComponent implements OnInit {
         this.showcases.push(typeObj);
       });
     });
-    this._behaviorSubject.acceptedInvite.subscribe(accepted =>{
-      if(accepted['accept'] == 'accept'){
+    this._behaviorSubject.acceptedInvite.subscribe(accepted => {
+      if (accepted['accept'] == 'accept') {
         //reset accepted value
-        this._behaviorSubject.refreshAccepted({accept:''});
+        this._behaviorSubject.refreshAccepted({ accept: '' });
         this.dialogRef.close();
 
       }
@@ -93,7 +94,8 @@ export class PeopleComponent implements OnInit {
     this.dialog.open(InvitationsComponent, { data: { notify: this.notify, inviterNumber: inviterNumber } });
   }
   viewPerson(userNumber) {
-    console.log(userNumber)
+    console.log(userNumber);
+    this.dialog.open(ShareSettingsComponent, { data: { userNumber: userNumber } });
   }
   //
   //
@@ -148,24 +150,24 @@ export class PeopleComponent implements OnInit {
         }
       });
       if (connectionAlreadyExists) {
-        alert("You are already connected to " + response["userName"] +"!");
+        alert("You are already connected to " + response["userName"] + "!");
         this.dialogRef.close();
       }
-      if(connectionAlreadyExists == undefined){
+      if (connectionAlreadyExists == undefined) {
         // check for pending invitations and declined invitations
         imgDb["people"]["invitations"]["received"].forEach(receivedInvitation => {
-          if(receivedInvitation.userNumber == response["userNumber"]){
+          if (receivedInvitation.userNumber == response["userNumber"]) {
             // already received invitation, check status
             // if not yet accepted/declined
-            if(receivedInvitation.status == 0){
+            if (receivedInvitation.status == 0) {
               alert('You already have a pending invitation from ' + response["userName"] + ". Please repond to the existing invitation");
               this.dialogRef.close();
             }
             // if already declined
-            else if(receivedInvitation.status == 2){
+            else if (receivedInvitation.status == 2) {
               var confirm = confirm('You have already declined an invitation from ' + response["userName"] + ". Would you like to continue with sending this invitation?");
               if (confirm == true) {
-                
+
               } else {
                 this.dialogRef.close();
               }
@@ -185,7 +187,7 @@ export class PeopleComponent implements OnInit {
         }
       }
       else {
-        
+
       }
     }, err => {
       console.log("Something went wrong");
@@ -195,20 +197,21 @@ export class PeopleComponent implements OnInit {
   sendInvite(inviteeUserName) {
     let acc = localStorage.getItem("acc");
     let idName = localStorage.getItem("userName");
-    this._http.post("https://switchmagic.com:4111/api/invite", { 
+    this._http.post("https://switchmagic.com:4111/api/invite", {
       userNumber: this.inviteUserNumber
       , id: acc
       , showcaseArray: JSON.stringify(this.checkboxShowcases)
       , idName: idName
-      , inviteeUserName: inviteeUserName }, {
-      headers: new HttpHeaders({
-        "Content-Type": "application/json"
-      })
-    }).subscribe(response => {
-      this.personFound = undefined;
-      this.invitationSent = true;
-    }, err => {
-      console.log("Something went wrong");
-    });
+      , inviteeUserName: inviteeUserName
+    }, {
+        headers: new HttpHeaders({
+          "Content-Type": "application/json"
+        })
+      }).subscribe(response => {
+        this.personFound = undefined;
+        this.invitationSent = true;
+      }, err => {
+        console.log("Something went wrong");
+      });
   }
 }

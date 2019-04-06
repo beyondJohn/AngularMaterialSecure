@@ -26,7 +26,11 @@ body {
     color: #3F51B5;
     font-size: 1.8em;
 }
-
+.my-settings{
+    font-weight: 600;
+    color: #F44336;
+    font-size: 1.8em;
+}
 .my-bold-label{
     font-weight: 600;
     color: #3F51B5;
