@@ -130,7 +130,6 @@ export class InvitationsComponent implements OnInit {
     params = params.append('status', status);
     params = params.append('id', id);
     params = params.append('inviterName', this.inviterName);
-    params = params.append('userName', localStorage.getItem('userName'));
     return this._httpClient.post<void>(this._config.urls.apiEndPoint + "/invitationResponse", params);
   }
 
@@ -153,7 +152,7 @@ export class InvitationsComponent implements OnInit {
     params = params.append('status', status);
     params = params.append('id', id);
     params = params.append('showcaseArray', JSON.stringify(cleanShowcaseTitles));
-
+    params = params.append('userName', localStorage.getItem('userName'));
     return this._httpClient.post<void>(this._config.urls.apiEndPoint + "/addsentrecord", params);
   }
 
