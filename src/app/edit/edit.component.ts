@@ -62,6 +62,17 @@ export class EditComponent implements OnInit {
   deleteImage(img) {
     let image = this.data.image.replace(".jpg", "") + "---" + this.data.timestamp;
     this.delete(image).subscribe(db => {
+      // // set default image
+      // var returnedDB = (JSON.parse(db["back"]));
+      // var tempData = returnedDB['imagesDB'];
+      // localStorage.setItem("DefaultImage", 
+      //             tempData[0]["timestamp"]
+      //   + "---" + tempData[0]["image"]
+      //   + "---" + tempData[0]["type"]
+      //   + "---" + tempData[0]["description"]
+      //   + "---" + tempData[0]["date"]
+      //   + "---" + tempData[0]["comment"]
+      // );
         this._behaviorSubject.refreshDelete({refresh:db["back"]});
         this.dialogRef.close();
     });

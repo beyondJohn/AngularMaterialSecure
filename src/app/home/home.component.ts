@@ -137,13 +137,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
               var imgName = localStorage.getItem("DefaultImage").split("---")[1];
               for (var r = 0; r < this.db[i].length; r++) {
                 if (this.db[i][r]["timestamp"] == timestamp && this.db[i][r]["image"] == imgName) {
-                  if (this.deleted != undefined) {
-                    this.myPosition = [0, 0];
-                    this.deleted = undefined;
-                  }
-                  else {
                     this.myPosition = [i, r];
-                  }
                 }
               }
             }
@@ -168,6 +162,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
                 if (this.db[i][r]["timestamp"] == timestamp && this.db[i][r]["image"] == imgName) {
                   if (this.deleted != undefined) {
                     this.myPosition = [0, 0];
+                    localStorage.setItem("DefaultImage", 
+                                this.db[0][0]["timestamp"]
+                      + "---" + this.db[0][0]["image"]
+                      + "---" + this.db[0][0]["type"]
+                      + "---" + this.db[0][0]["description"]
+                      + "---" + this.db[0][0]["date"]
+                      + "---" + this.db[0][0]["comment"]
+                    );
                     this.deleted = undefined;
                   }
                   else {
