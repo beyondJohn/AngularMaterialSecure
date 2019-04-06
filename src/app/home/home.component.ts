@@ -50,12 +50,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
   deleted;
   ngAfterViewInit() {
     let that = this;
-    this._behaviorSubject.delete.subscribe(deleted=>{
-      if(deleted['refresh'] != 'refresh'){
+    this._behaviorSubject.delete.subscribe(deleted => {
+      if (deleted['refresh'] != 'refresh') {
         this.deleted = true;
         console.log(deleted['refresh']);
         this._getImageDb.refreshImagesDB(JSON.parse(deleted['refresh']));
-        this._behaviorSubject.refreshDelete({refresh:'refresh'});
+        this._behaviorSubject.refreshDelete({ refresh: 'refresh' });
       }
     })
     this._behaviorSubject.acceptedInvite.subscribe(event => {
@@ -137,11 +137,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
               var imgName = localStorage.getItem("DefaultImage").split("---")[1];
               for (var r = 0; r < this.db[i].length; r++) {
                 if (this.db[i][r]["timestamp"] == timestamp && this.db[i][r]["image"] == imgName) {
-                  if(this.deleted != undefined){
+                  if (this.deleted != undefined) {
                     this.myPosition = [0, 0];
                     this.deleted = undefined;
                   }
-                  else{
+                  else {
                     this.myPosition = [i, r];
                   }
                 }
@@ -166,11 +166,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
               var imgName = localStorage.getItem("DefaultImage").split("---")[1];
               for (var r = 0; r < this.db[i].length; r++) {
                 if (this.db[i][r]["timestamp"] == timestamp && this.db[i][r]["image"] == imgName) {
-                  if(this.deleted != undefined){
+                  if (this.deleted != undefined) {
                     this.myPosition = [0, 0];
                     this.deleted = undefined;
                   }
-                  else{
+                  else {
                     this.myPosition = [i, r];
                   }
                 }
@@ -240,17 +240,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
         });
         this.db.push(tempShowcase.reverse());
       }
-      //this.myPosition = [0, 0]
+
       // End sort & organize image types into type arrays
       if (this.db.length > 0) {
-        if (localStorage.getItem('DefaultImage')) {
+        if (localStorage.getItem('DefaultImage') != undefined) {
           var storedImage = localStorage.getItem('DefaultImage');
+          this.type = storedImage.split('---')[2];
           this.description = storedImage.split('---')[3];
           this.date = storedImage.split('---')[4];
           this.comment = storedImage.split('---')[5];
         }
         else {
-
+          this.myPosition = [0, 0]
           this.description = this.db[this.myPosition[0]][this.myPosition[1]].description;
           this.date = this.db[this.myPosition[0]][this.myPosition[1]].date;
           this.comment = this.db[this.myPosition[0]][this.myPosition[1]].comment;
@@ -311,20 +312,29 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
   edit(img) {
     if (this.db[this.myPosition[0]][this.myPosition[1]].isShared) {
-
+        // don't allow editing of images that are shared from other users
     }
     else {
-      if(this.setdate == undefined){
-        let date = this.db[this.myPosition[0]][this.myPosition[1]].date;
-      let desc = this.db[this.myPosition[0]][this.myPosition[1]].description;
-      let comm = this.db[this.myPosition[0]][this.myPosition[1]].comment;
-      let type = this.db[this.myPosition[0]][this.myPosition[1]].type;
-      let image = this.db[this.myPosition[0]][this.myPosition[1]].image;
-      let timestamp = this.db[this.myPosition[0]][this.myPosition[1]].timestamp;
-      this.dialog.open(EditComponent, { data: { date: date, img: img, description: desc, comment: comm, type: type, timestamp: timestamp, image: image } });
+      if (localStorage.getItem('DefaultImage') != undefined) {
+        var storedImage = localStorage.getItem('DefaultImage');
+        this.type = storedImage.split('---')[2];
+        this.description = storedImage.split('---')[3];
+        this.date = storedImage.split('---')[4];
+        this.comment = storedImage.split('---')[5];
+        this.dialog.open(EditComponent, { data: { date: this.date, img: img, description: this.desc, comment: this.comm, type: this.type, timestamp: this.timestamp, image: this.image } });
       }
-      else{
-        this.dialog.open(EditComponent, { data: { date: this.setdate, img: img, description: this.desc, comment: this.comm, type: this.type, timestamp: this.timestamp, image: this.image } });
+      // else {
+      // if (this.setdate == undefined) {
+      //   let date = this.db[this.myPosition[0]][this.myPosition[1]].date;
+      //   let desc = this.db[this.myPosition[0]][this.myPosition[1]].description;
+      //   let comm = this.db[this.myPosition[0]][this.myPosition[1]].comment;
+      //   let type = this.db[this.myPosition[0]][this.myPosition[1]].type;
+      //   let image = this.db[this.myPosition[0]][this.myPosition[1]].image;
+      //   let timestamp = this.db[this.myPosition[0]][this.myPosition[1]].timestamp;
+      //   this.dialog.open(EditComponent, { data: { date: date, img: img, description: desc, comment: comm, type: type, timestamp: timestamp, image: image } });
+      // }
+      else {
+        this.dialog.open(EditComponent, { data: { date: this.date, img: img, description: this.desc, comment: this.comm, type: this.type, timestamp: this.timestamp, image: this.image } });
       }
     }
   }
