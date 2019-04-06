@@ -114,6 +114,8 @@ export class InvitationsComponent implements OnInit {
       //this.dialogRef.close();
     });
   }
+
+  // this is user by accept & decline functions to reply to invitation
   updateInvitation(status): Observable<void> {
     var inviter = this.inviterNumber;
     var id = localStorage.getItem("acc");
@@ -128,13 +130,43 @@ export class InvitationsComponent implements OnInit {
     params = params.append('status', status);
     params = params.append('id', id);
     params = params.append('inviterName', this.inviterName);
+    params = params.append('userName', localStorage.getItem('userName'));
     return this._httpClient.post<void>(this._config.urls.apiEndPoint + "/invitationResponse", params);
   }
+
+  // the following is used to set showcases to share with inviter 
+  // which are subsequently listed in people.invitations.sent.sharedShowcases 
+  setSentRecordShowcase(status): Observable<void> {
+    //create a sent invitation record in the db of the user accepting an invitation (this may sonud wacky but its how it works)
+    var inviteeNumber = this.inviterNumber;
+    var inviteeName = this.inviterName;
+    var id = localStorage.getItem("acc");
+
+    var cleanShowcaseTitles = [];
+    this.checkboxShowcases.forEach(showcase => {
+      cleanShowcaseTitles.push(this.checkBoxLabels(showcase));
+    });
+
+    let params = new HttpParams();
+    params = params.append('inviteeNumber', inviteeNumber);
+    params = params.append('inviteeName', inviteeName);
+    params = params.append('status', status);
+    params = params.append('id', id);
+    params = params.append('showcaseArray', JSON.stringify(cleanShowcaseTitles));
+
+    return this._httpClient.post<void>(this._config.urls.apiEndPoint + "/addsentrecord", params);
+  }
+
   share() {
-    this._getImageDb.refreshImagesDB(this.acceptReturnedDb);
-    this._acceptInviteService.refreshAccepted({ accept: "accept" });
-    this._notifications.refreshNotifications([]);
-    this.dialogRef.close();
+    // update users people db and add a 'sent' record (even though the user didn't actually send an invite but rather accepted one)
+    // and add the showcases the user just selected to share during the accept process
+    this.setSentRecordShowcase("1").subscribe(() => {
+      // finish accept process & return to home screen
+      this._getImageDb.refreshImagesDB(this.acceptReturnedDb);
+      this._acceptInviteService.refreshAccepted({ accept: "accept" });
+      this._notifications.refreshNotifications([]);
+      this.dialogRef.close();
+    });
   }
 
   // checkbox Utility
@@ -146,11 +178,9 @@ export class InvitationsComponent implements OnInit {
       }
     });
     this.checkboxShowcases = tempArray;
-    //console.log(this.checkboxShowcases);
   }
   checkboxShowcases = [];
   checkBox(boxName) {
-    console.log(boxName);
     if (this.checkboxShowcases.indexOf(boxName) == -1) {
       this.checkboxShowcases.push(boxName);
     }

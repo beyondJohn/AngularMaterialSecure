@@ -152,6 +152,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
       // set string values for description, date, & comment before returning the image url to the view
       //localStorage.setItem("activeType", this.db[this.myPosition[0]][this.myPosition[1]].type);
       if (localStorage.getItem("DefaultImage") != undefined) {
+        if(this.myPosition.length == 0){
+          this.myPosition = [0,0];
+        }
         if (localStorage.getItem("DefaultImage").indexOf(this.db[this.myPosition[0]][this.myPosition[1]].image) != -1) {
           var showcaseType = localStorage.getItem("DefaultImage").split("---")[2].toUpperCase();
           for (var i = 0; i < this.db.length; i++) {

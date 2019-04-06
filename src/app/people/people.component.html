@@ -29,8 +29,8 @@
       </tr>
       <tr *ngFor="let connection of connections">
         <td style="padding-bottom: 10px; border-bottom: 1px solid #ddd; position: relative;">
-          <mat-icon svgIcon="settings" class="my-settings" style="display: inline-block; position: relative; top:6px;" (click)="viewPerson(connection.inviterNumber)" >Settings</mat-icon>
-          <div class="my-bold-un" style="padding-bottom: 10px; display: inline-block;" (click)="viewPerson(connection.inviterNumber)">{{connection.inviterName}}</div>
+          <mat-icon svgIcon="settings" class="my-settings" style="display: inline-block; position: relative; top:6px;" (click)="viewPerson(connection.inviterNumber, connection.inviterName)" >Settings</mat-icon>
+          <div class="my-bold-un" style="padding-bottom: 10px; display: inline-block;" (click)="viewPerson(connection.inviterNumber, connection.inviterName)">{{connection.inviterName}}</div>
           
           
           <!-- <button mat-button mat-raised-button color="warn" (click)="viewPerson(connection.inviterNumber)" type="button">Settings</button> -->

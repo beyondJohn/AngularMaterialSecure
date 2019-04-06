@@ -91,11 +91,12 @@ export class PeopleComponent implements OnInit {
       });
   }
   viewInvitation(inviterNumber) {
+    console.log("notify: ", this.notify);
     this.dialog.open(InvitationsComponent, { data: { notify: this.notify, inviterNumber: inviterNumber } });
   }
-  viewPerson(userNumber) {
+  viewPerson(userNumber, userName) {
     console.log(userNumber);
-    this.dialog.open(ShareSettingsComponent, { data: { userNumber: userNumber } });
+    this.dialog.open(ShareSettingsComponent, { data: { userNumber: userNumber, userName: userName } });
   }
   //
   //
