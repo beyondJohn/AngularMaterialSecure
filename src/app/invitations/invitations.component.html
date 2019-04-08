@@ -30,14 +30,14 @@
     </div>
     <br [ngStyle]="{display:checkboxShowcases.length > 0 ? 'block' : 'none'}" />
     <br [ngStyle]="{display:checkboxShowcases.length > 0 ? 'block' : 'none'}" />
-    <br [ngStyle]="{display:!checkboxShowcases.length > 0 ? 'block' : 'none'}" />
-    <br [ngStyle]="{display:!checkboxShowcases.length > 0 ? 'block' : 'none'}" />
+    <!-- <br [ngStyle]="{display:checkboxShowcases.length > 0 ? 'block' : 'none'}" />
+    <br [ngStyle]="{display:checkboxShowcases.length > 0 ? 'block' : 'none'}" /> -->
   </div>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button [mat-dialog-close]="true" [ngStyle]="{display:!accepted ? 'block' : 'none'}" cdkFocusInitial
     mat-raised-button color="primary">cancel</button>
-  <button mat-button [mat-dialog-close]="true" [ngStyle]="{display:accepted && !checkboxShowcases.length > 0 ? 'block' : 'none'}"
+  <button mat-button [mat-dialog-close]="true" [ngStyle]="{display:accepted && checkboxShowcases.length == 0 ? 'block' : 'none'}"
     cdkFocusInitial mat-raised-button color="primary">Finished</button>
   <button mat-button  mat-raised-button color="warn" type="button" [ngStyle]="{display:checkboxShowcases.length > 0 ? 'block' : 'none'}"
     (click)="share()" class="btnNewAcc">Share</button>

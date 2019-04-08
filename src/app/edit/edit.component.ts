@@ -67,6 +67,35 @@ export class EditComponent implements OnInit {
   deleteImage(img) {
     let image = this.data.image.replace(".jpg", "") + "---" + this.data.timestamp;
     this.delete(image).subscribe(db => {
+      localStorage.setItem('imagesDB', db['back']);
+      var returnedDB = JSON.parse(db['back']);
+      var setNewDefault;
+      var currentShowcaseType = localStorage.getItem('showcaseType');
+      // if there is another image of the same showcase type of the deleted image, use it as new default image 
+      returnedDB['imagesDB'].forEach(imageObj => {
+        if (imageObj['type'] === currentShowcaseType) {
+          setNewDefault = imageObj['timestamp']
+            + "---" + imageObj['image']
+            + "---" + imageObj['type']
+            + "---" + imageObj['description']
+            + "---" + imageObj['date']
+            + "---" + imageObj['comment'];
+          localStorage.setItem("showcaseType", imageObj['type']);
+          localStorage.setItem("DefaultImage", setNewDefault);
+        }
+      });
+      // if there is not another image of the same showcase type of the deleted image, use the first DB image as the new default image
+      if (setNewDefault === undefined) {
+        var imageObj = returnedDB['imagesDB'][0];
+        setNewDefault = imageObj['timestamp']
+          + "---" + imageObj['image']
+          + "---" + imageObj['type']
+          + "---" + imageObj['description']
+          + "---" + imageObj['date']
+          + "---" + imageObj['comment'];
+        localStorage.setItem("showcaseType", imageObj['type']);
+        localStorage.setItem("DefaultImage", setNewDefault);
+      }
       this._behaviorSubject.refreshDelete({ refresh: db["back"] });
       this.dialogRef.close();
     });

@@ -152,7 +152,7 @@ const appRoutes: Routes = [
     , JwtHelper
     , WebsocketService
     , ChatService
-    , ChatComponent,
+    , ChatComponent
     , NotificationsService
     , GetImageDbService
     , FilterPipe

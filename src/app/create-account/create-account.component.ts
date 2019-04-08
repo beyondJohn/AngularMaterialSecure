@@ -79,7 +79,6 @@ export class CreateAccountComponent implements OnInit {
       .subscribe(response => {
         localStorage.setItem("acc",id);
         this.login(form);
-        
       });
   }
   login(form: NgForm){
@@ -96,10 +95,15 @@ export class CreateAccountComponent implements OnInit {
       localStorage.setItem("jwt", token);
       let userNumber = (<any>response).userNumber;
       localStorage.setItem("acc", userNumber);
+      let userName = (<any>response).userName;
+      localStorage.setItem("userName", userName);
       this.loading = false;
       //this.invalidLogin = false;
       this._router.navigate(["/home"]);
     }, err => {
+      console.log(err);
+      this.loading = false;
+      alert("There was an error during login. Please go to the login screen and try to login with the account you just created. Thank you!");
       //this.invalidLogin = true;
     });
   }

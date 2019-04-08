@@ -105,13 +105,12 @@ export class InvitationsComponent implements OnInit {
       this.acceptReturnedDb = JSON.parse(res["back"]);
     });
   }
-  decline() {
+  decline(inviterNumber) {
     // update JSON - set received invite status to 2
     this.updateInvitation("2").subscribe(res => {
       this.preDecision = undefined;
       this.declined = true;
-
-      //this.dialogRef.close();
+      this.dialogRef.close();
     });
   }
 
@@ -119,6 +118,7 @@ export class InvitationsComponent implements OnInit {
   updateInvitation(status): Observable<void> {
     var inviter = this.inviterNumber;
     var id = localStorage.getItem("acc");
+    var userName = localStorage.getItem("userName");
     // Initialize Params Object
     let params = new HttpParams();
     // Begin assigning parameters
@@ -130,6 +130,7 @@ export class InvitationsComponent implements OnInit {
     params = params.append('status', status);
     params = params.append('id', id);
     params = params.append('inviterName', this.inviterName);
+    params = params.append('userName', userName);
     return this._httpClient.post<void>(this._config.urls.apiEndPoint + "/invitationResponse", params);
   }
 

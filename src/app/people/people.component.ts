@@ -61,6 +61,32 @@ export class PeopleComponent implements OnInit {
       }
     })
   }
+  countSent() {
+    var count = 0;
+    var db = localStorage.getItem('imagesDB');
+    if (db !== undefined) {
+      db = JSON.parse(db);
+      db["people"]["invitations"]["sent"].forEach(sentInvite => {
+        if (sentInvite.status === "0") {
+          count++;
+        }
+      });
+      return count;
+    }
+  }
+  countReceived() {
+    var count = 0;
+    var db = localStorage.getItem('imagesDB');
+    if (db !== undefined) {
+      db = JSON.parse(db);
+      db["people"]["invitations"]["received"].forEach(sentInvite => {
+        if (sentInvite.status === "0") {
+          count++;
+        }
+      });
+      return count;
+    }
+  }
   getUserName4UI() {
 
     if (this.userName) {
@@ -75,7 +101,7 @@ export class PeopleComponent implements OnInit {
         this.activeInvitations.push(notification);
       }
     });
-
+    this.countSent();
   }
   buildConnections() {
     var id = localStorage.getItem("acc");
@@ -209,6 +235,11 @@ export class PeopleComponent implements OnInit {
           "Content-Type": "application/json"
         })
       }).subscribe(response => {
+        console.log("response: ",response);
+        console.log("response['back']: ", response['back']);
+        localStorage.setItem('imagesDB',response['back']);
+        this.countSent();
+        this.countReceived(); 
         this.personFound = undefined;
         this.invitationSent = true;
       }, err => {

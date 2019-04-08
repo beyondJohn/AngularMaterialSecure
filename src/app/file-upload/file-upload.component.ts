@@ -222,7 +222,7 @@ export class FileUploadComponent implements OnInit, AfterViewInit {
                   this.loading = false;
                   this.disabled = true;
                   this._router.navigate(['/home']);
-                }, 1000);
+                }, 500);
               }
             }
           }

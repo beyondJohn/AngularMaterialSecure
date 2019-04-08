@@ -8,13 +8,23 @@
       </tr>
       <!-- start invitations -->
       <tr>
-        <td colspan="2" style="padding-bottom: 10px; padding-top: 15px;">
-          <div class="my-bold-label">Invitations (<span style="color: red;">{{notify.length}}</span>)</div>
+        <td colspan="2" [ngStyle]="{display: countSent() == 0 && countReceived() == 0 ? 'none' : 'inline-block'}" style="padding-bottom: 10px; padding-top: 15px;">
+          <div class="my-bold-label">Invitations</div>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" style="padding: 0 0 10px 10px;" [ngStyle]="{display: countSent() > 0 ? 'inline-block' : 'none'}">
+          <div class="my-bold-label">Pending Sent: <span style="color: red;">{{countSent()}}</span></div>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" style="padding: 0 0 10px 10px;" [ngStyle]="{display: countReceived() > 0 ? 'inline-block' : 'none'}">
+          <div class="my-bold-label">Pending Received: <span style="color: red;">{{countReceived()}}</span></div>
         </td>
       </tr>
       <tr *ngFor="let invitation of activeInvitations">
-        <td style="padding: 15px 0; border-bottom: 1px solid #ddd;">
-          <div class="my-bold-label"><span style="color: red;">{{invitation.inviterName}}</span></div>
+        <td style="padding: 0 0 10px 10px; border-bottom: 1px solid #ddd;">
+          <div class="my-bold-label" (click)="viewInvitation(invitation.userNumber)"><span style="color: red;">{{invitation.inviterName}}</span></div>
           <br />
           <button mat-button mat-raised-button color="warn" (click)="viewInvitation(invitation.userNumber)" type="button">View
             Invitation</button>
@@ -29,10 +39,11 @@
       </tr>
       <tr *ngFor="let connection of connections">
         <td style="padding-bottom: 10px; border-bottom: 1px solid #ddd; position: relative;">
-          <mat-icon svgIcon="settings" class="my-settings" style="display: inline-block; position: relative; top:6px;" (click)="viewPerson(connection.inviterNumber, connection.inviterName)" >Settings</mat-icon>
+          <mat-icon svgIcon="settings" class="my-settings" style="display: inline-block; position: relative; top:6px;"
+            (click)="viewPerson(connection.inviterNumber, connection.inviterName)">Settings</mat-icon>
           <div class="my-bold-un" style="padding-bottom: 10px; display: inline-block;" (click)="viewPerson(connection.inviterNumber, connection.inviterName)">{{connection.inviterName}}</div>
-          
-          
+
+
           <!-- <button mat-button mat-raised-button color="warn" (click)="viewPerson(connection.inviterNumber)" type="button">Settings</button> -->
         </td>
       </tr>
