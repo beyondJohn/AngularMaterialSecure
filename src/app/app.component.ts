@@ -119,6 +119,12 @@ export class AppComponent implements OnInit {
     iconRegistry.addSvgIcon(
       'notifications',
       sanitizer.bypassSecurityTrustResourceUrl('assets/materialIconsSVGs/notifications.svg'));
+    iconRegistry.addSvgIcon(
+      'remove',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/materialIconsSVGs/remove_circle.svg'));
+    iconRegistry.addSvgIcon(
+      'add',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/materialIconsSVGs/add_circle.svg'));
   }
   isInit = true;
   isNotificationOpen;
@@ -128,10 +134,10 @@ export class AppComponent implements OnInit {
         if (!this.isInit && this.isNotificationOpen == undefined) {
           this.isNotificationOpen = true;
           this.dialog.open(NotificationComponent, { data: { notify: notify } })
-          .afterClosed()
-          .subscribe(() => {
-            this.isNotificationOpen = undefined;
-          });
+            .afterClosed()
+            .subscribe(() => {
+              this.isNotificationOpen = undefined;
+            });
         }
       }
     });

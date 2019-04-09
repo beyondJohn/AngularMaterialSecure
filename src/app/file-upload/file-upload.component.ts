@@ -42,6 +42,7 @@ export class FileUploadComponent implements OnInit, AfterViewInit {
   describe = "meBloggy Rocks!";
   newTitle;
   comment = 'I &hearts; meBloggy!';
+  newShowcase = false;
   apiEndPoint = this._config.urls.apiEndPoint;
   ngOnInit() {
 
@@ -67,6 +68,9 @@ export class FileUploadComponent implements OnInit, AfterViewInit {
   }
   ngAfterViewInit() {
     this.openInput();
+  }
+  add_removeShowcase(){
+    this.newShowcase = !this.newShowcase; 
   }
   createForm() {
     this.form = this.fb.group({
