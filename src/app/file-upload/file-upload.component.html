@@ -3,8 +3,6 @@
         <table style="margin: 0 auto;">
             <tr>
                 <td style="text-align: left; padding-left: 28px;height:80px;" colspan="2">
-                    <button mat-raised-button color="primary" style="padding:15px;" type="button" (click)="openInput()">Select
-                        Image</button>
                     <input class="file-selector" hidden type="file" accept="image/*" id="image" name="image" (change)="onFileChange($event)"
                         enctype="multipart/form-data" #fileInput>
                 </td>
@@ -51,6 +49,7 @@
                 <td>
                 </td>
                 <td style="text-align: right;">
+                    <button mat-raised-button color="primary" style="padding:15px;" type="button" (click)="openInput()">Select / Change</button>
                     <button mat-raised-button color="warn" style="padding:15px;" type="button" (click)="cancel()">Cancel</button>
                     <button id="submit" type="submit" mat-raised-button color="accent" style="padding:15px;" [disabled]="form.invalid || loading || disabled"
                         class="btn btn-success">Save

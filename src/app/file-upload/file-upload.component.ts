@@ -57,7 +57,9 @@ export class FileUploadComponent implements OnInit, AfterViewInit {
       this.showcases = [];
       let tempShowcaseTypes = JSON.parse(showcaseLocalStorage);
       tempShowcaseTypes.forEach(typeObj => {
-        this.showcases.push(typeObj);
+        if (typeObj.viewValue.indexOf("---") == -1) {
+          this.showcases.push(typeObj);
+        }
       });
     }
     this.getDefaultShowcaseType();
